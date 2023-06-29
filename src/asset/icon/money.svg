@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15" height="15" viewBox="0 0 15 15">
+  <defs>
+    <clipPath id="money">
+      <rect id="Rectangle_866" data-name="Rectangle 866" width="15" height="15" transform="translate(54 15)" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="money" transform="translate(-54 -15)" clip-path="url(#money)">
+    <path id="Icon_metro-money" data-name="Icon metro-money" d="M15.259,13.01c-1.892-.492-2.5-1-2.5-1.787,0-.908.837-1.546,2.25-1.546,1.483,0,2.033.708,2.083,1.75h1.842a3.317,3.317,0,0,0-2.675-3.175V6.427h-2.5v1.8c-1.617.354-2.917,1.4-2.917,3.008,0,1.925,1.6,2.883,3.917,3.442,2.087.5,2.5,1.229,2.5,2.013,0,.571-.4,1.488-2.25,1.488-1.717,0-2.4-.771-2.483-1.75H10.688a3.5,3.5,0,0,0,3.071,3.192v1.808h2.5V19.635c1.621-.312,2.917-1.25,2.917-2.963C19.175,14.314,17.15,13.506,15.259,13.01Z" transform="translate(46.312 8.573)" fill="#6768a6"/>
+  </g>
+</svg>

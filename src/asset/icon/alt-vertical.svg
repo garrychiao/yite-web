@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15" height="15" viewBox="0 0 15 15">
+  <defs>
+    <clipPath id="alt-vertical">
+      <rect id="Rectangle_875" data-name="Rectangle 875" width="15" height="15" transform="translate(10 8)" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="arrows-alt-v" transform="translate(-10 -8)" clip-path="url(#alt-vertical)">
+    <path id="Icon_awesome-arrows-alt-v" data-name="Icon awesome-arrows-alt-v" d="M7.005,11.072H5.656V3.927H7.005a.7.7,0,0,0,.5-1.2L4.981.206a.7.7,0,0,0-.994,0L1.465,2.727a.7.7,0,0,0,.5,1.2H3.312v7.145H1.963a.7.7,0,0,0-.5,1.2l2.521,2.521a.7.7,0,0,0,.994,0L7.5,12.273a.7.7,0,0,0-.5-1.2Z" transform="translate(12.742 8)" fill="#777"/>
+  </g>
+</svg>

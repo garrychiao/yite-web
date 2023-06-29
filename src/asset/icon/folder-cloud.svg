@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="25" viewBox="0 0 25 25">
+  <defs>
+    <clipPath id="folder-cloud">
+      <rect id="Rectangle_845" data-name="Rectangle 845" width="25" height="25" transform="translate(300.25 224)" fill="#fffffb"/>
+    </clipPath>
+  </defs>
+  <g id="folder_cloud" data-name="folder cloud" transform="translate(-300.25 -224)" clip-path="url(#folder-cloud)">
+    <g id="folder_documents_cloud_a" data-name="folder, documents, cloud, a" transform="translate(291.25 213.5)">
+      <path id="Path_3796" data-name="Path 3796" d="M30.125,18.25V14.656H20.063A2.156,2.156,0,0,0,17.906,12.5h-5.75A2.156,2.156,0,0,0,10,14.656V30.469L12.874,18.25Z" fill="none" stroke="#6768a6" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.7"/>
+      <path id="Path_3797" data-name="Path 3797" d="M12.874,32.5,10,44.719h6.121a2,2,0,0,1,.869-.373,1.179,1.179,0,0,1-.082-.427,1.2,1.2,0,0,1,1.2-1.2,1.184,1.184,0,0,1,.814.324,3.593,3.593,0,0,1,6.773,1.672h4.433L33,32.5Z" transform="translate(0 -14.25)" fill="none" stroke="#6768a6" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.7"/>
+      <path id="Path_3798" data-name="Path 3798" d="M39.253,69.688a1.6,1.6,0,1,0-.432-3.134,3.591,3.591,0,0,0-6.74-2.132,1.184,1.184,0,0,0-.814-.324,1.2,1.2,0,0,0-1.2,1.2,1.179,1.179,0,0,0,.082.427,2,2,0,0,0,.317,3.966h8.785Z" transform="translate(-13.161 -35.625)" fill="none" stroke="#6768a6" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.7"/>
+    </g>
+  </g>
+</svg>

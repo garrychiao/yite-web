@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15" height="15" viewBox="0 0 15 15">
+  <defs>
+    <clipPath id="move">
+      <rect id="Rectangle_868" data-name="Rectangle 868" width="15" height="15" transform="translate(10 16)" fill="#ededed"/>
+    </clipPath>
+  </defs>
+  <g id="move" transform="translate(-10 -16)" clip-path="url(#move)">
+    <g id="Group_3462" data-name="Group 3462" transform="translate(-8.188 -1183)">
+      <circle id="Ellipse_166" data-name="Ellipse 166" cx="1.875" cy="1.875" r="1.875" transform="translate(21 1199)" fill="#adadad"/>
+      <circle id="Ellipse_167" data-name="Ellipse 167" cx="1.875" cy="1.875" r="1.875" transform="translate(26.625 1199)" fill="#adadad"/>
+      <circle id="Ellipse_168" data-name="Ellipse 168" cx="1.875" cy="1.875" r="1.875" transform="translate(26.625 1204.625)" fill="#adadad"/>
+      <circle id="Ellipse_169" data-name="Ellipse 169" cx="1.875" cy="1.875" r="1.875" transform="translate(21 1204.625)" fill="#adadad"/>
+      <circle id="Ellipse_170" data-name="Ellipse 170" cx="1.875" cy="1.875" r="1.875" transform="translate(26.625 1210.25)" fill="#adadad"/>
+      <circle id="Ellipse_171" data-name="Ellipse 171" cx="1.875" cy="1.875" r="1.875" transform="translate(21 1210.25)" fill="#adadad"/>
+    </g>
+  </g>
+</svg>

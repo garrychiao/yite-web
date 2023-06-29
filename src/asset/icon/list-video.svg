@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="14" height="14" viewBox="0 0 25 25">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_957" data-name="Rectangle 957" width="25" height="25" transform="translate(300 224)" fill="currentColor"/>
+    </clipPath>
+  </defs>
+  <g id="list" transform="translate(-300 -224)" clip-path="url(#clip-path)">
+    <g id="list-interface-symbol" transform="translate(300 153.155)">
+      <g id="_x31_0_21_" transform="translate(0 73.862)">
+        <g id="Group_3858" data-name="Group 3858" transform="translate(0 0)">
+          <path id="Path_4123" data-name="Path 4123" d="M2.586,73.862a2.586,2.586,0,1,0,2.586,2.586A2.586,2.586,0,0,0,2.586,73.862Zm0,6.9a2.586,2.586,0,1,0,2.586,2.586A2.586,2.586,0,0,0,2.586,80.759Zm0,6.9a2.586,2.586,0,1,0,2.586,2.586A2.586,2.586,0,0,0,2.586,87.655Zm6.9-9.483H23.276a1.724,1.724,0,1,0,0-3.448H9.483a1.724,1.724,0,1,0,0,3.448Zm13.793,3.448H9.483a1.724,1.724,0,0,0,0,3.448H23.276a1.724,1.724,0,0,0,0-3.448Zm0,6.9H9.483a1.724,1.724,0,1,0,0,3.448H23.276a1.724,1.724,0,1,0,0-3.448Z" transform="translate(0 -73.862)" fill="currentColor"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

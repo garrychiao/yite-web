@@ -1,15 +1,30 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { lazy, Suspense } from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
+import reportWebVitals from 'setup/reportWebVitals';
+import setupI18n from 'setup/setupI18n';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+// import 'antd/dist/antd.variable.min.css';
+// import '@ant-design/pro-form/dist/form.css';
+// import '@ant-design/pro-card/dist/card.css';
+
+const App = lazy(() => import('./App'));
+
+(async () => {
+  // setupLog();
+  // setupFirebase();
+  // setupAxios();
+  await setupI18n();
+
+  ReactDOM.render(
+    <Router>
+      <Suspense fallback={null}>
+        <App />
+      </Suspense>
+    </Router>,
+    document.getElementById('root')
+  );
+})();
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

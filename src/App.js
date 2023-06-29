@@ -1,25 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import styled from 'styled-components';
+import { Suspense } from 'react';
+import { ConfigProvider, Empty } from 'antd';
+// import { AuthProvider } from 'shared/auth';
+import color from 'shared/style/color';
+import GlobalStyles from 'shared/style/GlobalStyles';
+import useAppRoutes from './useAppRoutes';
 
-function App() {
+// ConfigProvider.config({
+//   theme: {
+//     primaryColor: color.primary,
+//     errorColor: color.error,
+//     successColor: color.success,
+//   },
+// });
+
+export default function App() {
+  const routes = useAppRoutes();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ConfigProvider renderEmpty={() => <Empty description={false} />}>
+      {/* <AuthProvider></AuthProvider> */}
+      <GlobalStyles />
+      <AppLayout>
+        <Suspense fallback={null}>{routes}</Suspense>
+      </AppLayout>
+    </ConfigProvider>
   );
 }
 
-export default App;
+const AppLayout = styled.div`
+  // height: 100vh;
+  
+`;

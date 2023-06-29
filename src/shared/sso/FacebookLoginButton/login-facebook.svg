@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="25" viewBox="0 0 25 25">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_64" data-name="Rectangle 64" width="25" height="25" transform="translate(563 475)" fill="#fffffb"/>
+    </clipPath>
+  </defs>
+  <g id="Facebook" transform="translate(-563 -475)" clip-path="url(#clip-path)">
+    <g id="Layer_x0020_1" transform="translate(563 475)">
+      <path id="Path_15" data-name="Path 15" d="M25,12.5A12.5,12.5,0,1,0,10.547,24.849V16.113H7.373V12.5h3.174V9.746c0-3.132,1.868-4.863,4.722-4.863a19.225,19.225,0,0,1,2.8.244V8.2H16.489a1.807,1.807,0,0,0-2.036,1.953V12.5H17.92l-.554,3.613H14.453v8.735A12.5,12.5,0,0,0,25,12.5Z" fill="#1977f3"/>
+      <path id="Path_16" data-name="Path 16" d="M311.993,211.23l.554-3.613H309.08v-2.344a1.807,1.807,0,0,1,2.036-1.953h1.577v-3.076a19.225,19.225,0,0,0-2.8-.244c-2.854,0-4.722,1.729-4.722,4.863v2.754H302v3.613h3.174v8.735a12.575,12.575,0,0,0,1.953.151,12.882,12.882,0,0,0,1.953-.151V211.23Z" transform="translate(-294.627 -195.117)" fill="#fefefe"/>
+    </g>
+  </g>
+</svg>

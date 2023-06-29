@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" viewBox="0 0 18 18">
+  <defs>
+    <clipPath id="text-strike-through">
+      <rect id="Rectangle_305" data-name="Rectangle 305" width="18" height="18" transform="translate(0 0)" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="strikethrough" clip-path="url(#text-strike-through)">
+    <path id="Icon_material-format-strikethrough" data-name="Icon material-format-strikethrough" d="M11.5,21h4V18h-4ZM6.5,6V9h5v3h4V9h5V6Zm-2,10h18V14H4.5Z" transform="translate(-4.5 -4)" fill="#777"/>
+  </g>
+</svg>

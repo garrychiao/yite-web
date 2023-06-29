@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15" height="15" viewBox="0 0 15 15">
+  <defs>
+    <clipPath id="text-color">
+      <rect id="Rectangle_265" data-name="Rectangle 265" width="15" height="15" transform="translate(10 8)" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="color-text" transform="translate(-10 -8)" clip-path="url(#text-color)">
+    <g id="Icon_material-format-color-text" data-name="Icon material-format-color-text" transform="translate(10 4.5)">
+      <path id="text-color-bar" data-name="Path 955" d="M0,30H15v2.5H0Z" transform="translate(0 -14.875)" fill="#fffffb"/>
+      <path id="Path_956" data-name="Path 956" d="M11.688,4.5,8.25,13.25H9.656l.7-1.875h3.906l.7,1.875h1.406L12.938,4.5Zm-.863,5.625,1.488-3.956L13.8,10.125Z" transform="translate(-4.813)" fill="#777"/>
+    </g>
+  </g>
+</svg>

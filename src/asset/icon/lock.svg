@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15" height="15" viewBox="0 0 15 15">
+  <defs>
+    <clipPath id="lock">
+      <rect id="Rectangle_867" data-name="Rectangle 867" width="15" height="15" transform="translate(10 16)" fill="#fffffb"/>
+    </clipPath>
+  </defs>
+  <g id="lock" transform="translate(-10 -16)" clip-path="url(#lock)">
+    <path id="Icon_material-lock-outline" data-name="Icon material-lock-outline" d="M11.714,12.929A1.429,1.429,0,1,0,10.286,11.5,1.433,1.433,0,0,0,11.714,12.929ZM16,6.5h-.714V5.071a3.571,3.571,0,0,0-7.143,0V6.5H7.429A1.433,1.433,0,0,0,6,7.929v7.143A1.433,1.433,0,0,0,7.429,16.5H16a1.433,1.433,0,0,0,1.429-1.429V7.929A1.433,1.433,0,0,0,16,6.5ZM9.5,5.071a2.214,2.214,0,0,1,4.429,0V6.5H9.5Zm6.5,10H7.429V7.929H16Z" transform="translate(6 14.5)" fill="#adadad"/>
+  </g>
+</svg>

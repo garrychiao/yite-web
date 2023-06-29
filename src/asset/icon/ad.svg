@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="25" viewBox="0 0 25 25">
+  <defs>
+    <clipPath id="ad">
+      <rect id="Rectangle_5" data-name="Rectangle 5" width="25" height="25" transform="translate(300 224)" fill="#fffffb"/>
+    </clipPath>
+  </defs>
+  <g id="Ad" transform="translate(-300 -224)" clip-path="url(#ad)">
+    <g id="Group_3491" data-name="Group 3491">
+      <g id="Rectangle_890" data-name="Rectangle 890" transform="translate(300 227)" fill="none" stroke="#6768a6" stroke-width="0.7">
+        <rect width="25" height="20" rx="3" stroke="none"/>
+        <rect x="0.35" y="0.35" width="24.3" height="19.3" rx="2.65" fill="none"/>
+      </g>
+      <text id="Ad-2" data-name="Ad" transform="translate(305 241)" fill="#6768a6" font-size="11" font-family="ArialRoundedMTBold, Arial Rounded MT Bold"><tspan x="0" y="0">Ad</tspan></text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15" height="15" viewBox="0 0 15 15">
+  <defs>
+    <clipPath id="resize">
+      <rect id="Rectangle_878" data-name="Rectangle 878" width="15" height="15" transform="translate(-1 1.9)" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="resize" transform="translate(1 -1.9)" clip-path="url(#resize)">
+    <path id="Icon_ionic-ios-resize" data-name="Icon ionic-ios-resize" d="M18.119,5.625H14.038a.507.507,0,0,0-.506.506v.007a.507.507,0,0,0,.506.506h2.825L6.644,16.863V14.038a.507.507,0,0,0-.506-.506H6.131a.507.507,0,0,0-.506.506v4.081a.507.507,0,0,0,.506.506h4.081a.507.507,0,0,0,.506-.506v-.007a.507.507,0,0,0-.506-.506H7.387L17.606,7.387v2.825a.507.507,0,0,0,.506.506h.007a.507.507,0,0,0,.506-.506V6.131A.5.5,0,0,0,18.119,5.625Z" transform="translate(-5.625 -2.725)" fill="#777"/>
+  </g>
+</svg>

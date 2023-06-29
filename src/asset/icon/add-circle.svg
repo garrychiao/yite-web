@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"
+     viewBox="9 6 27 27">
+    <g id="icon-add-circle" transform="translate(9 6)">
+        <g id="Group_1133" data-name="Group 1133">
+            <g transform="matrix(1, 0, 0, 1, -9, -6)" filter="url(#icon-add-circle)">
+                <path id="Path_1-2" data-name="Path 1" d="M12.5,0A12.5,12.5,0,1,1,0,12.5,12.5,12.5,0,0,1,12.5,0Z"
+                      transform="translate(9 6)" fill="#fffffb"/>
+            </g>
+            <path id="plus"
+                  d="M12.5,0A12.5,12.5,0,1,0,25,12.5,12.514,12.514,0,0,0,12.5,0Zm5.469,13.542H13.542v4.427a1.042,1.042,0,0,1-2.083,0V13.542H7.031a1.042,1.042,0,0,1,0-2.083h4.427V7.031a1.042,1.042,0,0,1,2.083,0v4.427h4.427a1.042,1.042,0,0,1,0,2.083Zm0,0"
+                  fill="#6768A6"/>
+        </g>
+    </g>
+</svg>

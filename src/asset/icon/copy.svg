@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20" viewBox="0 0 20 20">
+  <defs>
+    <clipPath id="copy">
+      <rect id="Rectangle_341" data-name="Rectangle 341" width="20" height="20" transform="translate(622.5 334.063)" fill="#fffffb"/>
+    </clipPath>
+  </defs>
+  <g id="copy" transform="translate(-622.5 -334.063)" clip-path="url(#copy)">
+    <path id="Icon_material-content-copy" data-name="Icon material-content-copy" d="M15.727,1.5H4.818A1.824,1.824,0,0,0,3,3.318V16.045H4.818V3.318H15.727Zm2.727,3.636h-10A1.824,1.824,0,0,0,6.636,6.955V19.682A1.824,1.824,0,0,0,8.455,21.5h10a1.824,1.824,0,0,0,1.818-1.818V6.955A1.824,1.824,0,0,0,18.455,5.136Zm0,14.545h-10V6.955h10Z" transform="translate(620.5 332.563)" fill="#6768a6"/>
+  </g>
+</svg>

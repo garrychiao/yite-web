@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" viewBox="0 0 18 18">
+  <defs>
+    <clipPath id="text-underlined">
+      <rect id="Rectangle_266" data-name="Rectangle 266" width="18" height="18" transform="translate(0 0)" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="underlined" clip-path="url(#text-underlined)">
+    <path id="Icon_material-format-underlined" data-name="Icon material-format-underlined" d="M14.5,18.5a6,6,0,0,0,6-6v-8H18v8a3.5,3.5,0,0,1-7,0v-8H8.5v8A6,6,0,0,0,14.5,18.5Zm-7,2v2h14v-2Z" transform="translate(-5.5 -4.5)" fill="#777"/>
+  </g>
+</svg>

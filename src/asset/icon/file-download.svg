@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="25" viewBox="0 0 25 25">
+  <defs>
+    <clipPath id="file-download">
+      <rect id="Rectangle_852" data-name="Rectangle 852" width="25" height="25" transform="translate(300 224)" fill="#6768a6"/>
+    </clipPath>
+  </defs>
+  <g id="file-download" transform="translate(-300 -224)" clip-path="url(#file-download)">
+    <path id="Icon_awesome-file-download" data-name="Icon awesome-file-download" d="M10.938,6.641V0H1.172A1.169,1.169,0,0,0,0,1.172V23.828A1.169,1.169,0,0,0,1.172,25H17.578a1.169,1.169,0,0,0,1.172-1.172V7.812H12.109A1.175,1.175,0,0,1,10.938,6.641Zm3.733,10.32L9.962,21.634a.833.833,0,0,1-1.174,0L4.081,16.961a.781.781,0,0,1,.549-1.336H7.812V11.719a.781.781,0,0,1,.781-.781h1.563a.781.781,0,0,1,.781.781v3.906H14.12A.781.781,0,0,1,14.67,16.961ZM18.408,5.127,13.628.342A1.171,1.171,0,0,0,12.8,0h-.3V6.25h6.25v-.3A1.168,1.168,0,0,0,18.408,5.127Z" transform="translate(303.125 224)" fill="#6768a6"/>
+  </g>
+</svg>
