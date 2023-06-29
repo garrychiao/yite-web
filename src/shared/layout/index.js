@@ -1,4 +1,4 @@
-export { default as Page } from './Page';
+// export { default as Page } from './Page';
 export { default as Section } from './Section';
 export { default as Toolbar } from './Toolbar';
 export { default as ActionSpace } from './ActionSpace';

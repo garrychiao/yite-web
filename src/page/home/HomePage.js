@@ -5,17 +5,17 @@ import color from 'shared/style/color';
 import i18n from 'i18next';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-// import useMainRoutes from './useMainRoutes';
-// import MainHeader from './MainHeader';
-// import Footer from './Footer';
+import { Section } from 'shared/layout';
 
 const { Title } = Typography;
 
 export default function HomePage() {
 
   return (
-    <>
-      hello world
-    </>
+    <Section.Container>
+      <Section>
+        hello world
+      </Section>
+    </Section.Container>
   );
 }

@@ -1,7 +1,12 @@
 import { lazy } from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
+import HomePage from 'page/home/HomePage';
+import { ProductListPage, ProductPage } from 'page/product';
+import { CategoryPage } from 'page/category';
 
-const HomePage = lazy(() => import('page/home/HomePage'));
+// const HomePage = lazy(() => import('page/home/HomePage'));
+// const { ProductPage, ProductListPage }= lazy(() => import('page/product'));
+// const { CategoryPage }= lazy(() => import('page/category'));
 // const ManagePage = lazy(() => import('page/manage/ManagePage'));
 // const ComparePage = lazy(() => import('page/compare/ComparePage'));
 // const LoginPage = lazy(() => import('page/auth/LoginPage'));
@@ -15,6 +20,27 @@ export default function useMainRoutes() {
     {
       path: '/',
       element: <HomePage />,
+    },
+    {
+      path: '/category',
+      children: [
+        {
+          path: '',
+          element: <CategoryPage />,
+        },
+        {
+          path: ':id',
+          element: <CategoryPage />,
+        },
+        {
+          path: 'product/:id',
+          element: <ProductListPage />,
+        },
+        {
+          path: 'productDetail/:id',
+          element: <ProductPage />,
+        },
+      ]
     },
     // {
     //   path: '/login',

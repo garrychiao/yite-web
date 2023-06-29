@@ -30,17 +30,5 @@ export default function MainPage() {
 }
 
 const StyledContent = styled(Layout.Content)`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  overflow: auto;
-  background-color: ${color.bg};
-`;
-const Footer = styled.div`
-  bottom: 0;
-  margin-top: auto;
-  width: 100%;
-  line-height: 30px;
-  text-align: center;
-  color: ${color.placeholder};
+  
 `;
