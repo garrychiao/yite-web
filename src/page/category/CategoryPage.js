@@ -86,7 +86,10 @@ export default function CategoryPage() {
             rowKey={'id'}
             dataSource={categoryItems}
             renderItem={(item) => {
-              const link = !id ? `./${item.id}` : !item.hasProduct ? `../${item.id}` : `../product/${item.id}`
+              console.log(item)
+              const link = id ? 
+                !item.hasProduct ? `../${item.id}` : `../product/${item.id}`
+              : !item.hasProduct ? `./${item.id}` : `./product/${item.id}`
 
               return (<List.Item>
                 <Link to={link}>
