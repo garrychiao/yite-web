@@ -1,6 +1,6 @@
 import { useMemo, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Divider, List, Breadcrumb, Card, Row, Col, Typography, Carousel, Image } from 'antd';
+import { Button, Divider, List, Breadcrumb, Card, Row, Col, Typography, Carousel, Image } from 'antd';
 import color from 'shared/style/color';
 import i18n from 'i18next';
 import { ArrowRightOutlined } from '@ant-design/icons';
@@ -10,6 +10,8 @@ import { useRequest } from 'ahooks';
 import { categoryApi, productApi } from 'page/api';
 import getSysFileUrl from 'utils/apiSysFiles';
 import { TabList } from './fields';
+import ButtonGroup from 'shared/buttonGroup';
+import CartCountOperator from 'shared/cartCountOperator';
 
 const { Title } = Typography;
 
@@ -17,6 +19,8 @@ export default function ProductPage() {
 
   const { id } = useParams();
   const [productData, setProductData] = useState({});
+  console.log(`productData`)
+  console.log(productData)
   const [productImages, setProductImages] = useState([]);
   const [selectedProductImageIndex, setSelectedProductImageIndex] = useState(0);
   const [featureImages, setFeatureImages] = useState([]);
@@ -52,7 +56,6 @@ export default function ProductPage() {
 
   const { loading: loadingProductFeaturesData } = useRequest(() => productApi.getFeatures({ id }), {
     onSuccess: (data) => {
-      console.log(data)
       setProductFeatures(data
         .filter((item) => item.featureType === 'INSIDE')
         .map((item) => ({ description: item.description }))
@@ -116,7 +119,7 @@ export default function ProductPage() {
         />
         <Divider />
         <Row gutter={40}>
-          <Col span={12}>
+          <Col sm={12} xs={24}>
             <Image preview={false} src={productImages[selectedProductImageIndex]?.imageUrl} />
             <ImageGalleryList>
               {
@@ -136,7 +139,7 @@ export default function ProductPage() {
               }
             </ImageGalleryList>
           </Col>
-          <Col span={12}>
+          <Col sm={12} xs={24}>
             <Title level={3}>{productData?.productNo}</Title>
             <Title style={{ marginTop: 0 }} level={2}>{productData?.productName}</Title>
             {
@@ -148,6 +151,47 @@ export default function ProductPage() {
               </ul>
             }
             {featureImages.length > 0 && <Image preview={false} src={featureImages[0].imageUrl} />}
+            <Divider />
+            <Title level={4} style={{margin: 0}}>選擇規格</Title>
+            {/* product spec section */}
+            <Row style={{paddingTop: 30}}>
+              <Col>
+                {
+                  (productData?.specs && productData.specs.length > 0) && 
+                    productData.specs.map((spec, index) => (
+                      <Row key={index} gutter={50} align='middle'>
+                        <Col>
+                          <Title level={4} style={{margin: 0}}>{spec.specName}</Title>
+                        </Col>
+                        <Col>
+                          <ButtonGroup items={spec.items.map(item => ({
+                            name: item.itemName,
+                            value: item.productNo
+                          }))} />
+                        </Col>
+                      </Row>
+                    ))
+                }
+              </Col>
+            </Row>
+
+            {/* add product to cart count */}
+            <Row style={{paddingTop: 30}} align='middle' gutter={50}>
+              <Col>
+                <Title style={{margin: 0}} level={4}>數量</Title>
+              </Col>
+              <Col>
+                <CartCountOperator />
+              </Col>
+            </Row>
+            <Row style={{paddingTop: 30}} align='middle' gutter={50}>
+              <Col>
+                <Button size='large'>加入購物車</Button>
+              </Col>
+              <Col>
+                <Button size='large'>直接購買</Button>
+              </Col>
+            </Row>
           </Col>
         </Row>
         <Row style={{paddingTop: 80}}>
