@@ -48,7 +48,7 @@ export default function AuthProvider({ children }) {
     // },
   ]
   
-  const [user, setUser] = useState(roleList[uindex]);
+  const [user, setUser] = useState(roleList[0]);
   
   const switchUser = () => {
     console.log('user switching')

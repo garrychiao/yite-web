@@ -96,7 +96,12 @@ export default function ProductPage() {
     onSuccess: (data) => {
       console.log(data)
       setDownloadFiles(data
-        .map((item) => ({ uri: getSysFileUrl(item.sysFileId) }))
+        .map((item) => {
+
+          console.log(`item`)
+          console.log(item)
+          return { name: item.sysFile.originName, uri: getSysFileUrl(item.sysFileId) }
+        })
       );
     }
   });
