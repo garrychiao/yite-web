@@ -9,6 +9,7 @@ import { Section } from 'shared/layout';
 import { useRequest } from 'ahooks';
 import { categoryApi, productApi } from 'page/api';
 import getSysFileUrl from 'utils/apiSysFiles';
+import FullSpin from 'shared/FullSpin';
 
 const { Title } = Typography;
 
@@ -62,48 +63,52 @@ export default function CategoryPage() {
   console.log(`breadcrumbList`)
   console.log(breadcrumbList)
 
+  const loading = loadingCategoryDetailData || loadingCategoryList
+
   return (
-    <Wrapper>
-      <Section.Container>
-        <Section style={{height: '100vh'}}>
-          <Breadcrumb
-            separator=">"
-            items={breadcrumbList}
-          />
+    <FullSpin spinning={loading}>
+      <Wrapper>
+        <Section.Container>
+          <Section style={{height: '100vh'}}>
+            <Breadcrumb
+              separator=">"
+              items={breadcrumbList}
+            />
 
-          <Divider />
+            <Divider />
 
-          <List
-            grid={{
-              gutter: 36,
-              xs: 1,
-              sm: 2,
-              md: 4,
-              lg: 4,
-              xl: 4,
-              xxl: 4,
-            }}
-            rowKey={'id'}
-            dataSource={categoryItems}
-            renderItem={(item) => {
-              console.log(item)
-              const link = id ? 
-                !item.hasProduct ? `../${item.id}` : `../product/${item.id}`
-              : !item.hasProduct ? `./${item.id}` : `./product/${item.id}`
+            <List
+              grid={{
+                gutter: 36,
+                xs: 1,
+                sm: 2,
+                md: 4,
+                lg: 4,
+                xl: 4,
+                xxl: 4,
+              }}
+              rowKey={'id'}
+              dataSource={categoryItems}
+              renderItem={(item) => {
+                console.log(item)
+                const link = id ? 
+                  !item.hasProduct ? `../${item.id}` : `../product/${item.id}`
+                : !item.hasProduct ? `./${item.id}` : `./product/${item.id}`
 
-              return (<List.Item>
-                <Link to={link}>
-                  <CategoryItem>
-                    <Image preview={false} src={item.imageUrl} width={'100%'} />
-                    <Title level={4} style={{textAlign: 'center'}}>{item.categoryName}</Title>
-                  </CategoryItem>
-                </Link>
-              </List.Item>)
-            }}
-          />
-        </Section>
-      </Section.Container>
-    </Wrapper>
+                return (<List.Item>
+                  <Link to={link}>
+                    <CategoryItem>
+                      <Image preview={false} src={item.imageUrl} width={'100%'} />
+                      <Title level={4} style={{textAlign: 'center'}}>{item.categoryName}</Title>
+                    </CategoryItem>
+                  </Link>
+                </List.Item>)
+              }}
+            />
+          </Section>
+        </Section.Container>
+      </Wrapper>
+    </FullSpin>
   );
 }
 

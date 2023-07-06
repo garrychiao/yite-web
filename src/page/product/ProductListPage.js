@@ -9,6 +9,7 @@ import { Section } from 'shared/layout';
 import { useRequest } from 'ahooks';
 import { categoryApi, productApi } from 'page/api';
 import getSysFileUrl from 'utils/apiSysFiles';
+import FullSpin from 'shared/FullSpin';
 
 const { Title } = Typography;
 
@@ -60,51 +61,55 @@ export default function ProductListPage() {
   // console.log(`breadcrumbList`)
   // console.log(breadcrumbList)
 
+  const loading = loadingProductDetailData || loadingProductListData;
+
 
   return (
-    <Wrapper>
-      <Section.Container>
-      <Section style={{height: '100vh'}}>
-        <Breadcrumb
-            separator=">"
-            items={breadcrumbList}
-          />
-        <Divider />
+    <FullSpin spinning={loading}>
+      <Wrapper>
+        <Section.Container>
+          <Section style={{height: '100vh'}}>
+            <Breadcrumb
+                separator=">"
+                items={breadcrumbList}
+              />
+            <Divider />
 
-        {productItems.length === 0 && <>查無產品</>}
-        <List
-          grid={{
-            gutter: 36,
-            xs: 1,
-            sm: 2,
-            md: 4,
-            lg: 4,
-            xl: 4,
-            xxl: 4,
-          }}
-          rowKey={'id'}
-          dataSource={productItems}
-          renderItem={(item) => {
-            return (<List.Item>
-              <Link to={`../productDetail/${item.id}`}>
-                <CategoryItem>
-                  <Image preview={false} src={item.imageUrl} width={'100%'} />
-                  <Divider />
-                  <Title level={5} style={{textAlign: 'center', marginTop: 0}}>{item.productNo}</Title>
-                  <Title level={4} style={{textAlign: 'center', marginTop: 0}}>{item.productName}</Title>
-                  <BulletList>
-                    {item?.outsideFeatures && item.outsideFeatures.map((item, index) => (
-                      <li key={index}>{item.description}</li>
-                    ))}
-                  </BulletList>
-                </CategoryItem>
-              </Link>
-            </List.Item>)
-          }}
-        />
-      </Section>
-    </Section.Container>
-    </Wrapper>
+            {productItems.length === 0 && <>查無產品</>}
+            <List
+              grid={{
+                gutter: 36,
+                xs: 1,
+                sm: 2,
+                md: 4,
+                lg: 4,
+                xl: 4,
+                xxl: 4,
+              }}
+              rowKey={'id'}
+              dataSource={productItems}
+              renderItem={(item) => {
+                return (<List.Item>
+                  <Link to={`../productDetail/${item.id}`}>
+                    <CategoryItem>
+                      <Image preview={false} src={item.imageUrl} width={'100%'} />
+                      <Divider />
+                      <Title level={5} style={{textAlign: 'center', marginTop: 0}}>{item.productNo}</Title>
+                      <Title level={4} style={{textAlign: 'center', marginTop: 0}}>{item.productName}</Title>
+                      <BulletList>
+                        {item?.outsideFeatures && item.outsideFeatures.map((item, index) => (
+                          <li key={index}>{item.description}</li>
+                        ))}
+                      </BulletList>
+                    </CategoryItem>
+                  </Link>
+                </List.Item>)
+              }}
+            />
+          </Section>
+        </Section.Container>
+      </Wrapper>
+    </FullSpin>
   );
 }
 

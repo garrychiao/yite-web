@@ -29,7 +29,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy.meproz": "ssh root@www.meproz.com 'rm -rf /var/www/yite-web && mkdir /var/www/yite-web' && scp -r build/* root@www.meproz.com:/var/www/yite-web"
   },
   "eslintConfig": {
     "extends": [
