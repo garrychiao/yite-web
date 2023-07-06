@@ -1,15 +1,18 @@
 import { useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { Layout, Menu, Image } from 'antd';
+import { Layout, Menu, Button } from 'antd';
 import color from 'shared/style/color';
 import { useLocation, useNavigate } from 'react-router-dom';
 import i18n from 'i18next';
+import { useAuth } from 'shared/auth';
 
 export default function MainHeader() {
   // const responsive = useResponsive();
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(location.pathname)
+  // console.log(location.pathname)
+
+  const { user, switchUser } = useAuth();
   
   const items = [
     {
@@ -46,6 +49,9 @@ export default function MainHeader() {
         mode="horizontal" 
         items={items} 
       />
+      <Button onClick={() => {
+        switchUser();
+      }}>{user?.name}</Button>
     </StyledHeader>
   );
 }
@@ -53,4 +59,7 @@ export default function MainHeader() {
 // web styles
 const StyledHeader = styled(Layout.Header)`
   background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;

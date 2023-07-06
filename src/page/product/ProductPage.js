@@ -12,6 +12,7 @@ import getSysFileUrl from 'utils/apiSysFiles';
 import { TabList } from './fields';
 import ButtonGroup from 'shared/buttonGroup';
 import CartCountOperator from 'shared/cartCountOperator';
+import CurrencyFormat from 'react-currency-format';
 
 const { Title } = Typography;
 
@@ -104,7 +105,7 @@ export default function ProductPage() {
 
   }, [productData])
 
-  // console.log(productDetailData)
+  console.log(productData)
 
 
 
@@ -151,6 +152,47 @@ export default function ProductPage() {
               </ul>
             }
             {featureImages.length > 0 && <Image preview={false} src={featureImages[0].imageUrl} />}
+            <Divider />
+            {
+              productData?.customerPrice ? (
+                <Row gutter={50} align='middle'>
+                  <Col>
+                    <Title style={{margin: 0}} level={4}>會員價格</Title>
+                  </Col>
+                  <Col style={{textAlign: 'center', display: 'flex', flexDirection: 'column'}}>
+                    <CurrencyFormat 
+                      value={productData.defaultPrice} 
+                      thousandSeparator={true} 
+                      prefix={'$'} 
+                      displayType='text'
+                      renderText={value => <small style={{textDecoration: 'line-through'}}>{value}</small>} 
+                    />
+                    <CurrencyFormat 
+                      value={productData.customerPrice.price} 
+                      thousandSeparator={true} 
+                      prefix={'$'} 
+                      style={{fontSize: 20}}
+                      displayType='text'
+                    />
+                  </Col>
+                </Row>
+              ) : (
+                <Row gutter={50}>
+                  <Col>
+                    <Title style={{margin: 0}} level={4}>價格</Title>
+                  </Col>
+                  <Col>
+                    <CurrencyFormat 
+                      value={productData.defaultPrice} 
+                      thousandSeparator={true} 
+                      prefix={'$'} 
+                      style={{fontSize: 20}}
+                      displayType='text'
+                    />
+                  </Col>
+                </Row>
+              )
+            }
             <Divider />
             <Title level={4} style={{margin: 0}}>選擇規格</Title>
             {/* product spec section */}

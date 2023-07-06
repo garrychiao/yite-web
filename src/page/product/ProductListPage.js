@@ -35,8 +35,8 @@ export default function ProductListPage() {
     })) : list
   }, [productListData]);
 
-  // console.log(`data`)
-  // console.log(productItems)
+  console.log(`data`)
+  console.log(productDetailData)
 
   const breadcrumbList = useMemo(() => {
     const initPath = [
@@ -57,8 +57,8 @@ export default function ProductListPage() {
 
   }, [productDetailData])
 
-  console.log(`breadcrumbList`)
-  console.log(breadcrumbList)
+  // console.log(`breadcrumbList`)
+  // console.log(breadcrumbList)
 
 
   return (

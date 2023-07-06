@@ -18,10 +18,12 @@ export default function setupAxios() {
     );
     
     try {
-      // // https://firebase.google.com/docs/reference/js/auth.md?authuser=0#getidtoken
-      // // Returns the current token if it has not expired or if it will not
-      // // expire in the next five minutes. Otherwise, this will refresh the
-      // // token and return a new one.
+      const token = localStorage.getItem('token');
+      console.log(`token`)
+      console.log(token)
+      if (token) {
+        request.headers.token = `${token}`;
+      }
       // if (auth?.currentUser) {
       //   const token = await getIdToken(auth.currentUser);
       //   request.headers.authorization = `JWT ${token}`;
