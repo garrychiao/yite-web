@@ -6,8 +6,8 @@ import color from 'shared/style/color';
 export default function ButtonGroup ({items = [], selectedIndex}) {
 
   const [selected, setSelected] = useState(selectedIndex);
-  console.log(`items`)
-  console.log(items)
+  // console.log(`items`)
+  // console.log(items)
 
   return (<Container>
     {items.map((item, index) => (

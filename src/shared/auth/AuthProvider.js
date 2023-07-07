@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import log from 'loglevel';
-import { createContext, useMemo, useState } from 'react';
+import { createContext, useMemo, useState, useEffect } from 'react';
 import { useBoolean, useMount, useMemoizedFn, useRequest } from 'ahooks';
 import PropTypes from 'prop-types';
 import FullSpin from 'shared/FullSpin';
@@ -48,7 +48,8 @@ export default function AuthProvider({ children }) {
     // },
   ]
   
-  const [user, setUser] = useState(roleList[0]);
+  const [user, setUser] = useState(roleList[uindex]);
+  // console.log(uindex)
   
   const switchUser = () => {
     console.log('user switching')
@@ -75,6 +76,9 @@ export default function AuthProvider({ children }) {
     }
   }
 
+  useEffect(() => {
+    switchUser()
+  }, [])
   // const signOut = useMemoizedFn(async () => {
   //   const firebaseAuth = getAuth();
   //   try {

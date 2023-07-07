@@ -94,12 +94,8 @@ export default function ProductPage() {
 
   const { loading: loadingProductFilesData } = useRequest(() => productApi.getFiles({ id }), {
     onSuccess: (data) => {
-      console.log(data)
       setDownloadFiles(data
         .map((item) => {
-
-          console.log(`item`)
-          console.log(item)
           return { name: item.sysFile.originName, uri: getSysFileUrl(item.sysFileId) }
         })
       );
@@ -114,7 +110,7 @@ export default function ProductPage() {
 
   const specTabData = useMemo(() => ({
     tableData: productData?.specCategoryItems, // array
-    bulletData: productData?.specDescription, // array
+    bulletData: productData?.specItems, // array
   }), [productData])
 
   const breadcrumbList = useMemo(() => {
@@ -140,7 +136,6 @@ export default function ProductPage() {
 
   const renderInventoryCount = (count) => {
     const target = inventorySetup.find(item => item.count >= count);
-    console.log(target);
     if (target) {
       return <Text style={{textAlign: 'center', fontSize: 18, color: target.color}}>{count}</Text>
     }
@@ -244,13 +239,35 @@ export default function ProductPage() {
                   </Row>
                 )
               }
+              {
+                (productData?.sellPrice && productData?.customerPrice) && (<>
+                <Divider />
+                <Row gutter={50}>
+                  <Col>
+                    <Title style={{ margin: 0 }} level={4}>建議價格</Title>
+                  </Col>
+                  <Col>
+                    <CurrencyFormat
+                      value={productData.sellPrice}
+                      thousandSeparator={true}
+                      prefix={'$'}
+                      style={{ fontSize: 20 }}
+                      displayType='text'
+                    />
+                  </Col>
+                </Row>
+                </>)
+              }
               <Divider />
-              <Row gutter={50}>
+              <Row gutter={50} align='middle'>
                 <Col>
                   <Title style={{ margin: 0 }} level={4}>庫存數量</Title>
                 </Col>
                 <Col>
                   {renderInventoryCount(inventoryCount)}
+                </Col>
+                <Col>
+                  <Button size='large' onClick={() => {onChangeInventoryCount()}}>切換庫存數量</Button>
                 </Col>
               </Row>
               <Divider />
@@ -261,7 +278,7 @@ export default function ProductPage() {
                   {
                     (productData?.specs && productData.specs.length > 0) &&
                     productData.specs.map((spec, index) => (
-                      <Row key={index} gutter={50} align='middle'>
+                      <Row key={index} gutter={50} style={{paddingTop: 20}} align='middle'>
                         <Col>
                           <Title level={4} style={{ margin: 0 }}>{spec.specName}</Title>
                         </Col>
@@ -288,7 +305,7 @@ export default function ProductPage() {
               </Row>
               <Row style={{ paddingTop: 30 }} align='middle' gutter={50}>
                 <Col>
-                  <Button size='large' onClick={() => {onChangeInventoryCount()}}>加入購物車</Button>
+                  <Button size='large'>加入購物車</Button>
                 </Col>
                 <Col>
                   <Button size='large'>直接購買</Button>
