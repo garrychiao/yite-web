@@ -137,14 +137,14 @@ export default function ProductPage() {
   const renderInventoryCount = (count) => {
     const target = inventorySetup.find(item => item.count >= count);
     if (target) {
-      return <Text style={{textAlign: 'center', fontSize: 18, color: target.color}}>{count}</Text>
+      return <Text style={{ textAlign: 'center', fontSize: 18, color: target.color }}>{count}</Text>
     }
-    return <Text style={{textAlign: 'center', fontSize: 18, color: defaultLight}}>{count}</Text>
+    return <Text style={{ textAlign: 'center', fontSize: 18, color: defaultLight }}>{count}</Text>
   }
 
   const onChangeInventoryCount = () => {
     const index = inventoryCountList.indexOf(inventoryCount);
-    if (index !== inventoryCountList.length -1) {
+    if (index !== inventoryCountList.length - 1) {
       setInventoryCount(inventoryCountList[index + 1]);
     } else {
       setInventoryCount(inventoryCountList[0]);
@@ -241,21 +241,21 @@ export default function ProductPage() {
               }
               {
                 (productData?.sellPrice && productData?.customerPrice) && (<>
-                <Divider />
-                <Row gutter={50}>
-                  <Col>
-                    <Title style={{ margin: 0 }} level={4}>建議價格</Title>
-                  </Col>
-                  <Col>
-                    <CurrencyFormat
-                      value={productData.sellPrice}
-                      thousandSeparator={true}
-                      prefix={'$'}
-                      style={{ fontSize: 20 }}
-                      displayType='text'
-                    />
-                  </Col>
-                </Row>
+                  <Divider />
+                  <Row gutter={50}>
+                    <Col>
+                      <Title style={{ margin: 0 }} level={4}>建議價格</Title>
+                    </Col>
+                    <Col>
+                      <CurrencyFormat
+                        value={productData.sellPrice}
+                        thousandSeparator={true}
+                        prefix={'$'}
+                        style={{ fontSize: 20 }}
+                        displayType='text'
+                      />
+                    </Col>
+                  </Row>
                 </>)
               }
               <Divider />
@@ -267,35 +267,35 @@ export default function ProductPage() {
                   {renderInventoryCount(inventoryCount)}
                 </Col>
                 <Col>
-                  <Button size='large' onClick={() => {onChangeInventoryCount()}}>切換庫存數量</Button>
+                  <Button size='large' onClick={() => { onChangeInventoryCount() }}>切換庫存數量</Button>
                 </Col>
               </Row>
               <Divider />
-              <Title level={4} style={{ margin: 0 }}>選擇規格</Title>
-              {/* product spec section */}
-              <Row style={{ paddingTop: 30 }}>
-                <Col>
-                  {
-                    (productData?.specs && productData.specs.length > 0) &&
-                    productData.specs.map((spec, index) => (
-                      <Row key={index} gutter={50} style={{paddingTop: 20}} align='middle'>
-                        <Col>
-                          <Title level={4} style={{ margin: 0 }}>{spec.specName}</Title>
-                        </Col>
-                        <Col>
-                          <ButtonGroup items={spec.items.map(item => ({
-                            name: item.itemName,
-                            value: item.productNo
-                          }))} />
-                        </Col>
-                      </Row>
-                    ))
-                  }
-                </Col>
-              </Row>
-
+              {
+                (productData?.specs && productData.specs.length > 0) &&
+                <>
+                  <Title level={4} style={{ margin: 0 }}>選擇規格</Title>
+                  <Row style={{paddingBottom: 20}}>
+                    <Col>
+                      {productData.specs.map((spec, index) => (
+                        <Row key={index} gutter={50} style={{ paddingTop: 20 }} align='middle'>
+                          <Col>
+                            <Title level={4} style={{ margin: 0 }}>{spec.specName}</Title>
+                          </Col>
+                          <Col>
+                            <ButtonGroup items={spec.items.map(item => ({
+                              name: item.itemName,
+                              value: item.productNo
+                            }))} />
+                          </Col>
+                        </Row>
+                      ))}
+                    </Col>
+                  </Row>
+                </>
+              }
               {/* add product to cart count */}
-              <Row style={{ paddingTop: 30 }} align='middle' gutter={50}>
+              <Row align='middle' gutter={50}>
                 <Col>
                   <Title style={{ margin: 0 }} level={4}>數量</Title>
                 </Col>

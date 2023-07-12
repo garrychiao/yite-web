@@ -4,6 +4,7 @@ import HomePage from 'page/home/HomePage';
 import { ProductListPage, ProductPage } from 'page/product';
 import { CategoryPage } from 'page/category';
 import { RequireAuth } from 'page/auth';
+import { CartPage, ConfirmOrderPage, OrderCreatedPage } from 'page/cart';
 
 // const HomePage = lazy(() => import('page/home/HomePage'));
 // const { ProductPage, ProductListPage }= lazy(() => import('page/product'));
@@ -13,6 +14,7 @@ import { RequireAuth } from 'page/auth';
 const LoginPage = lazy(() => import('page/auth/LoginPage'));
 const LoginResultPage = lazy(() => import('page/auth/LoginResultPage'));
 const UserInfo = lazy(() => import('page/auth/UserInfo'));
+// const CartPage = lazy(() => import('page/cart/CartPage'));
 // const RegisterPage = lazy(() => import('page/auth/RegisterPage'));
 // const AboutUsPage = lazy(() => import('page/aboutUs/AboutUsPage'));
 // const PrivacyPage = lazy(() => import('page/privacy/PrivacyPage'));
@@ -45,11 +47,35 @@ export default function useMainRoutes() {
         },
       ]
     },
+    // auth pages
     {
       path: '/user/info',
       element: (<RequireAuth required>
         <UserInfo />
       </RequireAuth>)
+    },
+    {
+      path: '/cart',
+      element: (<RequireAuth required>
+        <CartPage />
+      </RequireAuth>)
+    },
+    {
+      path: '/order',
+      children: [
+        {
+          path: 'confirm',
+          element: (<RequireAuth required>
+            <ConfirmOrderPage />
+          </RequireAuth>)
+        },
+        {
+          path: 'created',
+          element: (<RequireAuth required>
+            <OrderCreatedPage />
+          </RequireAuth>)
+        },
+      ]
     },
     {
       path: '/login/result',

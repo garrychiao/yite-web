@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Suspense } from 'react';
 import { ConfigProvider, Empty } from 'antd';
-// import { AuthProvider } from 'shared/auth';
+import { CartProvider } from 'shared/cart';
 // import { AuthProvider } from 'react-auth-kit'
 import color from 'shared/style/color';
 import GlobalStyles from 'shared/style/GlobalStyles';
@@ -20,10 +20,12 @@ export default function App() {
 
   return (
     <ConfigProvider renderEmpty={() => <Empty description={false} />}>
-      <GlobalStyles />
-      <AppLayout>
-        <Suspense fallback={null}>{routes}</Suspense>
-      </AppLayout>
+      <CartProvider>
+        <GlobalStyles />
+        <AppLayout>
+          <Suspense fallback={null}>{routes}</Suspense>
+        </AppLayout>
+      </CartProvider>
     </ConfigProvider>
   );
 }

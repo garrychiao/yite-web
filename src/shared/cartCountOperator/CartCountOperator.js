@@ -5,21 +5,26 @@ import color from 'shared/style/color';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 
 
-export default function CartCountOperator ({initvalue = 0}) {
+export default function CartCountOperator ({initvalue = 1, onChange = () => {}}) {
 
   const [count, setCount] = useState(initvalue);
 
+  const onValueChange = (value) => {
+    onChange(value);
+    setCount(value);
+  }
+
   return (<Container>
     <OperationContainer onClick={() => {
-      if (count > 0) setCount(count - 1)
+      if (count > 1) onValueChange(count - 1)
     }}>
       <MinusOutlined />
     </OperationContainer>
     <InputContainer>
-      <InputNumber controls={false} value={count} min={0} step={1} />
+      <InputNumber controls={false} value={count} min={1} step={1} onChange={onValueChange} />
     </InputContainer>
     <OperationContainer onClick={() => {
-      setCount(count + 1);
+      onValueChange(count + 1);
     }}>
       <PlusOutlined />
     </OperationContainer>
@@ -30,15 +35,28 @@ export default function CartCountOperator ({initvalue = 0}) {
 const Container = styled.div`
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 25px;
+  flex-wrap: nowrap;
+  width: 100%;
+  border: 1px solid grey;
+  max-width: 120px;
 `
 
 const OperationContainer = styled.div`
   flex: 1;
   cursor: pointer;
+  text-align: center;
 `
 
 const InputContainer = styled.div`
-  flex: 4;
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  .ant-input-number-input {
+    text-align: center;
+    width: 100%;
+  }
+  .ant-input-number {
+    width: 60px;
+    border-radius: 0;
+  }
 `
