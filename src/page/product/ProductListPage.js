@@ -10,10 +10,14 @@ import { useRequest } from 'ahooks';
 import { categoryApi, productApi } from 'page/api';
 import getSysFileUrl from 'utils/apiSysFiles';
 import FullSpin from 'shared/FullSpin';
+import SearchInput from 'shared/SearchInput';
+import searchValues from 'shared/searchValues';
 
 const { Title } = Typography;
 
 export default function ProductListPage() {
+
+  const [search, onSearch] = useState('');
 
   const { id } = useParams();
   const { data:productListData, loading:loadingProductListData } = useRequest(() => productApi.list({
@@ -30,14 +34,17 @@ export default function ProductListPage() {
 
   const productItems = useMemo(() => {
     const list = productListData?.rows || [];
-    return list.length ? list.map(item => ({
+    return list.filter(item => searchValues(Object.values({
+      name: item.productName,
+      productNo: item.productNo,
+    }), search.toString())).map(item => ({
       ...item,
       imageUrl: item.mainImages ?  getSysFileUrl(item.mainImages[0].imageSysFileId) : ''
-    })) : list
-  }, [productListData]);
+    }))
+  }, [productListData, search]);
 
-  console.log(`data`)
-  console.log(productDetailData)
+  // console.log(`data`)
+  console.log(productListData)
 
   const breadcrumbList = useMemo(() => {
     const initPath = [
@@ -69,10 +76,17 @@ export default function ProductListPage() {
       <Wrapper>
         <Section.Container>
           <Section style={{height: '100vh'}}>
-            <Breadcrumb
-                separator=">"
-                items={breadcrumbList}
-              />
+            <Row justify={'space-between'}>
+              <Col>
+                <Breadcrumb
+                  separator=">"
+                  items={breadcrumbList}
+                />
+              </Col>
+              <Col>
+                <SearchInput onChange={onSearch} onSearch={() => {}} />
+              </Col>
+            </Row>
             <Divider />
 
             {productItems.length === 0 && <>查無產品</>}

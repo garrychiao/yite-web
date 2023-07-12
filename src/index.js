@@ -4,6 +4,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import reportWebVitals from 'setup/reportWebVitals';
 import setupI18n from 'setup/setupI18n';
 import setupAxios from 'setup/setupAxios';
+import { AuthProvider } from 'react-auth-kit'
 
 // import 'antd/dist/antd.variable.min.css';
 // import '@ant-design/pro-form/dist/form.css';
@@ -18,11 +19,16 @@ const App = lazy(() => import('./App'));
   await setupI18n();
 
   ReactDOM.render(
-    <Router>
-      <Suspense fallback={null}>
-        <App />
-      </Suspense>
-    </Router>,
+    <AuthProvider
+      authType={'localstorage'}
+      authName={'_auth'}>
+      <Router>
+        <Suspense fallback={null}>
+          <App />
+        </Suspense>
+      </Router>
+    </AuthProvider>
+    ,
     document.getElementById('root')
   );
 })();

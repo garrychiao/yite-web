@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { Suspense } from 'react';
 import { ConfigProvider, Empty } from 'antd';
-import { AuthProvider } from 'shared/auth';
+// import { AuthProvider } from 'shared/auth';
+// import { AuthProvider } from 'react-auth-kit'
 import color from 'shared/style/color';
 import GlobalStyles from 'shared/style/GlobalStyles';
 import useAppRoutes from './useAppRoutes';
@@ -19,17 +20,14 @@ export default function App() {
 
   return (
     <ConfigProvider renderEmpty={() => <Empty description={false} />}>
-      <AuthProvider>
-        <GlobalStyles />
-        <AppLayout>
-          <Suspense fallback={null}>{routes}</Suspense>
-        </AppLayout>
-      </AuthProvider>
+      <GlobalStyles />
+      <AppLayout>
+        <Suspense fallback={null}>{routes}</Suspense>
+      </AppLayout>
     </ConfigProvider>
   );
 }
 
 const AppLayout = styled.div`
-  // height: 100vh;
   
 `;

@@ -3,13 +3,16 @@ import { Navigate, useRoutes } from 'react-router-dom';
 import HomePage from 'page/home/HomePage';
 import { ProductListPage, ProductPage } from 'page/product';
 import { CategoryPage } from 'page/category';
+import { RequireAuth } from 'page/auth';
 
 // const HomePage = lazy(() => import('page/home/HomePage'));
 // const { ProductPage, ProductListPage }= lazy(() => import('page/product'));
 // const { CategoryPage }= lazy(() => import('page/category'));
 // const ManagePage = lazy(() => import('page/manage/ManagePage'));
 // const ComparePage = lazy(() => import('page/compare/ComparePage'));
-// const LoginPage = lazy(() => import('page/auth/LoginPage'));
+const LoginPage = lazy(() => import('page/auth/LoginPage'));
+const LoginResultPage = lazy(() => import('page/auth/LoginResultPage'));
+const UserInfo = lazy(() => import('page/auth/UserInfo'));
 // const RegisterPage = lazy(() => import('page/auth/RegisterPage'));
 // const AboutUsPage = lazy(() => import('page/aboutUs/AboutUsPage'));
 // const PrivacyPage = lazy(() => import('page/privacy/PrivacyPage'));
@@ -42,12 +45,22 @@ export default function useMainRoutes() {
         },
       ]
     },
-    // {
-    //   path: '/login',
-    //   element: <RequireAuth require={false}>
-    //     <LoginPage />
-    //   </RequireAuth>
-    // },
+    {
+      path: '/user/info',
+      element: (<RequireAuth required>
+        <UserInfo />
+      </RequireAuth>)
+    },
+    {
+      path: '/login/result',
+      element: <LoginResultPage />
+    },
+    {
+      path: '/login',
+      element: <RequireAuth nonAuth={true}>
+        <LoginPage />
+      </RequireAuth>
+    },
     // {
     //   path: '/register',
     //   element: <RequireAuth require={false}>

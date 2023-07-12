@@ -6,7 +6,8 @@ import { useRoutes } from 'react-router-dom';
 const MainPage = lazy(() => import('page/main/MainPage'));
 
 export default function useAppRoutes() {
-  return useRoutes([
+
+  const routes = useRoutes([
     { path: '403', element: '403 Forbidden' },
     { path: '404', element: '404 Not Found' },
     {
@@ -16,4 +17,6 @@ export default function useAppRoutes() {
       ),
     },
   ]);
+
+  return routes
 }

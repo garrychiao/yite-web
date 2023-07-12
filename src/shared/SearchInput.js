@@ -16,6 +16,7 @@ export default function SearchInput({
     <Input.Group style={{ width }} compact>
       <StyledInput
         onChange={(evt) => {
+          // console.log(evt)
           setKeyword(evt.target.value);
           onChange(evt.target.value);
         }}

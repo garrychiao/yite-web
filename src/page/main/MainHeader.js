@@ -2,17 +2,22 @@ import { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Layout, Menu, Button } from 'antd';
 import color from 'shared/style/color';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import i18n from 'i18next';
 import { useAuth } from 'shared/auth';
+import { LoginButton, LogoutButton } from 'page/auth';
+import {useAuthUser} from 'react-auth-kit'
+
 
 export default function MainHeader() {
   // const responsive = useResponsive();
+  const auth = useAuthUser()
+  const user = auth();
+
   const navigate = useNavigate();
   const location = useLocation();
-  // console.log(location.pathname)
+  // console.log(window.location.origin)
 
-  const { user, switchUser } = useAuth();
   
   const items = [
     {
@@ -25,16 +30,6 @@ export default function MainHeader() {
       key: '/category',
       path: '/category'
     },
-    // {
-    //   label: i18n.t('保單比較'),
-    //   key: '/compare',
-    //   path: '/compare'
-    // },
-    // {
-    //   label: i18n.t('登入／註冊'),
-    //   key: '/login',
-    //   path: '/login',
-    // },
   ]
 
   return (
@@ -43,15 +38,20 @@ export default function MainHeader() {
         defaultSelectedKeys='/'
         selectedKeys={[location.pathname]}
         onClick={(item) => {
-          console.log(item)
           navigate(`${item.key}`);
         }} 
         mode="horizontal" 
         items={items} 
       />
-      <Button onClick={() => {
-        switchUser();
-      }}>{user?.name}</Button>
+      
+      { user?.displayName ? <LogoutButton /> : <Link to='/login'>
+        <Button>
+          Login
+        </Button>
+      </Link> }
+      
+
+      
     </StyledHeader>
   );
 }

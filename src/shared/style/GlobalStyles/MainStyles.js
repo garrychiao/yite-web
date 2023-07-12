@@ -7,4 +7,7 @@ export default createGlobalStyle`
     background-color: #fff;
     font-size: 20px;
   }
+  #webpack-dev-server-client-overlay {
+    display:none;
+  }
 `;

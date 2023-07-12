@@ -6,10 +6,12 @@ import i18n from 'i18next';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Link, useParams } from 'react-router-dom';
 import { Section } from 'shared/layout';
-import { useRequest } from 'ahooks';
+import { useRequest, useEventTarget } from 'ahooks';
 import { categoryApi, productApi } from 'page/api';
 import getSysFileUrl from 'utils/apiSysFiles';
 import FullSpin from 'shared/FullSpin';
+import SearchInput from 'shared/SearchInput';
+import searchValues from 'shared/searchValues';
 
 const { Title } = Typography;
 
@@ -30,16 +32,21 @@ export default function CategoryPage() {
     ready: !!id,
     refreshDeps: [id]
   });
-  console.log(`categoryDetailData`)
-  console.log(categoryDetailData)
+
+  const [search, onSearch] = useState('');
+
+  // console.log(`categoryListData`)
+  // console.log(categoryListData)
 
   const categoryItems = useMemo(() => {
     const list = categoryListData?.rows || [];
-    return list.length ? list.map(item => ({
+    return list.filter(item => searchValues(Object.values({
+      name: item.categoryName
+    }), search.toString())).map(item => ({
       ...item,
       imageUrl: getSysFileUrl(item.imageSysFileId)
-    })) : list
-  }, [categoryListData]);
+    }))
+  }, [categoryListData, search]);
 
   const breadcrumbList = useMemo(() => {
     const initPath = [
@@ -60,8 +67,8 @@ export default function CategoryPage() {
 
   }, [categoryDetailData])
 
-  console.log(`breadcrumbList`)
-  console.log(breadcrumbList)
+  // console.log(`breadcrumbList`)
+  // console.log(breadcrumbList)
 
   const loading = loadingCategoryDetailData || loadingCategoryList
 
@@ -69,11 +76,18 @@ export default function CategoryPage() {
     <FullSpin spinning={loading}>
       <Wrapper>
         <Section.Container>
-          <Section style={{height: '100vh'}}>
-            <Breadcrumb
-              separator=">"
-              items={breadcrumbList}
-            />
+          <Section>
+            <Row justify={'space-between'}>
+              <Col>
+                <Breadcrumb
+                  separator=">"
+                  items={breadcrumbList}
+                />
+              </Col>
+              <Col>
+                <SearchInput onChange={onSearch} onSearch={() => {}} />
+              </Col>
+            </Row>
 
             <Divider />
 
@@ -90,7 +104,7 @@ export default function CategoryPage() {
               rowKey={'id'}
               dataSource={categoryItems}
               renderItem={(item) => {
-                console.log(item)
+                // console.log(item)
                 const link = id ? 
                   !item.hasProduct ? `../${item.id}` : `../product/${item.id}`
                 : !item.hasProduct ? `./${item.id}` : `./product/${item.id}`

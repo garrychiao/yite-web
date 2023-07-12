@@ -6,8 +6,17 @@ import _ from 'lodash';
 
 export default function setupAxios() {
   // set request base url
-  axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
-  // axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
+  const token = localStorage.getItem('token');
+
+  const publicBaseURL = `${process.env.REACT_APP_API_BASE_URL}/public`;
+  const authBaseURL = `${process.env.REACT_APP_API_BASE_URL}/api`;
+  
+  if (token) {
+    axios.defaults.baseURL = authBaseURL;
+  } else {
+    axios.defaults.baseURL = publicBaseURL;
+  }
+  
   // request interceptor
   axios.interceptors.request.use(async (request) => {
     log.debug(
@@ -18,16 +27,9 @@ export default function setupAxios() {
     );
     
     try {
-      const token = localStorage.getItem('token');
-      console.log(`token`)
-      console.log(token)
       if (token) {
-        request.headers.token = `${token}`;
+        request.headers.Authorization = `Bearer ${token}`;
       }
-      // if (auth?.currentUser) {
-      //   const token = await getIdToken(auth.currentUser);
-      //   request.headers.authorization = `JWT ${token}`;
-      // }
     } catch (e) {
       log.error('axios:getIdToken.error', e);
     }
