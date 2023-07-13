@@ -4,7 +4,7 @@ import { Button, Divider, Form, Breadcrumb, Card, Row, Col, Typography, Carousel
 import color from 'shared/style/color';
 import i18n from 'i18next';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Section } from 'shared/layout';
 import { useRequest } from 'ahooks';
 import { cartApi, productApi } from 'page/api';
@@ -45,6 +45,8 @@ const inventorySetup = [
 export default function ProductPage() {
 
   const { fetchCart, cart } = useCart();
+
+  const navigate = useNavigate();
   // console.log(cart)
   const auth = useAuthUser();
   const [form] = Form.useForm();
@@ -70,11 +72,27 @@ export default function ProductPage() {
   const { run: addToCart, loading: loadingAddToCart } = useRequest(({ payload }) => cartApi.add({ payload }), {
     manual: true,
     onSuccess: (data) => {
-      console.log(data)
+      // console.log(data)
       fetchCart();
       notification.success({
         message: '成功加入購物車'
       })
+    }, onError: (err) => {
+      console.error(err);
+      notification.error({
+        message: '發生錯誤'
+      })
+    }
+  });
+
+  // add to cart
+  const { run: runDirectBuy, loading: loadingDirectBuy } = useRequest(({ payload }) => cartApi.add({ payload }), {
+    manual: true,
+    onSuccess: (data) => {
+      fetchCart();
+      const { id } = data;
+      navigate(`/order/confirm/${id}`)
+
     }, onError: (err) => {
       console.error(err);
       notification.error({
@@ -185,7 +203,7 @@ export default function ProductPage() {
     }
   }
 
-  const onAddToCart = async () => {
+  const onAddToCart = async (isDirectBuy) => {
     try {
       await form.validateFields();
       // console.log(form.getFieldsValue());
@@ -203,7 +221,12 @@ export default function ProductPage() {
       console.log(`payload`);
       console.log(payload);
 
-      addToCart({ payload });
+      if (isDirectBuy) {
+        runDirectBuy({payload});
+      } else {
+        addToCart({payload});
+      }
+      
 
     } catch (err) {
       console.error('error:onAddToCart');
@@ -386,10 +409,12 @@ export default function ProductPage() {
                 <Col>
                   <Button
                     size='large'
-                    onClick={onAddToCart}>加入購物車</Button>
+                    onClick={() => onAddToCart(false)}>加入購物車</Button>
                 </Col>
                 <Col>
-                  <Button size='large'>直接購買</Button>
+                  <Button 
+                    size='large'
+                    onClick={() => onAddToCart(true)}>直接購買</Button>
                 </Col>
               </Row>
             </Col>

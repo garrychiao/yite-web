@@ -14,8 +14,10 @@ const { Title } = Typography;
 
 export default function ProductCard({ product = {} }) {
 
+  console.log(`product`)
+  console.log(product)
   const [specOpen, setSpecOpen] = useState(false);
-  const { fetchCart, selectedItems, addSelectedItem, removeSelectedItem } = useCart();
+  const { cart, fetchCart, selectedItems, addSelectedItem, removeSelectedItem } = useCart();
 
   const [qty, setQty] = useState(1);
   const [specs, setSpecs] = useState({});
@@ -33,7 +35,7 @@ export default function ProductCard({ product = {} }) {
 
   }, [product]);
 
-
+  
   const isSelected = useMemo(() => selectedItems.map(item => item.id).includes(product.id), [product, selectedItems]);
   // console.log(`isSelected`)
   // console.log(isSelected)
@@ -108,9 +110,12 @@ export default function ProductCard({ product = {} }) {
     updateToCart({payload});
   }
 
-  // useEffect(() => {
-  //   triggerUpdate(qty, specs);
-  // }, [qty, specs, triggerUpdate])
+  useEffect(() => {
+    if (isSelected) {
+      addSelectedItem(product.id);
+    }
+  }, [cart]);
+
 
   const RenderSpecSelect = () => {
 

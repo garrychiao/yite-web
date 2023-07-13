@@ -8,6 +8,6 @@ export default createGlobalStyle`
     font-size: 20px;
   }
   #webpack-dev-server-client-overlay {
-    display:none;
+    // display:none;
   }
 `;

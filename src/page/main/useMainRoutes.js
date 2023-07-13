@@ -83,6 +83,12 @@ export default function useMainRoutes() {
           </RequireAuth>)
         },
         {
+          path: 'confirm/:id',
+          element: (<RequireAuth required>
+            <ConfirmOrderPage />
+          </RequireAuth>)
+        },
+        {
           path: 'created',
           element: (<RequireAuth required>
             <OrderCreatedPage />
