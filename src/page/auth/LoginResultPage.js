@@ -11,6 +11,7 @@ import { authApi } from 'page/api';
 import getSysFileUrl from 'utils/apiSysFiles';
 import FullSpin from 'shared/FullSpin';
 import { useSignIn } from 'react-auth-kit'
+import axios from 'axios';
 
 const { Title } = Typography;
 
@@ -21,10 +22,16 @@ export default function LoginResultPage() {
   const { hash } = useLocation();
   const formattedToken = hash.substring(1);
   
-  const {run, loading} = useRequest(authApi.getMe, {
+  const {run, loading} = useRequest(() => authApi.getMe({token: formattedToken}), {
     manual: true,
     onSuccess: (res) => {
-      // setUser(res);
+      
+      axios.defaults.baseURL = `${process.env.REACT_APP_API_BASE_URL}/api`;
+      axios.interceptors.request.use(async (request) => {
+        request.headers.Authorization = `Bearer ${formattedToken}`;
+        return request;
+      });
+
       signIn(
         {
             token: formattedToken,
@@ -33,14 +40,15 @@ export default function LoginResultPage() {
             authState: res,
         }
       )
-      // localStorage.setItem(
-      //   'user',
-      //   JSON.stringify(res),
-      // )
+      
       notification.success({
         message: 'login success'
-      })
+      });
+      
       navigate('/');
+    },
+    onError: (err) => {
+      console.error(err);
     }
   });
 
@@ -48,7 +56,7 @@ export default function LoginResultPage() {
     if (formattedToken) {
       run();
     }
-  }, [])
+  }, [formattedToken, run]);
   
   return (
     <FullSpin spinning={loading} />

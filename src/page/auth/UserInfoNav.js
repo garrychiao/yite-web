@@ -49,6 +49,7 @@ export default function UserInfoNav() {
         style={{ padding: 20 }}
         onClick={(e) => {
           e.preventDefault();
+          localStorage.setItem('token', '')
           signOut();
         }}>
 

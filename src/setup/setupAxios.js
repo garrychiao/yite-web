@@ -6,7 +6,9 @@ import _ from 'lodash';
 
 export default function setupAxios() {
   // set request base url
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('_auth');
+  // console.log(`token`)
+  // console.log(token)
 
   const publicBaseURL = `${process.env.REACT_APP_API_BASE_URL}/public`;
   const authBaseURL = `${process.env.REACT_APP_API_BASE_URL}/api`;
