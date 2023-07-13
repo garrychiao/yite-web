@@ -1,19 +1,21 @@
 import { useMemo, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Button, Divider, List, Breadcrumb, Card, Row, Col, Typography, Carousel, Image } from 'antd';
+import { Button, Divider, Form, Breadcrumb, Card, Row, Col, Typography, Carousel, Image, notification } from 'antd';
 import color from 'shared/style/color';
 import i18n from 'i18next';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Link, useParams } from 'react-router-dom';
 import { Section } from 'shared/layout';
 import { useRequest } from 'ahooks';
-import { categoryApi, productApi } from 'page/api';
+import { cartApi, productApi } from 'page/api';
 import getSysFileUrl from 'utils/apiSysFiles';
 import { TabList } from './fields';
 import ButtonGroup from 'shared/buttonGroup';
 import CartCountOperator from 'shared/cartCountOperator';
 import CurrencyFormat from 'react-currency-format';
 import FullSpin from 'shared/FullSpin';
+import { useAuthUser } from 'react-auth-kit';
+import { useCart } from 'shared/cart';
 
 const { Title, Text } = Typography;
 
@@ -42,6 +44,10 @@ const inventorySetup = [
 
 export default function ProductPage() {
 
+  const { fetchCart, cart } = useCart();
+  // console.log(cart)
+  const auth = useAuthUser();
+  const [form] = Form.useForm();
   // tmp section
   const inventoryCountList = [1000, 500, 199, 95, 5, 0];
   const [inventoryCount, setInventoryCount] = useState(0);
@@ -57,12 +63,40 @@ export default function ProductPage() {
   const [productFeatures, setProductFeatures] = useState([]);
   const [downloadFiles, setDownloadFiles] = useState([]);
 
+  // storing spec data
+  const [specDict, setSpecDict] = useState({});
+  // console.log(specDict)
+  // add to cart
+  const { run: addToCart, loading: loadingAddToCart } = useRequest(({ payload }) => cartApi.add({ payload }), {
+    manual: true,
+    onSuccess: (data) => {
+      console.log(data)
+      fetchCart();
+      notification.success({
+        message: '成功加入購物車'
+      })
+    }, onError: (err) => {
+      console.error(err);
+      notification.error({
+        message: '發生錯誤'
+      })
+    }
+  });
+
   // console.log(`productFeatures`)
   // console.log(productFeatures)
   const { loading: loadingProductDetailData } = useRequest(() => productApi.get({ id }), {
     onSuccess: (data) => {
       console.log(data)
       setProductData(data);
+      const dict = {};
+      const specs = data?.specs || [];
+      if (specs.length > 0) {
+        specs.forEach(spec => {
+          dict[spec.id] = spec.items[0].itemName
+        })
+      }
+      setSpecDict(dict);
     }
   });
 
@@ -151,10 +185,42 @@ export default function ProductPage() {
     }
   }
 
+  const onAddToCart = async () => {
+    try {
+      await form.validateFields();
+      // console.log(form.getFieldsValue());
+      const { qty } = form.getFieldsValue();
+
+      const payload = {
+        userId: auth().id,
+        productId: productData.id,
+        qty,
+        selectedProductSpecs: Object.keys(specDict).map(key => ({
+          productSpecId: key,
+          itemName: specDict[key],
+        }))
+      }
+      console.log(`payload`);
+      console.log(payload);
+
+      addToCart({ payload });
+
+    } catch (err) {
+      console.error('error:onAddToCart');
+      console.error(err);
+    } finally {
+
+    }
+  }
+
 
   console.log(productData)
   // const { data, loading } = useRequest(() => categoryApi.list());
-  const loading = loadingProductDetailData || loadingProductFeaturesData || loadingProductFilesData || loadingProductImagesData;
+  const loading = loadingProductDetailData ||
+    loadingProductFeaturesData ||
+    loadingProductFilesData ||
+    loadingProductImagesData ||
+    loadingAddToCart;
 
   return (
     <FullSpin spinning={loading}>
@@ -275,7 +341,7 @@ export default function ProductPage() {
                 (productData?.specs && productData.specs.length > 0) &&
                 <>
                   <Title level={4} style={{ margin: 0 }}>選擇規格</Title>
-                  <Row style={{paddingBottom: 20}}>
+                  <Row style={{ paddingBottom: 20 }}>
                     <Col>
                       {productData.specs.map((spec, index) => (
                         <Row key={index} gutter={50} style={{ paddingTop: 20 }} align='middle'>
@@ -283,10 +349,19 @@ export default function ProductPage() {
                             <Title level={4} style={{ margin: 0 }}>{spec.specName}</Title>
                           </Col>
                           <Col>
-                            <ButtonGroup items={spec.items.map(item => ({
-                              name: item.itemName,
-                              value: item.productNo
-                            }))} />
+                            <ButtonGroup
+                              selectedIndex={spec?.items[0]?.itemName}
+                              items={spec.items.map(item => ({
+                                name: item.itemName,
+                                value: item.itemName
+                              }))}
+                              onChange={(value) => {
+                                setSpecDict({
+                                  ...specDict,
+                                  [spec.id]: value,
+                                })
+                              }}
+                            />
                           </Col>
                         </Row>
                       ))}
@@ -299,13 +374,19 @@ export default function ProductPage() {
                 <Col>
                   <Title style={{ margin: 0 }} level={4}>數量</Title>
                 </Col>
-                <Col>
-                  <CartCountOperator />
+                <Col style={{ alignSelf: 'center' }}>
+                  <Form form={form} initialValues={{ qty: 1 }}>
+                    <Form.Item name='qty' style={{ margin: 0 }}>
+                      <CartCountOperator />
+                    </Form.Item>
+                  </Form>
                 </Col>
               </Row>
               <Row style={{ paddingTop: 30 }} align='middle' gutter={50}>
                 <Col>
-                  <Button size='large'>加入購物車</Button>
+                  <Button
+                    size='large'
+                    onClick={onAddToCart}>加入購物車</Button>
                 </Col>
                 <Col>
                   <Button size='large'>直接購買</Button>

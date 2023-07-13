@@ -1,26 +1,36 @@
 import _ from 'lodash';
 // import log from 'loglevel';
 import { createContext, useMemo, useState, useEffect } from 'react';
-// import { useBoolean, useMount, useMemoizedFn, useRequest } from 'ahooks';
+import { useRequest } from 'ahooks';
 import PropTypes from 'prop-types';
+import { cartApi } from 'page/api';
 
 export const CartContext = createContext({
-  cart: () => {},
+  cart: [],
   setCart: () => {},
+  fetchCart: () => {},
   hasProduct: false,
 });
 
 export default function CartProvider({ children }) {
   
   const [cart, setCart] = useState([]);
-  console.log(`cart.length`)
-  console.log(cart.length)
-
   const hasProduct = useMemo(() => (cart.length > 0), [cart]);
+
+  const {run: fetchCart} = useRequest(() => cartApi.list(), {
+    onSuccess: (res) => {
+      const data = res?.rows || [];
+      setCart(data.map(item => ({
+        ...item,
+        unitPrice: item?.product?.customerPrice || item?.product?.defaultPrice,
+        defaultPrice: item?.product?.defaultPrice,
+      })));
+    },
+  })
   
   const contextValue = useMemo(
-    () => ({ cart, setCart, hasProduct }),
-    [cart, setCart, hasProduct]
+    () => ({ cart, setCart, fetchCart, hasProduct }),
+    [cart, setCart, fetchCart, hasProduct]
   );
 
   // if (!isAuthReady) return <FullSpin tip={i18n.t('驗證中...')} />;

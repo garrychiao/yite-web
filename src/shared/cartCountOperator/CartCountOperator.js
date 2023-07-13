@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Card, Button, InputNumber } from 'antd';
 import color from 'shared/style/color';
@@ -8,11 +8,16 @@ import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 export default function CartCountOperator ({initvalue = 1, onChange = () => {}}) {
 
   const [count, setCount] = useState(initvalue);
+  // console.log(count);
 
   const onValueChange = (value) => {
     onChange(value);
     setCount(value);
   }
+
+  useEffect(()=> {
+    setCount(initvalue);
+  }, [initvalue])
 
   return (<Container>
     <OperationContainer onClick={() => {
@@ -38,7 +43,7 @@ const Container = styled.div`
   flex-wrap: nowrap;
   width: 100%;
   border: 1px solid grey;
-  max-width: 120px;
+  width: 120px;
 `
 
 const OperationContainer = styled.div`
