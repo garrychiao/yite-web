@@ -5,7 +5,7 @@ import color from 'shared/style/color';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import i18n from 'i18next';
 import { useAuth } from 'shared/auth';
-import { LoginButton, LogoutButton } from 'page/auth';
+import { LoginButton, UserInfoNav } from 'page/auth';
 import { useAuthUser } from 'react-auth-kit'
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { useCart } from 'shared/cart';
@@ -56,7 +56,7 @@ export default function MainHeader() {
             </Badge>
           </Col>
           <Col>
-            <LogoutButton />
+            <UserInfoNav />
           </Col>
         </Row> : <Link to='/login'>
           <Button>

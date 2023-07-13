@@ -14,6 +14,7 @@ import { CartPage, ConfirmOrderPage, OrderCreatedPage } from 'page/cart';
 const LoginPage = lazy(() => import('page/auth/LoginPage'));
 const LoginResultPage = lazy(() => import('page/auth/LoginResultPage'));
 const UserInfo = lazy(() => import('page/auth/UserInfo'));
+const OrderHistory = lazy(() => import('page/auth/OrderHistory'));
 // const CartPage = lazy(() => import('page/cart/CartPage'));
 // const RegisterPage = lazy(() => import('page/auth/RegisterPage'));
 // const AboutUsPage = lazy(() => import('page/aboutUs/AboutUsPage'));
@@ -63,6 +64,18 @@ export default function useMainRoutes() {
     {
       path: '/order',
       children: [
+        {
+          path: 'history',
+          element: (<RequireAuth required>
+            <OrderHistory />
+          </RequireAuth>)
+        },
+        {
+          path: 'history/:id',
+          element: (<RequireAuth required>
+            <OrderHistory />
+          </RequireAuth>)
+        },
         {
           path: 'confirm',
           element: (<RequireAuth required>
