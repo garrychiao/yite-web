@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Popconfirm, notification, Button, Space, Card, Spin, Row, Col, Typography, Popover, Image } from 'antd';
+import { Checkbox, Popconfirm, notification, Button, Space, Card, Spin, Row, Col, Typography, Popover, Image } from 'antd';
 import CurrencyFormat from 'react-currency-format';
 import CartCountOperator from 'shared/cartCountOperator';
 import getSysFileUrl from 'utils/apiSysFiles';
@@ -14,10 +14,7 @@ const { Title } = Typography;
 export default function ProductCard({ product = {}, form }) {
 
   const [specOpen, setSpecOpen] = useState(false);
-  const { fetchCart } = useCart();
-
-  console.log(`product`)
-  console.log(product)
+  const { fetchCart, selectedItems, addSelectedItem, removeSelectedItem } = useCart();
 
   const [qty, setQty] = useState(1);
   const [specs, setSpecs] = useState({});
@@ -37,6 +34,9 @@ export default function ProductCard({ product = {}, form }) {
   }, [product]);
 
 
+  const isSelected = useMemo(() => selectedItems.map(item => item.id).includes(product.id), [product, selectedItems]);
+  // console.log(`isSelected`)
+  // console.log(isSelected)
   const productData = useMemo(() => product?.product || {}, [product]);
   const productSpecs = useMemo(() => product?.specs || {}, [product]);
   const mainImage = useMemo(() => getSysFileUrl(product?.product?.mainImages[0].imageSysFileId), [product]);
@@ -170,6 +170,15 @@ export default function ProductCard({ product = {}, form }) {
     <StyledCard>
       <Spin spinning={loading}>
         <Row gutter={10} align='middle'>
+          <Col span={1}>
+            <Checkbox checked={isSelected} onChange={(value) => {
+              if (value.target.checked) {
+                addSelectedItem(product.id)
+              } else {
+                removeSelectedItem(product.id)
+              }
+            }} />
+          </Col>
           <Col span={3}>
             <Image width='100%' src={mainImage} preview={false} />
           </Col>
@@ -178,7 +187,7 @@ export default function ProductCard({ product = {}, form }) {
               {productData.productName}
             </Title>
           </Col>
-          <Col span={4}>
+          <Col span={3}>
             <Title level={5} style={{ margin: 0 }}>
               {(product?.selectedProductSpecs && product?.selectedProductSpecs.length > 0) ? <RenderSpecField>
                 <Button

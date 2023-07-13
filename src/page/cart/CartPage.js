@@ -1,4 +1,4 @@
-// import { Suspense } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { Divider, Row, Col, Typography, Button, Image } from 'antd';
 import _ from 'lodash';
@@ -15,9 +15,17 @@ const { Title } = Typography;
 
 export default function CartPage() {
 
-  const { cart, fetchCart, hasProduct } = useCart();
-  // console.log(`cart`)
-  // console.log(cart)
+  const { cart, hasProduct, selectedItems, onSelectAll } = useCart();
+  
+  const [initState, setInitState] = useState(true);
+
+  useEffect(() => {
+    if (cart.length > 0 && initState) {
+      onSelectAll()
+      setInitState(false);
+    }
+  } ,[cart, initState, onSelectAll])
+
 
   return (
     <Section.Container>
@@ -59,7 +67,7 @@ export default function CartPage() {
         <Row justify={'space-around'} style={{ paddingTop: 50 }}>
           <Col>
             <Link to='/order/confirm'>
-              <Button size='large' disabled={!hasProduct}>
+              <Button size='large' disabled={selectedItems.length === 0}>
                 去買單
               </Button>
             </Link>

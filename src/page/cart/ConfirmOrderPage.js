@@ -16,13 +16,16 @@ const { Title } = Typography;
 
 export default function ConfirmOrderPage() {
 
-  const { cart, fetchCart, hasProduct } = useCart();
+  const { selectedItems } = useCart();
 
-  const cartData = useMemo(() => cart.map(item => ({
+  console.log(`selectedItems`)
+  console.log(selectedItems)
+
+  const cartData = useMemo(() => selectedItems.map(item => ({
     ...item,
     ...item.product,
     image: getSysFileUrl(item?.product?.mainImages[0].imageSysFileId),
-  })), [cart])
+  })), [selectedItems])
 
   console.log(`cartData`)
   console.log(cartData)
@@ -112,7 +115,7 @@ export default function ConfirmOrderPage() {
                 <Table.Summary.Cell index={2}>
                   <Title level={5}>
                     <CurrencyFormat
-                      value={_.sum(cart.map(item => item.qty * item.unitPrice))}
+                      value={_.sum(selectedItems.map(item => item.qty * item.unitPrice))}
                       thousandSeparator={true}
                       prefix={'$'}
                       displayType='text'
