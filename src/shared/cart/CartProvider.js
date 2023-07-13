@@ -31,11 +31,16 @@ export default function CartProvider({ children }) {
     ready: !!user,
     onSuccess: (res) => {
       const data = res?.rows || [];
-      setCart(data.map(item => ({
+      const resCart = data.map(item => ({
         ...item,
         unitPrice: item?.product?.customerPrice || item?.product?.defaultPrice,
         defaultPrice: item?.product?.defaultPrice,
-      })));
+      }))
+      setCart(resCart);
+
+      if (selectedItems.length > res.count) {
+        setSelectedItems(resCart)
+      }
     },
   })
 

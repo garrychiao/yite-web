@@ -8,18 +8,18 @@ import ButtonGroup from 'shared/buttonGroup/ButtonGroup';
 import { useRequest } from 'ahooks';
 import { cartApi } from 'page/api';
 import { useCart } from 'shared/cart';
+import { Link } from 'react-router-dom';
 
 const { Title } = Typography;
 
-export default function ProductCard({ product = {}, form }) {
+export default function ProductCard({ product = {} }) {
 
   const [specOpen, setSpecOpen] = useState(false);
   const { fetchCart, selectedItems, addSelectedItem, removeSelectedItem } = useCart();
 
   const [qty, setQty] = useState(1);
   const [specs, setSpecs] = useState({});
-  // console.log(`specs`)
-  // console.log(specs)
+  
 
   useEffect(() => {
     setQty(product.qty);
@@ -38,6 +38,8 @@ export default function ProductCard({ product = {}, form }) {
   // console.log(`isSelected`)
   // console.log(isSelected)
   const productData = useMemo(() => product?.product || {}, [product]);
+  // console.log(`productData`)
+  // console.log(productData)
   const productSpecs = useMemo(() => product?.specs || {}, [product]);
   const mainImage = useMemo(() => getSysFileUrl(product?.product?.mainImages[0].imageSysFileId), [product]);
   // console.log(mainImage)
@@ -184,7 +186,9 @@ export default function ProductCard({ product = {}, form }) {
           </Col>
           <Col span={5}>
             <Title level={5} style={{ margin: 0 }}>
+              <Link to={`/category/productDetail/${productData.id}`}>
               {productData.productName}
+              </Link>
             </Title>
           </Col>
           <Col span={3}>
