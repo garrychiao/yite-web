@@ -197,7 +197,7 @@ export default function CartPage() {
     updateToCart({ payload });
   }
 
-  const loading = loadingUpdateToCart || loadingUpdateToCart;
+  const loading = loadingUpdateToCart || loadingDeleteToCart;
 
   return (
     <Section.Container>

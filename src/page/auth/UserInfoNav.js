@@ -24,7 +24,7 @@ export default function UserInfoNav() {
         <Space>
           <UserOutlined />
           <Text>
-            User Info
+            用戶資訊
           </Text>
         </Space>
       </Link>,
@@ -35,7 +35,7 @@ export default function UserInfoNav() {
         <Space>
           <UserOutlined />
           <Text>
-            Order History
+            訂單記錄
           </Text>
         </Space>
       </Link>,
@@ -56,7 +56,7 @@ export default function UserInfoNav() {
         <Space>
           <LogoutOutlined />
           <Text>
-            Sign Out
+            登出
           </Text>
         </Space>
       </a>,

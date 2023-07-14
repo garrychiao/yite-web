@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import _ from 'lodash';
 // import styled from 'styled-components';
 import { Button, Space, Table, List, Image, Row, Col, Divider, Typography, notification } from 'antd';
 import dayjs from 'dayjs';
@@ -11,44 +12,31 @@ import CurrencyFormat from 'react-currency-format';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from 'shared/cart';
 
-const { Title, Text } = Typography;
+const { Title, Text, Paragraph } = Typography;
 
 export default function OrderHistory() {
 
   const auth = useAuthUser();
-  const user = useMemo(() => auth() || {}, [auth]);
+  // const user = useMemo(() => auth() || {}, [auth]);
   const navigate = useNavigate();
   const { fetchCart } = useCart();
   const [loadingBuyAgain, setLoadingBuyAgain] = useState(false);
 
   const { data, loading:loadingList } = useRequest(() => orderApi.list());
-  const tableData = useMemo(() => data?.rows || [], [data])
+  const tableData = useMemo(() => {
+    const list = data?.rows || [];
+    return _.chain(list).orderBy('createdAt', 'asc')
+      .map((i, index) => ({...i, id_index: index+1}))
+      .orderBy('createdAt', 'desc')
+      .value()
+  }, [data])
   // console.log(tableData);
-
-  // const { run: addToCart, loading: loadingAddToCart } = useRequest(({ payload }) => cartApi.add({ payload }), {
-  //   manual: true,
-  //   onSuccess: (data) => {
-  //     // console.log(data)
-  //     fetchCart();
-  //     notification.success({
-  //       message: '成功加入購物車'
-  //     })
-  //     navigate('/cart')
-  //   }, onError: (err) => {
-  //     console.error(err);
-  //     notification.error({
-  //       message: '發生錯誤'
-  //     })
-  //   }
-  // });
-
   const columns = [
     {
       title: '訂單編號',
-      dataIndex: 'id',
-      key: 'id',
+      dataIndex: 'id_index',
+      key: 'id_index',
       width: 150,
-      // render: (value) => <Paragraph ellipsis>{}</Paragraph>
     },
     {
       title: '日期',
@@ -61,6 +49,7 @@ export default function OrderHistory() {
       title: '訂單狀態',
       dataIndex: 'status',
       key: 'status',
+      render: (value) => value === 'WAITING' ? '訂單處理中' : '訂單完成'
     },
     {
       title: '品項',

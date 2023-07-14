@@ -204,6 +204,15 @@ export default function ProductPage() {
   }
 
   const onAddToCart = async (isDirectBuy) => {
+
+    const user = auth();
+    if (!user) {
+      notification.warning({
+        message: '請先登入'
+      })
+      return navigate('/login')
+    }
+
     try {
       await form.validateFields();
       // console.log(form.getFieldsValue());

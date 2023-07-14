@@ -56,7 +56,7 @@ export default function ConfirmOrderPage() {
   useEffect(() => {
     if (id && cart.length > 0 && selectedItems.length !== 1) {
       setSelectedItems([id]);
-    } else if (cartData.length > 0 && selectedItems.length === 0) {
+    } else if (cart.length > 0 && selectedItems.length === 0) {
       const selectedItems = getSelectedFromLocal();
       if (selectedItems.length > 0) {
         setSelectedItems(selectedItems);

@@ -3,15 +3,23 @@ import styled from 'styled-components';
 import { Card, Button, InputNumber } from 'antd';
 import color from 'shared/style/color';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import { useDebounceFn } from 'ahooks';
 
 
 export default function CartCountOperator ({initvalue = 1, onChange = () => {}}) {
 
   const [count, setCount] = useState(initvalue);
-  // console.log(count);
-
+  const { run: runDebounce } = useDebounceFn(
+    (value) => {
+      onChange(value);
+    },
+    {
+      wait: 500,
+    },
+  );
+  
   const onValueChange = (value) => {
-    onChange(value);
+    runDebounce(value);
     setCount(value);
   }
 

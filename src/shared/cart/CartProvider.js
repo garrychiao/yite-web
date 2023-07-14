@@ -33,9 +33,10 @@ export default function CartProvider({ children }) {
     ready: !!user,
     onSuccess: (res) => {
       const data = res?.rows || [];
+      console.log(data)
       const resCart = data.map(item => ({
         ...item,
-        unitPrice: item?.product?.customerPrice || item?.product?.defaultPrice,
+        unitPrice: item?.product?.customerPrice?.price || item?.product?.defaultPrice,
         defaultPrice: item?.product?.defaultPrice,
       }))
       setCart(resCart);
