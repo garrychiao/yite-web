@@ -36,7 +36,7 @@ export default function OrderHistory() {
       title: '訂單編號',
       dataIndex: 'id_index',
       key: 'id_index',
-      width: 150,
+      width: 100,
     },
     {
       title: '日期',
@@ -49,6 +49,7 @@ export default function OrderHistory() {
       title: '訂單狀態',
       dataIndex: 'status',
       key: 'status',
+      width: 100,
       render: (value) => value === 'WAITING' ? '訂單處理中' : '訂單完成'
     },
     {
@@ -161,7 +162,11 @@ export default function OrderHistory() {
           loading={loading}
           rowKey='id'
           dataSource={tableData}
-          columns={columns} />
+          columns={columns}
+          scroll={{
+            x: 'calc(700px + 50%)',
+            // y: 'calc(100vh - 50px)',
+          }}/>
       </Section>
     </Section.Container>
   );
