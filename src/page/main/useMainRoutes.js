@@ -46,6 +46,10 @@ export default function useMainRoutes() {
           path: 'productDetail/:id',
           element: <ProductPage />,
         },
+        {
+          path: 'productDetail/preview/:id',
+          element: <ProductPage preview />,
+        },
       ]
     },
     // auth pages

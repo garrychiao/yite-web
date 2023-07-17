@@ -1,69 +1,141 @@
 import { useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { Badge, Layout, Menu, Button, Space, Row, Col } from 'antd';
+import { Space, Drawer, Badge, Layout, Menu, Button, Divider, Row, Col, Dropdown, Typography } from 'antd';
 import color from 'shared/style/color';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import i18n from 'i18next';
-import { useAuth } from 'shared/auth';
-import { LoginButton, UserInfoNav } from 'page/auth';
-import { useAuthUser } from 'react-auth-kit'
-import { ShoppingCartOutlined } from '@ant-design/icons';
+import { UserInfoNav } from './fields';
+import { useIsAuthenticated, useAuthUser, useSignOut } from 'react-auth-kit'
+import { UserOutlined, ShoppingCartOutlined, MenuOutlined, DownOutlined, LogoutOutlined } from '@ant-design/icons';
 import { useCart } from 'shared/cart';
+import { useBoolean, useResponsive } from 'ahooks';
+import { MainNavItems, UserNavItems } from './fields/NavItems';
+
+const { Text } = Typography;
 
 export default function MainHeader() {
   // const responsive = useResponsive();
+  const authed = useIsAuthenticated();
   const auth = useAuthUser()
   const user = auth();
+  const responsive = useResponsive();
   const { hasProduct } = useCart();
+  const signOut = useSignOut();
 
   const navigate = useNavigate();
   const location = useLocation();
   // console.log(window.location.origin)
+  const [showDrawer, { toggle: toggleDrawer, setFalse: closeDrawer }] = useBoolean(false);
+  const MobileNavItems = useMemo(() => {
+    if (user?.displayName) {
+      return MainNavItems.concat([{ label: <Divider /> }, ...UserNavItems])
+    }
+    return MainNavItems
+  }, [MainNavItems, UserNavItems, user])
 
+  const SignoutButton = () => (<a
+    style={{ padding: 20 }}
+    onClick={(e) => {
+      e.preventDefault();
+      localStorage.setItem('token', '')
+      signOut();
+      navigate(0);
+    }}>
+    <Space>
+      <LogoutOutlined />
+      <Text>
+        登出
+      </Text>
+    </Space>
+  </a>)
 
-  const items = [
-    {
-      label: i18n.t('首頁'),
-      key: '/',
-      path: ''
-    },
-    {
-      label: i18n.t('產品資訊'),
-      key: '/category',
-      path: '/category'
-    },
-  ]
+  const SignInButton = () => (<a
+    style={{ padding: 20 }}
+    onClick={(e) => {
+      e.preventDefault();
+      navigate('/login');
+      closeDrawer();
+    }}>
+    <Space>
+      <UserOutlined />
+      <Text>
+        登入
+      </Text>
+    </Space>
+  </a>)
+
 
   return (
     <StyledHeader>
-      <Menu
-        defaultSelectedKeys='/'
-        selectedKeys={[location.pathname]}
-        onClick={(item) => {
-          navigate(`${item.key}`);
-        }}
-        mode="horizontal"
-        items={items}
-      />
-
-      <RightNavContainer>
-        {user?.displayName ? <Row align="middle" gutter={15}>
-          <Col style={{display: 'flex'}}>
-            <Badge dot={hasProduct} >
-              <Link to='/cart'  style={{ fontSize: 24 }}>
-                <ShoppingCartOutlined />
-              </Link>
-            </Badge>
-          </Col>
-          <Col>
-            <UserInfoNav />
-          </Col>
-        </Row> : <Link to='/login'>
-          <Button>
-            Login
-          </Button>
-        </Link>}
-      </RightNavContainer>
+      {responsive.md ? <Row justify={'space-between'} style={{ width: '100%' }}>
+        <Menu
+          // defaultSelectedKeys='/'
+          selectedKeys={[location.pathname]}
+          onClick={(item) => {
+            navigate(`${item.key}`);
+          }}
+          mode="horizontal"
+          items={MainNavItems}
+        />
+        <RightNavContainer>
+          {authed() ? <Row align="middle" gutter={15}>
+            <Col style={{ display: 'flex' }}>
+              <Badge dot={hasProduct} >
+                <Link to='/cart' style={{ fontSize: 24 }}>
+                  <ShoppingCartOutlined />
+                </Link>
+              </Badge>
+            </Col>
+            <Col>
+              <Dropdown
+                menu={{
+                  items: UserNavItems.map((item, index) => ({
+                    label: (<Link to={item.path} style={{ padding: 20 }}>
+                      <Space>
+                        {item?.icon}
+                        <Text>
+                          {item?.label}
+                        </Text>
+                      </Space>
+                    </Link>),
+                    key: index
+                  })).concat([{
+                    type: <Divider />
+                  },
+                  {
+                    label: <SignoutButton />,
+                    key: 'signout',
+                  }]),
+                }}
+                trigger={['click']}
+              >
+                <a onClick={(e) => e.preventDefault()}>
+                  <Space>
+                    {user?.displayName}
+                    <DownOutlined />
+                  </Space>
+                </a>
+              </Dropdown>
+            </Col>
+          </Row> : <SignInButton />}
+        </RightNavContainer>
+      </Row> : <>
+        <Button icon={<MenuOutlined />} size='large' onClick={toggleDrawer} />
+        <Drawer title="" placement="right" width='60%' onClose={toggleDrawer} open={showDrawer}>
+          <Menu
+            defaultSelectedKeys='/'
+            selectedKeys={[location.pathname]}
+            onClick={(item) => {
+              navigate(`${item.key}`);
+              closeDrawer();
+            }}
+            mode="vertical"
+            items={MobileNavItems}
+          />
+          <Divider />
+          {authed() ? <SignoutButton /> : <SignInButton />}
+        </Drawer>
+      </>}
     </StyledHeader>
   );
 }
@@ -74,6 +146,10 @@ const StyledHeader = styled(Layout.Header)`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @media (max-width: 767px) {
+    padding: 20px;
+    justify-content: right;
+  }
 `;
 
 const RightNavContainer = styled.div`

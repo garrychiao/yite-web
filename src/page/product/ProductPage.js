@@ -14,7 +14,7 @@ import ButtonGroup from 'shared/buttonGroup';
 import CartCountOperator from 'shared/cartCountOperator';
 import CurrencyFormat from 'react-currency-format';
 import FullSpin from 'shared/FullSpin';
-import { useAuthUser } from 'react-auth-kit';
+import { useAuthUser, useIsAuthenticated} from 'react-auth-kit';
 import { useCart } from 'shared/cart';
 
 const { Title, Text } = Typography;
@@ -40,18 +40,21 @@ const { Title, Text } = Typography;
 
 // ]
 
-export default function ProductPage() {
+export default function ProductPage({preview = false}) {
 
-  const { fetchCart, cart } = useCart();
+
+  console.log('is preivew', preview);
+  const { fetchCart } = useCart();
 
   const navigate = useNavigate();
   // console.log(cart)
   const auth = useAuthUser();
+  const isAuthenticated = useIsAuthenticated()
   const [form] = Form.useForm();
   // tmp section
   // const inventoryCountList = [1000, 500, 199, 95, 5, 0];
   // const [inventoryCount, setInventoryCount] = useState(0);
-
+  const permissionValid = useMemo(() => (isAuthenticated() && !preview ), [preview, isAuthenticated]);
   const { id } = useParams();
   const [productData, setProductData] = useState({});
   // console.log(`productData`)
@@ -416,6 +419,7 @@ export default function ProductPage() {
               <Row style={{ paddingTop: 30 }} align='middle' gutter={50}>
                 <Col>
                   <Button
+                    disabled={!permissionValid}
                     size='large'
                     onClick={() => onAddToCart(false)}>
                       <ShoppingCartOutlined />
@@ -424,6 +428,7 @@ export default function ProductPage() {
                 </Col>
                 <Col>
                   <Button 
+                    disabled={!permissionValid}
                     size='large'
                     onClick={() => onAddToCart(true)}>
                       <ShoppingOutlined />
@@ -431,7 +436,7 @@ export default function ProductPage() {
                     </Button>
                 </Col>
                 <Col>
-                  <InventoryIndicator $type='grey' />
+                  <InventoryIndicator $type='green' />
                 </Col>
               </Row>
             </Col>

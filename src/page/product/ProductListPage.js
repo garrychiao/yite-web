@@ -76,7 +76,7 @@ export default function ProductListPage() {
       <Wrapper>
         <Section.Container>
           <Section style={{height: '100vh'}}>
-            <Row justify={'space-between'}>
+            <Row justify={'space-between'} align='middle' gutter={[20, 20]}>
               <Col>
                 <Breadcrumb
                   separator=">"

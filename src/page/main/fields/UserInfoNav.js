@@ -1,26 +1,43 @@
 import React from 'react';
 import { DownOutlined } from '@ant-design/icons';
-import { Col, Dropdown, Space, Typography, Button } from 'antd';
+import { Menu, Col, Dropdown, Space, Typography, Button } from 'antd';
 import { useAuthUser, useSignOut } from 'react-auth-kit';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   UserOutlined,
   LogoutOutlined
 } from '@ant-design/icons';
+import { useResponsive } from 'ahooks';
 
 const { Text } = Typography;
 
 
 export default function UserInfoNav() {
 
+  const responsive = useResponsive();
   const auth = useAuthUser();
   const user = auth();
   const signOut = useSignOut();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // console.log(user)
+  // const items = [
+  //   {
+  //     label: i18n.t('用戶資訊'),
+  //     key: '/user/info',
+  //     path: 'user/info'
+  //   },
+  //   {
+  //     label: i18n.t('訂單記錄'),
+  //     key: '/order/history',
+  //     path: '/order/history'
+  //   },
+  // ]
+
   const items = [
     {
-      label: <Link to='/user/info' style={{ padding: 20 }}>
+      label: <Link to='/user/info'>
         <Space>
           <UserOutlined />
           <Text>
@@ -31,7 +48,7 @@ export default function UserInfoNav() {
       key: '2',
     },
     {
-      label: <Link to='/order/history' style={{ padding: 20 }}>
+      label: <Link to='/order/history'>
         <Space>
           <UserOutlined />
           <Text>
@@ -51,6 +68,7 @@ export default function UserInfoNav() {
           e.preventDefault();
           localStorage.setItem('token', '')
           signOut();
+          navigate(0);
         }}>
 
         <Space>
@@ -62,16 +80,11 @@ export default function UserInfoNav() {
       </a>,
       key: '0',
     },
-    
-    // {
-    //   label: '3rd menu item',
-    //   key: '3',
-    // },
   ];
 
   return (
     <Col>
-      <Dropdown
+      {responsive.md ? <Dropdown
         menu={{
           items,
         }}
@@ -83,7 +96,18 @@ export default function UserInfoNav() {
             <DownOutlined />
           </Space>
         </a>
-      </Dropdown>
+      </Dropdown> : <>
+        <Menu
+          defaultSelectedKeys='/'
+          selectedKeys={[location.pathname]}
+          onClick={(item) => {
+            navigate(`${item.key}`);
+            // closeDrawer();
+          }}
+          mode="vertical"
+          items={items}
+        />
+      </>}
     </Col>
   );
 }

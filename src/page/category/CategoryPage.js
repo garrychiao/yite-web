@@ -77,7 +77,7 @@ export default function CategoryPage() {
       <Wrapper>
         <Section.Container>
           <Section>
-            <Row justify={'space-between'}>
+            <Row justify={'space-between'} align='middle' gutter={[20, 20]}>
               <Col>
                 <Breadcrumb
                   separator=">"
