@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Button, Divider, Form, Breadcrumb, Card, Row, Col, Typography, Carousel, Image, notification } from 'antd';
 import color from 'shared/style/color';
 import i18n from 'i18next';
-import { ArrowRightOutlined } from '@ant-design/icons';
+import { ShoppingCartOutlined, ShoppingOutlined } from '@ant-design/icons';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Section } from 'shared/layout';
 import { useRequest } from 'ahooks';
@@ -19,28 +19,26 @@ import { useCart } from 'shared/cart';
 
 const { Title, Text } = Typography;
 
-const defaultLight = '#5F8D4E';
-const inventorySetup = [
-  {
-    count: 0,
-    color: '#a0a0a0',
-  },
-  {
-    count: 10,
-    color: '#FF1E00',
-  },
-  {
-    count: 100,
-    color: '#EF5B0C',
-  },
-  {
-    count: 200,
-    color: '#F57328',
-  },
+// const defaultLight = '#5F8D4E';
+// const inventorySetup = [
+//   {
+//     count: 0,
+//     color: '#a0a0a0',
+//   },
+//   {
+//     count: 10,
+//     color: '#FF1E00',
+//   },
+//   {
+//     count: 100,
+//     color: '#EF5B0C',
+//   },
+//   {
+//     count: 200,
+//     color: '#F57328',
+//   },
 
-]
-
-
+// ]
 
 export default function ProductPage() {
 
@@ -51,8 +49,8 @@ export default function ProductPage() {
   const auth = useAuthUser();
   const [form] = Form.useForm();
   // tmp section
-  const inventoryCountList = [1000, 500, 199, 95, 5, 0];
-  const [inventoryCount, setInventoryCount] = useState(0);
+  // const inventoryCountList = [1000, 500, 199, 95, 5, 0];
+  // const [inventoryCount, setInventoryCount] = useState(0);
 
   const { id } = useParams();
   const [productData, setProductData] = useState({});
@@ -186,22 +184,22 @@ export default function ProductPage() {
 
   }, [productData])
 
-  const renderInventoryCount = (count) => {
-    const target = inventorySetup.find(item => item.count >= count);
-    if (target) {
-      return <Text style={{ textAlign: 'center', fontSize: 18, color: target.color }}>{count}</Text>
-    }
-    return <Text style={{ textAlign: 'center', fontSize: 18, color: defaultLight }}>{count}</Text>
-  }
+  // const renderInventoryCount = (count) => {
+  //   const target = inventorySetup.find(item => item.count >= count);
+  //   if (target) {
+  //     return <Text style={{ textAlign: 'center', fontSize: 18, color: target.color }}>{count}</Text>
+  //   }
+  //   return <Text style={{ textAlign: 'center', fontSize: 18, color: defaultLight }}>{count}</Text>
+  // }
 
-  const onChangeInventoryCount = () => {
-    const index = inventoryCountList.indexOf(inventoryCount);
-    if (index !== inventoryCountList.length - 1) {
-      setInventoryCount(inventoryCountList[index + 1]);
-    } else {
-      setInventoryCount(inventoryCountList[0]);
-    }
-  }
+  // const onChangeInventoryCount = () => {
+  //   const index = inventoryCountList.indexOf(inventoryCount);
+  //   if (index !== inventoryCountList.length - 1) {
+  //     setInventoryCount(inventoryCountList[index + 1]);
+  //   } else {
+  //     setInventoryCount(inventoryCountList[0]);
+  //   }
+  // }
 
   const onAddToCart = async (isDirectBuy) => {
 
@@ -252,7 +250,8 @@ export default function ProductPage() {
     loadingProductFeaturesData ||
     loadingProductFilesData ||
     loadingProductImagesData ||
-    loadingAddToCart;
+    loadingAddToCart ||
+    loadingDirectBuy;
 
   return (
     <FullSpin spinning={loading}>
@@ -356,7 +355,7 @@ export default function ProductPage() {
                   </Row>
                 </>)
               }
-              <Divider />
+              {/* <Divider />
               <Row gutter={50} align='middle'>
                 <Col>
                   <Title style={{ margin: 0 }} level={4}>庫存數量</Title>
@@ -367,7 +366,7 @@ export default function ProductPage() {
                 <Col>
                   <Button size='large' onClick={() => { onChangeInventoryCount() }}>切換庫存數量</Button>
                 </Col>
-              </Row>
+              </Row> */}
               <Divider />
               {
                 (productData?.specs && productData.specs.length > 0) &&
@@ -418,12 +417,21 @@ export default function ProductPage() {
                 <Col>
                   <Button
                     size='large'
-                    onClick={() => onAddToCart(false)}>加入購物車</Button>
+                    onClick={() => onAddToCart(false)}>
+                      <ShoppingCartOutlined />
+                      加入購物車
+                    </Button>
                 </Col>
                 <Col>
                   <Button 
                     size='large'
-                    onClick={() => onAddToCart(true)}>直接購買</Button>
+                    onClick={() => onAddToCart(true)}>
+                      <ShoppingOutlined />
+                      直接購買
+                    </Button>
+                </Col>
+                <Col>
+                  <InventoryIndicator $type='grey' />
                 </Col>
               </Row>
             </Col>
@@ -448,4 +456,40 @@ const ImageGalleryList = styled.div`
   gap: 20px;
   flex-wrap: nowrap;
   cursor: pointer;
+`
+
+const InventoryIndicator = styled.div`
+  width: 20px;
+  height: 20px;
+  margin: 30px;
+  border-radius: 50%;
+  background-color: ${props => {
+    switch(props.$type) {
+      case 'green':
+        return '#66cc00'
+      case 'yellow':
+        return '#F4D160'
+      case 'red':
+        return '#ff0000'
+      case 'grey':
+        return '#BDCDD6'
+      default: 
+        return '#66cc00'
+    }
+  }};
+  box-shadow: 0px 0px 2px 2px ${props => {
+    switch(props.$type) {
+      case 'green':
+        return '#66cc00'
+      case 'yellow':
+        return '#F4D160'
+      case 'red':
+        return '#ff0000'
+      case 'grey':
+        return '#BDCDD6'
+      default: 
+        return '#66cc00'
+    }
+  }};;
+
 `
