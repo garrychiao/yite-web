@@ -60,6 +60,7 @@ export default function CartPage() {
   const cartData = useMemo(() => cart.map(item => ({
     ...item,
     productName: item.product.productName,
+    productId: item.product.id,
     image: getSysFileUrl(item?.product?.mainImages[0].imageSysFileId),
     total: item.qty * item.unitPrice
   })), [cart])
@@ -91,7 +92,9 @@ export default function CartPage() {
       title: '名稱',
       dataIndex: 'productName',
       key: 'productName',
-      render: (value) => <Title style={{ margin: 0 }} level={5}>{value}</Title>,
+      render: (value, product) => (<Link to={`/category/productDetail/${product.productId}`}>
+        <Title style={{ margin: 0 }} level={5}>{value}</Title>
+      </Link>),
     },
     {
       title: '規格',
