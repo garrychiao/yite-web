@@ -22,7 +22,8 @@ export default function ProductListPage() {
   const { id } = useParams();
   const { data:productListData, loading:loadingProductListData } = useRequest(() => productApi.list({
     params: {
-      categoryId: id
+      categoryId: id,
+      status: 'ACTIVE',
     }
   }), {
     refreshDeps: [id]
