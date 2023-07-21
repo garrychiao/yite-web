@@ -14,8 +14,6 @@ import CurrencyFormat from 'react-currency-format';
 import { useAuthUser } from 'react-auth-kit';
 import { orderApi } from 'page/api';
 import { useRequest } from 'ahooks';
-import qs from 'qs'
-import axios from 'axios'
 
 const { Title } = Typography;
 
@@ -47,19 +45,11 @@ export default function ConfirmOrderPage() {
       const paymentResp = await orderApi.initPayment({
         userId: auth().id,
         orderId: data.id,
-        showResultUrl: "http://localhost:3000/order/payment/confirm"
+        showResultUrl: `${window.location.origin}/order/payment/confirm/${data.id}`
       })
       setPaymentData({ ...paymentResp.payload });
       setPaymentUrl(paymentResp.redirectUrl)
-      // TODO: submit ecpay form
-      axios.post(paymentResp.redirectUrl,
-        qs.stringify({...paymentResp.payload}), {
-          headers: { 
-            "Content-Type": "application/x-www-form-urlencoded"
-          }
-        }).then(function(response) {
-            console.log(response);
-        })
+      document.querySelector('#payForm').submit();
 
       // fetchCart();
       // notification.success({
@@ -153,72 +143,72 @@ export default function ConfirmOrderPage() {
     const payload = {
       userId: auth().id,
       totalPrice,
-      orderProducts:[],
-      cartProducts: cartData.map(item =>({
+      orderProducts: [],
+      cartProducts: cartData.map(item => ({
         cartId: item.id
       }))
     }
 
     console.log(payload);
-    createOrder({payload});
+    createOrder({ payload });
   }
 
   const loading = loadingCreateOrder;
 
   return (
     <>
-    <Section.Container>
-      <Section>
-        <Title level={4}>確認訂單 | 結帳</Title>
-        <Divider />
-        <Table
-        loading={loading}
-          pagination={false}
-          columns={columns}
-          dataSource={cartData}
-          rowKey='id'
-          summary={() => (
-            <Table.Summary fixed='bottom'>
-              <Table.Summary.Row>
-                <Table.Summary.Cell index={0} colSpan={5} />
-                <Table.Summary.Cell index={1}>
-                  <Title level={5}>
-                    總計：
-                  </Title>
-                </Table.Summary.Cell>
-                <Table.Summary.Cell index={2}>
-                  <Title level={5}>
-                    <CurrencyFormat
-                      value={totalPrice}
-                      thousandSeparator={true}
-                      prefix={'$'}
-                      displayType='text'
-                    />
-                  </Title>
-                </Table.Summary.Cell>
-              </Table.Summary.Row>
-            </Table.Summary>
-          )}
-        />
-        <Row justify={'space-around'} style={{ paddingTop: 50 }}>
-          <Col>
-            <Link to='/cart'>
-              <Button size='large'>
-                上一步
+      <Section.Container>
+        <Section>
+          <Title level={4}>確認訂單 | 結帳</Title>
+          <Divider />
+          <Table
+            loading={loading}
+            pagination={false}
+            columns={columns}
+            dataSource={cartData}
+            rowKey='id'
+            summary={() => (
+              <Table.Summary fixed='bottom'>
+                <Table.Summary.Row>
+                  <Table.Summary.Cell index={0} colSpan={5} />
+                  <Table.Summary.Cell index={1}>
+                    <Title level={5}>
+                      總計：
+                    </Title>
+                  </Table.Summary.Cell>
+                  <Table.Summary.Cell index={2}>
+                    <Title level={5}>
+                      <CurrencyFormat
+                        value={totalPrice}
+                        thousandSeparator={true}
+                        prefix={'$'}
+                        displayType='text'
+                      />
+                    </Title>
+                  </Table.Summary.Cell>
+                </Table.Summary.Row>
+              </Table.Summary>
+            )}
+          />
+          <Row justify={'space-around'} style={{ paddingTop: 50 }}>
+            <Col>
+              <Link to='/cart'>
+                <Button size='large'>
+                  上一步
+                </Button>
+              </Link>
+            </Col>
+            <Col>
+              <Button size='large' onClick={() => {
+                onConfirmOrder();
+              }}>
+                確認送出
               </Button>
-            </Link>
-          </Col>
-          <Col>
-            <Button size='large' onClick={() => {
-              onConfirmOrder();
-            }}>
-              確認送出
-            </Button>
-          </Col>
-        </Row>
-      </Section>
-    </Section.Container>
-      <form id="payForm" method="POST">
+            </Col>
+          </Row>
+        </Section>
+      </Section.Container>
+      <form id="payForm" action={paymentUrl} method="POST" style={{ display: 'none' }}>
         <input name="MerchantID" value={paymentData.MerchantID} autocomplete="off" />
         <input name="MerchantTradeNo" value={paymentData.MerchantTradeNo} autocomplete="off" />
         <input name="MerchantTradeDate" value={paymentData.MerchantTradeDate} autocomplete="off" />

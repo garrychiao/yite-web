@@ -15,7 +15,7 @@
     "i18next-http-backend": "^2.2.1",
     "lodash": "^4.17.21",
     "loglevel": "^1.8.1",
-    "qs": "^6.11.2",
+    "ramda": "^0.29.0",
     "react": "^18.2.0",
     "react-auth-kit": "^2.12.3",
     "react-currency-format": "^1.1.0",
@@ -32,7 +32,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy.meproz": "ssh root@www.meproz.com 'rm -rf /var/www/yite-web && mkdir /var/www/yite-web' && scp -r build/* root@www.meproz.com:/var/www/yite-web"
+    "deploy.meproz": "ssh root@www.meproz.com 'rm -rf /var/www/yite-web && mkdir /var/www/yite-web' && scp -rp build/* root@www.meproz.com:/var/www/yite-web"
   },
   "eslintConfig": {
     "extends": [

@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "HRB4UMPR9M.yite.djs.YiteApp",
+        "paths": ["*"]
+      }
+    ]
+  }
+}
