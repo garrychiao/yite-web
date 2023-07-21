@@ -5,6 +5,7 @@ import axios from 'axios';
 const orderApi = {
   list: () => axios.get(`/order`),
   create: ({payload}) => axios.post(`/order`, payload),
+  initPayment: (payload) => axios.post('/payment/init', payload),
 };
 
 export default orderApi;

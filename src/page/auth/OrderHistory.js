@@ -14,6 +14,38 @@ import { useCart } from 'shared/cart';
 
 const { Title, Text, Paragraph } = Typography;
 
+const getStatusName = (status) => {
+  switch (status) {
+    case 'DRAFT': {
+      return '草稿'
+    }
+    case 'INIT': {
+      return '訂單建立，未付款'
+    }
+    case 'WAITING': {
+      return '付款完成，等待確認'
+    }
+    case 'CONFIRM': {
+      return '訂單已確認，出貨中'
+    }
+    case 'SHIP': {
+      return ' 已出貨'
+    }
+    case 'FINISH': {
+      return '訂單已完成'
+    }
+    case 'CANCEL': {
+      return '訂單取消'
+    }
+    case 'OVERDUE': {
+      return '訂單過期'
+    }
+    default: {
+      return '不明'
+    }
+  }
+}
+
 export default function OrderHistory() {
 
   const auth = useAuthUser();
@@ -50,7 +82,8 @@ export default function OrderHistory() {
       dataIndex: 'status',
       key: 'status',
       width: 100,
-      render: (value) => value === 'WAITING' ? '訂單處理中' : '訂單完成'
+      // render: (value) => value === 'WAITING' ? '訂單處理中' : '訂單完成'
+      render: (value) => getStatusName(value)
     },
     {
       title: '品項',

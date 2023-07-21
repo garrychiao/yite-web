@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import _ from 'lodash';
 import { Divider, Row, Col, Typography, Button, Image, Table, notification } from 'antd';
@@ -14,10 +14,14 @@ import CurrencyFormat from 'react-currency-format';
 import { useAuthUser } from 'react-auth-kit';
 import { orderApi } from 'page/api';
 import { useRequest } from 'ahooks';
+import qs from 'qs'
+import axios from 'axios'
 
 const { Title } = Typography;
 
 export default function ConfirmOrderPage() {
+  const [paymentData, setPaymentData] = useState({})
+  const [paymentUrl, setPaymentUrl] = useState('')
 
   const { cart, fetchCart, selectedItems, setSelectedItems, getSelectedFromLocal } = useCart();
   const auth = useAuthUser()
@@ -36,15 +40,32 @@ export default function ConfirmOrderPage() {
 
   const totalPrice = useMemo(() => _.sum(cartData.map(item => item.qty * item.unitPrice)), [cartData]);
 
-  const { run: createOrder, loading: loadingCreateOrder } = useRequest(({ payload }) => orderApi.create({ payload }), {
+  const { run: createOrder, loading: loadingCreateOrder } = useRequest(async ({ payload }) => orderApi.create({ payload }), {
     manual: true,
-    onSuccess: (data) => {
-      console.log(data)
-      fetchCart();
-      notification.success({
-        message: '訂單已送出'
+    onSuccess: async (data) => {
+      console.log('order.create.data:', data)
+      const paymentResp = await orderApi.initPayment({
+        userId: auth().id,
+        orderId: data.id,
+        showResultUrl: "http://localhost:3000/order/payment/confirm"
       })
-      navigate('/order/history')
+      setPaymentData({ ...paymentResp.payload });
+      setPaymentUrl(paymentResp.redirectUrl)
+      // TODO: submit ecpay form
+      axios.post(paymentResp.redirectUrl,
+        qs.stringify({...paymentResp.payload}), {
+          headers: { 
+            "Content-Type": "application/x-www-form-urlencoded"
+          }
+        }).then(function(response) {
+            console.log(response);
+        })
+
+      // fetchCart();
+      // notification.success({
+      //   message: '訂單已送出'
+      // })
+      // navigate('/order/history')
     }, onError: (err) => {
       console.error(err);
       notification.error({
@@ -145,6 +166,7 @@ export default function ConfirmOrderPage() {
   const loading = loadingCreateOrder;
 
   return (
+    <>
     <Section.Container>
       <Section>
         <Title level={4}>確認訂單 | 結帳</Title>
@@ -196,6 +218,26 @@ export default function ConfirmOrderPage() {
         </Row>
       </Section>
     </Section.Container>
+      <form id="payForm" method="POST">
+        <input name="MerchantID" value={paymentData.MerchantID} autocomplete="off" />
+        <input name="MerchantTradeNo" value={paymentData.MerchantTradeNo} autocomplete="off" />
+        <input name="MerchantTradeDate" value={paymentData.MerchantTradeDate} autocomplete="off" />
+        <input name="PaymentType" value={paymentData.PaymentType} autocomplete="off" />
+        <input name="TotalAmount" value={paymentData.TotalAmount} autocomplete="off" />
+        <input name="TradeDesc" value={paymentData.TradeDesc} autocomplete="off" />
+        <input name="ItemName" value={paymentData.ItemName} autocomplete="off" />
+        <input name="ReturnURL" value={paymentData.ReturnURL} autocomplete="off" />
+        <input name="ChoosePayment" value={paymentData.ChoosePayment} autocomplete="off" />
+        <input name="CheckMacValue" value={paymentData.CheckMacValue} autocomplete="off" />
+        <input name="EncryptType" value={paymentData.EncryptType} autocomplete="off" />
+        <input name="ClientBackURL" value={paymentData.ClientBackURL} autocomplete="off" />
+        <input name="CustomField1" value={paymentData.CustomField1} autocomplete="off" />
+
+        <button type="submit">
+          確認訂單
+        </button>
+      </form>
+    </>
   );
 }
 
