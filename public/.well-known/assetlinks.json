@@ -1,10 +1,14 @@
 [
-    {
-      "relation": ["delegate_permission/common.handle_all_urls"],
+  {
+      "relation": [
+          "delegate_permission/common.handle_all_urls"
+      ],
       "target": {
-        "namespace": "android_app",
-        "package_name": ".MainApplication",
-        "sha256_cert_fingerprints": ["DC:63:60:49:9E:CA:57:0D:1A:D4:C5:46:A9:A5:0F:17:A9:5D:60:F8:04:58:3D:79:17:17:29:AE:55:50:53:A5"]
+          "namespace": "android_app",
+          "package_name": "com.yiteapp",
+          "sha256_cert_fingerprints": [
+              "FA:C6:17:45:DC:09:03:78:6F:B9:ED:E6:2A:96:2B:39:9F:73:48:F0:BB:6F:89:9B:83:32:66:75:91:03:3B:9C"
+          ]
       }
-    }
-  ]
+  }
+]
