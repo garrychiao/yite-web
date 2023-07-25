@@ -65,6 +65,8 @@ export default function ProductPage({preview = false}) {
   const [introImages, setIntroImages] = useState([]);
   const [productFeatures, setProductFeatures] = useState([]);
   const [downloadFiles, setDownloadFiles] = useState([]);
+  //
+  const [modelNo, setModelNo] = useState('無');
 
   // storing spec data
   const [specDict, setSpecDict] = useState({});
@@ -108,6 +110,9 @@ export default function ProductPage({preview = false}) {
     onSuccess: (data) => {
       console.log(data)
       setProductData(data);
+      if (data?.modelNo) {
+        setModelNo(data.modelNo)
+      }
       const dict = {};
       const specs = data?.specs || [];
       if (specs.length > 0) {
@@ -285,6 +290,7 @@ export default function ProductPage({preview = false}) {
                   ))
                 }
               </ImageGalleryList>
+              產品編號：{modelNo}
             </Col>
             <Col sm={12} xs={24}>
               <Title level={3}>{productData?.productNo}</Title>
@@ -358,18 +364,15 @@ export default function ProductPage({preview = false}) {
                   </Row>
                 </>)
               }
-              {/* <Divider />
+              <Divider />
               <Row gutter={50} align='middle'>
                 <Col>
-                  <Title style={{ margin: 0 }} level={4}>庫存數量</Title>
+                  <Title style={{ margin: 0 }} level={4}>庫存狀態</Title>
                 </Col>
                 <Col>
-                  {renderInventoryCount(inventoryCount)}
+                  <InventoryIndicator $type='green' />
                 </Col>
-                <Col>
-                  <Button size='large' onClick={() => { onChangeInventoryCount() }}>切換庫存數量</Button>
-                </Col>
-              </Row> */}
+              </Row>
               <Divider />
               {
                 (productData?.specs && productData.specs.length > 0) &&
@@ -435,9 +438,6 @@ export default function ProductPage({preview = false}) {
                       直接購買
                     </Button>
                 </Col>
-                <Col>
-                  <InventoryIndicator $type='green' />
-                </Col>
               </Row>
             </Col>
           </Row>
@@ -466,7 +466,6 @@ const ImageGalleryList = styled.div`
 const InventoryIndicator = styled.div`
   width: 20px;
   height: 20px;
-  margin: 30px;
   border-radius: 50%;
   background-color: ${props => {
     switch(props.$type) {
