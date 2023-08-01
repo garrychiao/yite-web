@@ -14,8 +14,10 @@ import ButtonGroup from 'shared/buttonGroup';
 import CartCountOperator from 'shared/cartCountOperator';
 import CurrencyFormat from 'react-currency-format';
 import FullSpin from 'shared/FullSpin';
-import { useAuthUser, useIsAuthenticated} from 'react-auth-kit';
+import { useAuthUser, useIsAuthenticated } from 'react-auth-kit';
 import { useCart } from 'shared/cart';
+import { QuestionCircleOutlined, } from '@ant-design/icons';
+
 
 const { Title, Text } = Typography;
 
@@ -40,10 +42,10 @@ const { Title, Text } = Typography;
 
 // ]
 
-export default function ProductPage({preview = false}) {
+export default function ProductPage({ preview = false }) {
 
 
-  console.log('is preivew', preview);
+  // console.log('is preivew', preview);
   const { fetchCart } = useCart();
 
   const navigate = useNavigate();
@@ -54,7 +56,7 @@ export default function ProductPage({preview = false}) {
   // tmp section
   // const inventoryCountList = [1000, 500, 199, 95, 5, 0];
   // const [inventoryCount, setInventoryCount] = useState(0);
-  const permissionValid = useMemo(() => (isAuthenticated() && !preview ), [preview, isAuthenticated]);
+  const permissionValid = useMemo(() => (isAuthenticated() && !preview), [preview, isAuthenticated]);
   const { id } = useParams();
   const [productData, setProductData] = useState({});
   // console.log(`productData`)
@@ -66,10 +68,15 @@ export default function ProductPage({preview = false}) {
   const [productFeatures, setProductFeatures] = useState([]);
   const [downloadFiles, setDownloadFiles] = useState([]);
   //
-  const [modelNo, setModelNo] = useState('無');
-
+  const [modelNo, setModelNo] = useState(false);
+  // const [inventoryColor, setInventoryColor] = useState('grey');
+  const [inventoryData, setInventoryData] = useState({});
+  console.log(`inventoryData`)
+  console.log(inventoryData)
+  const productOrderable = useMemo(() => !!inventoryData.inventoryQty ,[inventoryData]);
   // storing spec data
   const [specDict, setSpecDict] = useState({});
+  // console.log(`specDict`)
   // console.log(specDict)
   // add to cart
   const { run: addToCart, loading: loadingAddToCart } = useRequest(({ payload }) => cartApi.add({ payload }), {
@@ -108,7 +115,7 @@ export default function ProductPage({preview = false}) {
   // console.log(productFeatures)
   const { loading: loadingProductDetailData } = useRequest(() => productApi.get({ id }), {
     onSuccess: (data) => {
-      console.log(data)
+      // console.log(data)
       setProductData(data);
       if (data?.modelNo) {
         setModelNo(data.modelNo)
@@ -116,11 +123,22 @@ export default function ProductPage({preview = false}) {
       const dict = {};
       const specs = data?.specs || [];
       if (specs.length > 0) {
-        specs.forEach(spec => {
+        specs.forEach((spec, index) => {
+          if (index === 0) {
+            setModelNo(spec.items[0].modelNo)
+          }
           dict[spec.id] = spec.items[0].itemName
         })
       }
       setSpecDict(dict);
+    }
+  });
+
+  const { loading: loadingProductInventory } = useRequest(() => productApi.getInventory({ productId: productData.id, modelNo: modelNo }), {
+    refreshDeps: [modelNo],
+    ready: !!modelNo,
+    onSuccess: (data) => {
+      setInventoryData(data);
     }
   });
 
@@ -192,23 +210,6 @@ export default function ProductPage({preview = false}) {
 
   }, [productData])
 
-  // const renderInventoryCount = (count) => {
-  //   const target = inventorySetup.find(item => item.count >= count);
-  //   if (target) {
-  //     return <Text style={{ textAlign: 'center', fontSize: 18, color: target.color }}>{count}</Text>
-  //   }
-  //   return <Text style={{ textAlign: 'center', fontSize: 18, color: defaultLight }}>{count}</Text>
-  // }
-
-  // const onChangeInventoryCount = () => {
-  //   const index = inventoryCountList.indexOf(inventoryCount);
-  //   if (index !== inventoryCountList.length - 1) {
-  //     setInventoryCount(inventoryCountList[index + 1]);
-  //   } else {
-  //     setInventoryCount(inventoryCountList[0]);
-  //   }
-  // }
-
   const onAddToCart = async (isDirectBuy) => {
 
     const user = auth();
@@ -233,15 +234,15 @@ export default function ProductPage({preview = false}) {
           itemName: specDict[key],
         }))
       }
-      console.log(`payload`);
-      console.log(payload);
+      // console.log(`payload`);
+      // console.log(payload);
 
       if (isDirectBuy) {
-        runDirectBuy({payload});
+        runDirectBuy({ payload });
       } else {
-        addToCart({payload});
+        addToCart({ payload });
       }
-      
+
 
     } catch (err) {
       console.error('error:onAddToCart');
@@ -252,14 +253,15 @@ export default function ProductPage({preview = false}) {
   }
 
 
-  console.log(productData)
+  // console.log(productData)
   // const { data, loading } = useRequest(() => categoryApi.list());
   const loading = loadingProductDetailData ||
     loadingProductFeaturesData ||
     loadingProductFilesData ||
     loadingProductImagesData ||
     loadingAddToCart ||
-    loadingDirectBuy;
+    loadingDirectBuy ||
+    loadingProductInventory;
 
   return (
     <FullSpin spinning={loading}>
@@ -370,7 +372,9 @@ export default function ProductPage({preview = false}) {
                   <Title style={{ margin: 0 }} level={4}>庫存狀態</Title>
                 </Col>
                 <Col>
-                  <InventoryIndicator $type='green' />
+                  {(inventoryData?.color && inventoryData?.color === 'unknown') ?
+                    <QuestionCircleOutlined style={{ fontSize: 20 }} /> :
+                    <InventoryIndicator $type={inventoryData?.color} />}
                 </Col>
               </Row>
               <Divider />
@@ -390,9 +394,11 @@ export default function ProductPage({preview = false}) {
                               selectedIndex={spec?.items[0]?.itemName}
                               items={spec.items.map(item => ({
                                 name: item.itemName,
-                                value: item.itemName
+                                value: item.itemName,
+                                modelNo: item.modelNo,
                               }))}
-                              onChange={(value) => {
+                              onChange={(value, modelNo) => {
+                                setModelNo(modelNo)
                                 setSpecDict({
                                   ...specDict,
                                   [spec.id]: value,
@@ -422,21 +428,21 @@ export default function ProductPage({preview = false}) {
               <Row style={{ paddingTop: 30 }} align='middle' gutter={50}>
                 <Col>
                   <Button
-                    disabled={!permissionValid}
+                    disabled={!permissionValid || !productOrderable}
                     size='large'
                     onClick={() => onAddToCart(false)}>
-                      <ShoppingCartOutlined />
-                      加入購物車
-                    </Button>
+                    <ShoppingCartOutlined />
+                    加入購物車
+                  </Button>
                 </Col>
                 <Col>
-                  <Button 
-                    disabled={!permissionValid}
+                  <Button
+                    disabled={!permissionValid || !productOrderable}
                     size='large'
                     onClick={() => onAddToCart(true)}>
-                      <ShoppingOutlined />
-                      直接購買
-                    </Button>
+                    <ShoppingOutlined />
+                    直接購買
+                  </Button>
                 </Col>
               </Row>
             </Col>
@@ -468,7 +474,7 @@ const InventoryIndicator = styled.div`
   height: 20px;
   border-radius: 50%;
   background-color: ${props => {
-    switch(props.$type) {
+    switch (props.$type) {
       case 'green':
         return '#66cc00'
       case 'yellow':
@@ -477,12 +483,12 @@ const InventoryIndicator = styled.div`
         return '#ff0000'
       case 'grey':
         return '#BDCDD6'
-      default: 
+      default:
         return '#66cc00'
     }
   }};
   box-shadow: 0px 0px 2px 2px ${props => {
-    switch(props.$type) {
+    switch (props.$type) {
       case 'green':
         return '#66cc00'
       case 'yellow':
@@ -491,7 +497,7 @@ const InventoryIndicator = styled.div`
         return '#ff0000'
       case 'grey':
         return '#BDCDD6'
-      default: 
+      default:
         return '#66cc00'
     }
   }};;

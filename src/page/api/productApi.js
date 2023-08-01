@@ -8,6 +8,12 @@ const productApi = {
   getFeatures: ({id = ''}) => axios.get(`/product/${id}/features`),
   getImages: ({id = ''}) => axios.get(`/product/${id}/images`),
   getFiles: ({id = ''}) => axios.get(`/product/${id}/files`),
+  getInventory: ({productId, modelNo}) => axios.get(`/product/inventory`, {
+    params: {
+      productId, 
+      modelNo,
+    }
+  }),
 };
 
 export default productApi;

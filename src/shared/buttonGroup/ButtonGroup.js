@@ -20,9 +20,9 @@ export default function ButtonGroup ({items = [], selectedIndex, size = 'large',
         danger={(selected === item.value)}
         type="primary"
         onClick={() => {
-          console.log(item.value);
+          // console.log(item.value);
           setSelected(item.value);
-          onChange(item.value);
+          onChange(item.value, item?.modelNo);
         }}>{item.name}</Button>
     ))}
   </Container>)
