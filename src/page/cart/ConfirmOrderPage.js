@@ -147,19 +147,35 @@ export default function ConfirmOrderPage() {
     },
   ];
 
-  const onConfirmOrder = () => {
+  const onConfirmOrder = async () => {
 
-    const payload = {
-      userId: auth().id,
-      totalPrice,
-      orderProducts: [],
-      cartProducts: cartData.map(item => ({
-        cartId: item.id
-      }))
+    try {
+      await form.validateFields();
+      const { orderer, receiver } = form.getFieldsValue();
+      
+      const payload = {
+        userId: auth().id,
+        totalPrice,
+        cartProducts: cartData.map(item => ({
+          cartId: item.id
+        })),
+        orderName: orderer.name,
+        orderPhone: orderer.phone,
+        orderEmail: orderer.email,
+        orderAddress: orderer.address,
+        orderZipcode: orderer.zipcode,
+        receiverName: receiver.name,
+        receiverPhone: receiver.phone,
+        receiverEmail: receiver.email,
+        receiverAddress: receiver.address,
+        receiverZipcode: receiver.zipcode,
+      }
+
+      console.log(payload);
+      createOrder({ payload });
+    } catch (err) {
+
     }
-
-    console.log(payload);
-    createOrder({ payload });
   }
 
   const loading = loadingCreateOrder;
@@ -171,7 +187,7 @@ export default function ConfirmOrderPage() {
     if (checked) {
       const formValues = form.getFieldsValue();
       const { orderer } = formValues;
-      console.log(Object.keys(orderer).map(key => [ORDERER, key]))
+      // console.log(Object.keys(orderer).map(key => [ORDERER, key]))
       try {
         await form.validateFields(Object.keys(orderer).map(key => [ORDERER, key]));
         setSameAsOrderer(checked);
@@ -379,7 +395,7 @@ export default function ConfirmOrderPage() {
           <Row>
             <Col lg={12}>
               <Row>
-                <Col span={24}>
+                {/* <Col span={24}>
                   <Title level={4} style={{ marginBottom: 20 }}>選擇配送方式</Title>
                   <Radio.Group onChange={() => { }}>
                     <Space direction="vertical" size={'large'}>
@@ -388,13 +404,13 @@ export default function ConfirmOrderPage() {
                     </Space>
                   </Radio.Group>
                   <Divider />
-                </Col>
+                </Col> */}
                 <Col span={24}>
                   <Title level={4} style={{ marginBottom: 20 }}>選擇付款方式</Title>
-                  <Radio.Group onChange={() => { }}>
+                  <Radio.Group value={1} onChange={() => { }}>
                     <Space direction="vertical" size={'large'}>
                       <Radio value={1}>信用卡一次付清</Radio>
-                      <Radio value={2}>超商門市貨到付款</Radio>
+                      {/* <Radio value={2}>超商門市貨到付款</Radio> */}
                     </Space>
                   </Radio.Group>
                 </Col>

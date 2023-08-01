@@ -54,11 +54,11 @@ export default function OrderHistory() {
   const { fetchCart } = useCart();
   const [loadingBuyAgain, setLoadingBuyAgain] = useState(false);
 
-  const { data, loading:loadingList } = useRequest(() => orderApi.list());
+  const { data, loading: loadingList } = useRequest(() => orderApi.list());
   const tableData = useMemo(() => {
     const list = data?.rows || [];
     return _.chain(list).orderBy('createdAt', 'asc')
-      .map((i, index) => ({...i, id_index: index+1}))
+      .map((i, index) => ({ ...i, id_index: index + 1 }))
       .orderBy('createdAt', 'desc')
       .value()
   }, [data])
@@ -145,9 +145,22 @@ export default function OrderHistory() {
       title: '操作',
       dataIndex: 'actions',
       key: 'actions',
-      render: (_, order) => (<Button onClick={() => { onBuyAgain(order) }}>
-        再買一次
-      </Button>)
+      render: (_, order) => (
+        <Row gutter={20}>
+          <Col>
+            <Button onClick={() => { 
+              navigate(`./${order.id}`)
+             }}>
+              查看明細
+            </Button>
+          </Col>
+          <Col>
+            <Button onClick={() => { onBuyAgain(order) }}>
+              再買一次
+            </Button>
+          </Col>
+        </Row>
+      )
     },
   ];
 
@@ -166,7 +179,7 @@ export default function OrderHistory() {
             productSpecId: item.productSpecId,
           }))
         }
-        return cartApi.add({payload})
+        return cartApi.add({ payload })
       }))
       fetchCart();
       notification.success({
@@ -199,7 +212,7 @@ export default function OrderHistory() {
           scroll={{
             x: 'calc(700px + 50%)',
             // y: 'calc(100vh - 50px)',
-          }}/>
+          }} />
       </Section>
     </Section.Container>
   );
