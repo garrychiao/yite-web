@@ -49,6 +49,8 @@ export default function PaymentConfirmPage() {
   const getOrderData = async (orderId) => {
     try {
       const response = await orderApi.get(orderId)
+      console.log(`response`);
+      console.log(response);
       setOrderData(response)
       setPaymentData(R.find(R.where({
         paymentLog: R.where({

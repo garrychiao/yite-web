@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useEffect, useMemo, useState, useRef } from 'react';
 import styled from 'styled-components';
 import _ from 'lodash';
@@ -42,8 +43,8 @@ export default function ConfirmOrderPage() {
     productNo: item?.product.productNo,
     image: getSysFileUrl(item?.product?.mainImages[0].imageSysFileId),
   })), [selectedItems, cart])
-  console.log(`cartData`)
-  console.log(cartData)
+  // console.log(`cartData`)
+  // console.log(cartData)
 
   const totalPrice = useMemo(() => _.sum(cartData.map(item => item.qty * item.unitPrice)), [cartData]);
 
@@ -51,20 +52,24 @@ export default function ConfirmOrderPage() {
     manual: true,
     onSuccess: async (data) => {
       console.log('order.create.data:', data)
-      const paymentResp = await orderApi.initPayment({
-        userId: auth().id,
-        orderId: data.id,
-        showResultUrl: `${window.location.origin}/order/payment/confirm/${data.id}`
-      })
-      setPaymentData({ ...paymentResp.payload });
-      setPaymentUrl(paymentResp.redirectUrl)
-      document.querySelector('#payForm').submit();
+      console.log(`${window.location.origin}/order/payment/confirm/${data.id}`)
+      // const paymentResp = await orderApi.initPayment({
+      //   userId: auth().id,
+      //   orderId: data.id,
+      //   showResultUrl: `${window.location.origin}/order/payment/confirm/${data.id}`
+      // })
+
+      // setPaymentData({ ...paymentResp.payload });
+      // setPaymentUrl(paymentResp.redirectUrl)
+      // document.querySelector('#payForm').submit();
+
 
       // fetchCart();
       // notification.success({
       //   message: '訂單已送出'
       // })
-      // navigate('/order/history')
+      navigate(`/order/initECPay/${data.id}`);
+
     }, onError: (err) => {
       console.error(err);
       notification.error({
@@ -152,7 +157,7 @@ export default function ConfirmOrderPage() {
     try {
       await form.validateFields();
       const { orderer, receiver } = form.getFieldsValue();
-      
+
       const payload = {
         userId: auth().id,
         totalPrice,

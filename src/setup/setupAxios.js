@@ -46,10 +46,10 @@ export default function setupAxios() {
       log.error('axios:response.error', { error });
       const info = error.response?.data?.info ?? {};
       if (!_.isObject(info.msg)) {
-        notification.error({
-          message: info.code || error.message,
-          description: info.msg || defaultHttpErrorMessage(error),
-        });
+        // notification.error({
+        //   message: info.code || error.message,
+        //   description: info.msg || defaultHttpErrorMessage(error),
+        // });
       }
       return Promise.reject(error.response?.data);
     }

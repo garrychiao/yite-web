@@ -73,7 +73,8 @@ export default function ProductPage({ preview = false }) {
   const [inventoryData, setInventoryData] = useState({});
   console.log(`inventoryData`)
   console.log(inventoryData)
-  const productOrderable = useMemo(() => !!inventoryData.inventoryQty ,[inventoryData]);
+  // const productOrderable = useMemo(() => !!inventoryData.inventoryQty ,[inventoryData]);
+  const productOrderable = true
   // storing spec data
   const [specDict, setSpecDict] = useState({});
   // console.log(`specDict`)

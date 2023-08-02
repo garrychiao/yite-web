@@ -4,7 +4,7 @@ import HomePage from 'page/home/HomePage';
 import { ProductListPage, ProductPage } from 'page/product';
 import { CategoryPage } from 'page/category';
 import { RequireAuth } from 'page/auth';
-import { CartPage, ConfirmOrderPage, OrderCreatedPage, PaymentConfirmPage } from 'page/cart';
+import { CartPage, ConfirmOrderPage, OrderCreatedPage, PaymentConfirmPage, InitECPayPage } from 'page/cart';
 
 // const HomePage = lazy(() => import('page/home/HomePage'));
 // const { ProductPage, ProductListPage }= lazy(() => import('page/product'));
@@ -103,6 +103,12 @@ export default function useMainRoutes() {
           path: 'created',
           element: (<RequireAuth required>
             <OrderCreatedPage />
+          </RequireAuth>)
+        },
+        {
+          path: 'initECPay/:orderId',
+          element: (<RequireAuth required={false}>
+            <InitECPayPage />
           </RequireAuth>)
         },
       ]

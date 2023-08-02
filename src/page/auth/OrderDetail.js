@@ -107,14 +107,14 @@ export default function OrderDetail() {
                         <Image width={100} preview={false} src={getSysFileUrl(item.images[0].imageSysFileId)} />
                       }
                       title={
-                        <Title
+                        <div
                           style={{ cursor: 'pointer' }}
                           level={5}
                           onClick={() => {
                             navigate(`/category/productDetail/${item.product.id}`)
                           }}>
                           {item.product.productName}
-                        </Title>}
+                        </div>}
                       description={<Space direction='vertical'>
                         <Text>規格：{item.selectedProductSpecs.length ? item.selectedProductSpecs.map(item => item.itemName).join('、') : <>無</>}</Text>
                         <Text>單價：
