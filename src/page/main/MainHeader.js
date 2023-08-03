@@ -78,11 +78,11 @@ export default function MainHeader() {
           items={MainNavItems}
         />
         <RightNavContainer>
-          {authed() ? <Row align="middle" gutter={15}>
+          {authed() ? <Row align="middle" gutter={25}>
             <Col style={{ display: 'flex' }}>
               <Badge dot={hasProduct} >
-                <Link to='/cart' style={{ fontSize: 24 }}>
-                  <ShoppingCartOutlined />
+                <Link to='/cart'>
+                  <ShoppingCartOutlined style={{ fontSize: 24 }} />
                 </Link>
               </Badge>
             </Col>
@@ -146,6 +146,8 @@ const StyledHeader = styled(Layout.Header)`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid #c0c0c0;
+  overflow: hidden;
   @media (max-width: 767px) {
     padding: 20px;
     justify-content: right;

@@ -1,5 +1,5 @@
 import MainStyles from './MainStyles';
-// import FormStyles from './FormStyles';
+import MenuStyles from './MenuStyles';
 // import InputStyles from './InputStyles';
 // import ModalStyles from './ModalStyles';
 // import RadioStyles from './RadioStyles';
@@ -14,8 +14,8 @@ export default function GlobalStyles() {
       <MainStyles />
       {/* others */}
       {/* antd styles */}
-      {/* <FormStyles />
-      <ModalStyles />
+      <MenuStyles />
+      {/* <ModalStyles />
       <InputStyles />
       <SelectStyles />
       <RadioStyles />

@@ -10,4 +10,7 @@ export default createGlobalStyle`
   #webpack-dev-server-client-overlay {
     display:none;
   }
+  .slick-dots li button:before {
+    display: none;
+  }
 `;

@@ -3,8 +3,15 @@ import {
     LogoutOutlined
 } from '@ant-design/icons';
 import i18n from 'i18next';
+import { Image } from 'antd';
+import LOGO_IMAGE from 'asset/img/LOGO.png';
 
 export const MainNavItems = [
+    {
+        label: <Image src={LOGO_IMAGE} width={120} preview={false} />,
+        key: 'logo',
+        path: ''
+    },
     {
         label: i18n.t('首頁'),
         key: '/',
