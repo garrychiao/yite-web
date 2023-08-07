@@ -13,6 +13,8 @@ export default function HotProductSlider() {
 
     const settings = {
         dots: true,
+        autoplay: true,
+        autoplaySpeed: 2000,
         infinite: true,
         speed: 500,
         slidesToShow: 4,
@@ -65,9 +67,9 @@ export default function HotProductSlider() {
             <Row style={{width: '100%'}}>
                 <Col span={24}>
                     <Slider {...settings}>
-                        {hotProductList.map(item => {
+                        {hotProductList.map((item, index) => {
                             item.image = getSysFileUrl(item.mainImages[0].imageSysFileId)
-                            return <ProductSliderCard productData={item} />
+                            return <ProductSliderCard key={index} productData={item} />
                         })}
                     </Slider>
                 </Col>
@@ -78,5 +80,4 @@ export default function HotProductSlider() {
 
 const Container = styled.div`
     width: 100%;
-    padding: 20px;
 `

@@ -20,7 +20,7 @@ const getStatusName = (status) => {
       return '草稿'
     }
     case 'INIT': {
-      return '訂單建立，未付款'
+      return '訂單建立，待付款'
     }
     case 'WAITING': {
       return '付款完成，等待確認'
@@ -146,7 +146,7 @@ export default function OrderHistory() {
       dataIndex: 'actions',
       key: 'actions',
       render: (_, order) => (
-        <Row gutter={20}>
+        <Row gutter={[20, 20]}>
           <Col>
             <Button onClick={() => { 
               navigate(`./${order.id}`)

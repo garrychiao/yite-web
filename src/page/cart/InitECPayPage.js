@@ -43,8 +43,8 @@ export default function InitECPayPage() {
   }, [hashToken]);
 
 
-  // console.log(`authToken`)
-  // console.log(authToken)
+  console.log(`authToken`)
+  console.log(authToken)
 
   const [paymentData, setPaymentData] = useState({})
   const [paymentUrl, setPaymentUrl] = useState('')
@@ -65,7 +65,7 @@ export default function InitECPayPage() {
           userId: data.userId,
           orderId: data.id,
           showResultUrl: `${window.location.origin}/order/payment/confirm/${data.id}`
-        })
+        }, authToken)
 
         console.log(paymentResp.payload);
         console.log(paymentResp.redirectUrl);
@@ -88,7 +88,7 @@ export default function InitECPayPage() {
 
   return (
     <>
-      <FullSpin spinning={true} />
+      <FullSpin tip="正在前往付款..." spinning={true} />
       <form id="payForm" action={paymentUrl} method="POST" style={{ display: 'none' }}>
         <input name="MerchantID" value={paymentData.MerchantID} autoComplete="off" />
         <input name="MerchantTradeNo" value={paymentData.MerchantTradeNo} autoComplete="off" />

@@ -13,6 +13,8 @@ export default function NewProductSlider() {
 
     const settings = {
         dots: true,
+        autoplay: true,
+        autoplaySpeed: 2000,
         infinite: true,
         speed: 500,
         slidesToShow: 4,
@@ -62,12 +64,12 @@ export default function NewProductSlider() {
                     </Title>
                 </Col>
             </Row>
-            <Row style={{width: '100%'}}>
+            <Row style={{ width: '100%' }}>
                 <Col span={24}>
                     <Slider {...settings}>
-                        {newProductList.map(item => {
+                        {newProductList.map((item, index) => {
                             item.image = getSysFileUrl(item.mainImages[0].imageSysFileId)
-                            return <ProductSliderCard productData={item} />
+                            return <ProductSliderCard key={index} productData={item} />
                         })}
                     </Slider>
                 </Col>
@@ -78,5 +80,4 @@ export default function NewProductSlider() {
 
 const Container = styled.div`
     width: 100%;
-    padding: 20px;
 `

@@ -69,12 +69,12 @@ export default function ProductPage({ preview = false }) {
   const [downloadFiles, setDownloadFiles] = useState([]);
   //
   const [modelNo, setModelNo] = useState(false);
-  // const [inventoryColor, setInventoryColor] = useState('grey');
+  // const [inventoryColor, setInventoryColor] = useState('gray');
   const [inventoryData, setInventoryData] = useState({});
   console.log(`inventoryData`)
   console.log(inventoryData)
-  // const productOrderable = useMemo(() => !!inventoryData.inventoryQty ,[inventoryData]);
-  const productOrderable = true
+  const productOrderable = useMemo(() => !!inventoryData.inventoryQty, [inventoryData]);
+  // const productOrderable = true
   // storing spec data
   const [specDict, setSpecDict] = useState({});
   // console.log(`specDict`)
@@ -333,10 +333,10 @@ export default function ProductPage({ preview = false }) {
                   </Row>
                 ) : (
                   <Row gutter={50}>
-                    <Col>
+                    <Col span={8}>
                       <Title style={{ margin: 0 }} level={4}>價格</Title>
                     </Col>
-                    <Col>
+                    <Col span={16}>
                       <CurrencyFormat
                         value={productData.defaultPrice}
                         thousandSeparator={true}
@@ -352,10 +352,10 @@ export default function ProductPage({ preview = false }) {
                 (productData?.sellPrice && productData?.customerPrice) && (<>
                   <Divider />
                   <Row gutter={50}>
-                    <Col>
+                    <Col span={8}>
                       <Title style={{ margin: 0 }} level={4}>建議價格</Title>
                     </Col>
-                    <Col>
+                    <Col span={16}>
                       <CurrencyFormat
                         value={productData.sellPrice}
                         thousandSeparator={true}
@@ -369,10 +369,10 @@ export default function ProductPage({ preview = false }) {
               }
               <Divider />
               <Row gutter={50} align='middle'>
-                <Col>
+                <Col span={8}>
                   <Title style={{ margin: 0 }} level={4}>庫存狀態</Title>
                 </Col>
-                <Col>
+                <Col span={16}>
                   {(inventoryData?.color && inventoryData?.color === 'unknown') ?
                     <QuestionCircleOutlined style={{ fontSize: 20 }} /> :
                     <InventoryIndicator $type={inventoryData?.color} />}
@@ -382,11 +382,13 @@ export default function ProductPage({ preview = false }) {
               {
                 (productData?.specs && productData.specs.length > 0) &&
                 <>
-                  <Title level={4} style={{ margin: 0 }}>選擇規格</Title>
-                  <Row style={{ paddingBottom: 20 }}>
-                    <Col>
+                  <Row gutter={50} align='middle'>
+                    <Col span={8}>
+                      <Title level={4} style={{ margin: 0 }}>選擇規格</Title>
+                    </Col>
+                    <Col span={16}>
                       {productData.specs.map((spec, index) => (
-                        <Row key={index} gutter={50} style={{ paddingTop: 20 }} align='middle'>
+                        <Row key={index} gutter={50} align='middle'>
                           <Col>
                             <Title level={4} style={{ margin: 0 }}>{spec.specName}</Title>
                           </Col>
@@ -411,14 +413,15 @@ export default function ProductPage({ preview = false }) {
                       ))}
                     </Col>
                   </Row>
+                  <Divider />
                 </>
               }
               {/* add product to cart count */}
               <Row align='middle' gutter={50}>
-                <Col>
+                <Col span={8}>
                   <Title style={{ margin: 0 }} level={4}>數量</Title>
                 </Col>
-                <Col style={{ alignSelf: 'center' }}>
+                <Col span={16} style={{ alignSelf: 'center' }}>
                   <Form form={form} initialValues={{ qty: 1 }}>
                     <Form.Item name='qty' style={{ margin: 0 }}>
                       <CartCountOperator />
@@ -426,7 +429,8 @@ export default function ProductPage({ preview = false }) {
                   </Form>
                 </Col>
               </Row>
-              <Row style={{ paddingTop: 30 }} align='middle' gutter={50}>
+              <Divider />
+              <Row style={{ paddingTop: 30 }} justify={'center'} align='middle' gutter={50}>
                 <Col>
                   <Button
                     disabled={!permissionValid || !productOrderable}
@@ -482,10 +486,10 @@ const InventoryIndicator = styled.div`
         return '#F4D160'
       case 'red':
         return '#ff0000'
-      case 'grey':
+      case 'gray':
         return '#BDCDD6'
       default:
-        return '#66cc00'
+        return '#BDCDD6'
     }
   }};
   box-shadow: 0px 0px 2px 2px ${props => {
@@ -496,10 +500,10 @@ const InventoryIndicator = styled.div`
         return '#F4D160'
       case 'red':
         return '#ff0000'
-      case 'grey':
+      case 'gray':
         return '#BDCDD6'
       default:
-        return '#66cc00'
+        return '#BDCDD6'
     }
   }};;
 

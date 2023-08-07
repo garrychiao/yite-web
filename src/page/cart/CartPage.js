@@ -92,6 +92,7 @@ export default function CartPage() {
       title: '名稱',
       dataIndex: 'productName',
       key: 'productName',
+      width: 150,
       render: (value, product) => (<Link to={`/category/productDetail/${product.productId}`}>
         <Title style={{ margin: 0 }} level={5}>{value}</Title>
       </Link>),
@@ -100,6 +101,7 @@ export default function CartPage() {
       title: '規格',
       dataIndex: 'selectedProductSpecs',
       key: 'selectedProductSpecs',
+      width: 150,
       render: (_, product) => product.selectedProductSpecs.length > 0 ?
         <SpecChooser product={product} onSpecConfirmed={(specsDict) => updateSpecs(product.id, product.qty, specsDict)} />
         : <Title style={{ margin: 0 }} level={5}>無</Title>,
@@ -212,6 +214,9 @@ export default function CartPage() {
           {
             hasProduct ? (
               <Table
+                scroll={{
+                  x: 1200,
+                }}
                 loading={loading}
                 pagination={false}
                 rowKey='id'
@@ -258,7 +263,7 @@ export default function CartPage() {
                 addSelectedToLocal();
                 navigate('/order/confirm')
               }}>
-              去買單
+              前往結賬
             </Button>
           </Col>
         </Row>

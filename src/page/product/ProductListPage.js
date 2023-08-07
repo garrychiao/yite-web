@@ -76,7 +76,7 @@ export default function ProductListPage() {
     <FullSpin spinning={loading}>
       <Wrapper>
         <Section.Container>
-          <Section style={{height: '100vh'}}>
+          <Section style={{minHeight: '100vh'}}>
             <Row justify={'space-between'} align='middle' gutter={[20, 20]}>
               <Col>
                 <Breadcrumb

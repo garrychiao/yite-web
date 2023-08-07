@@ -94,7 +94,7 @@ export default function CategoryPage() {
             <List
               grid={{
                 gutter: 36,
-                xs: 1,
+                xs: 2,
                 sm: 2,
                 md: 4,
                 lg: 4,

@@ -94,17 +94,19 @@ export default function ConfirmOrderPage() {
       title: '圖片',
       dataIndex: 'image',
       key: 'image',
-      width: 100,
+      width: 150,
       render: (src) => <Image src={src} preview={false} width='100%' />,
     },
     {
       title: '名稱',
       dataIndex: 'productName',
+      width: 250,
       key: 'productName',
     },
     {
       title: '編號',
       dataIndex: 'productNo',
+      width: 150,
       key: 'productNo',
     },
     {
@@ -228,6 +230,9 @@ export default function ConfirmOrderPage() {
           <Title level={4}>確認訂單 | 結帳</Title>
           <Divider />
           <Table
+            scroll={{
+              x: 1200,
+            }}
             loading={loading}
             pagination={false}
             columns={columns}

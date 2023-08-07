@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { Space, Drawer, Badge, Layout, Menu, Button, Divider, Row, Col, Dropdown, Typography } from 'antd';
+import { Image, Space, Drawer, Badge, Layout, Menu, Button, Divider, Row, Col, Dropdown, Typography } from 'antd';
 import color from 'shared/style/color';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import i18n from 'i18next';
@@ -10,6 +10,7 @@ import { UserOutlined, ShoppingCartOutlined, MenuOutlined, DownOutlined, LogoutO
 import { useCart } from 'shared/cart';
 import { useBoolean, useResponsive } from 'ahooks';
 import { MainNavItems, UserNavItems } from './fields/NavItems';
+import LOGO_IMAGE from 'asset/img/LOGO.png';
 
 const { Text } = Typography;
 
@@ -28,7 +29,7 @@ export default function MainHeader() {
   const [showDrawer, { toggle: toggleDrawer, setFalse: closeDrawer }] = useBoolean(false);
   const MobileNavItems = useMemo(() => {
     if (user?.displayName) {
-      return MainNavItems.concat([{ label: <Divider /> }, ...UserNavItems])
+      return MainNavItems.filter(i => i.key !== 'logo').concat([{ label: <Divider /> }, ...UserNavItems])
     }
     return MainNavItems
   }, [MainNavItems, UserNavItems, user])
@@ -120,7 +121,16 @@ export default function MainHeader() {
           </Row> : <SignInButton />}
         </RightNavContainer>
       </Row> : <>
-        <Button icon={<MenuOutlined />} size='large' onClick={toggleDrawer} />
+        <Row style={{width: '100%'}} align='middle' justify='space-between'>
+          <Col>
+            <Image src={LOGO_IMAGE} width={120} preview={false} onClick={() => {
+              navigate('/')
+            }} />
+          </Col>
+          <Col>
+            <Button icon={<MenuOutlined />} size='large' onClick={toggleDrawer} />
+          </Col>
+        </Row>
         <Drawer title="" placement="right" width='60%' onClose={toggleDrawer} open={showDrawer}>
           <Menu
             defaultSelectedKeys='/'

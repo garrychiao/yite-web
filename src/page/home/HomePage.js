@@ -33,7 +33,7 @@ export default function HomePage() {
 
   return (
     <>
-      <Carousel autoplay effect='fade' autoplaySpeed={5000}>
+      <Carousel autoplay effect='fade' autoplaySpeed={3000}>
         <CarouselSlide>
           <Image src={YITE_Banner_1} preview={false} width={'100%'} />
         </CarouselSlide>

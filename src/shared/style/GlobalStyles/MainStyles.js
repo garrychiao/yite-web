@@ -7,6 +7,11 @@ export default createGlobalStyle`
     background-color: #fff;
     font-size: 20px;
   }
+
+  .ant-layout {
+    background-color: #fff;
+  }
+
   #webpack-dev-server-client-overlay {
     display:none;
   }

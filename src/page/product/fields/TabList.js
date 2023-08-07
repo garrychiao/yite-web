@@ -1,14 +1,6 @@
-import { useMemo, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Divider, List, Breadcrumb, Card, Row, Col, Typography, Carousel, Image, Tabs } from 'antd';
-import color from 'shared/style/color';
-import i18n from 'i18next';
-import { ArrowRightOutlined } from '@ant-design/icons';
-import { Link, useParams } from 'react-router-dom';
-import { Section } from 'shared/layout';
-import { useRequest } from 'ahooks';
-import { categoryApi, productApi } from 'page/api';
-import getSysFileUrl from 'utils/apiSysFiles';
+import { Typography, Tabs } from 'antd';
+import { useResponsive } from 'ahooks';
 import IntroTab from './IntroTab';
 import SpecTab from './SpecTab';
 import FileTab from './FileTab';
@@ -16,6 +8,8 @@ import FileTab from './FileTab';
 const { Title } = Typography;
 
 export default function TabList({ introTabData, specTabData, downloadFiles }) {
+
+  const { sm } = useResponsive();
 
   const items = [
     {
@@ -36,14 +30,14 @@ export default function TabList({ introTabData, specTabData, downloadFiles }) {
   ];
 
 
-  return (<StyledTabs 
-      centered 
-      defaultActiveKey="1" 
-      items={items} 
-      size='large'
-      tabBarGutter={100}
-      onChange={() => {}} />)
-  
+  return (<StyledTabs
+    centered
+    defaultActiveKey="1"
+    items={items}
+    size='large'
+    tabBarGutter={sm ? 100: 50}
+    onChange={() => { }} />)
+
 }
 
 const StyledTabs = styled(Tabs)`

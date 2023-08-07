@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 // import styled from 'styled-components';
-import { Card, Row, Col, Divider } from 'antd';
+import { Typography, Card, Row, Col, Divider } from 'antd';
 import dayjs from 'dayjs';
 // import color from 'shared/style/color';
 // import i18n from 'i18next';
@@ -14,6 +14,8 @@ import dayjs from 'dayjs';
 import { useAuthUser } from 'react-auth-kit';
 import { Section } from 'shared/layout';
 
+const { Title } = Typography;
+
 export default function UserInfo() {
 
   const auth = useAuthUser();
@@ -24,20 +26,20 @@ export default function UserInfo() {
     <Section.Container>
       <Section>
         <Row gutter={20}>
-          <Col>
-            <Card title={user?.displayName} bordered={false} style={{ width: 300 }}>
-              <p>Email: {user?.email}</p>
-              <p>建立時間: {dayjs(user?.createdAt).format('YYYY-MM-DD')}</p>
+          <Col xs={24} sm={24} md={8}>
+            <Card title={<Title level={3}>{user?.displayName}</Title>} hoverable style={{ width: '100%', backgroundColor: '#fff' }}>
+              <Title level={5}>Email: {user?.email}</Title>
+              <Title level={5}>建立時間: {dayjs(user?.createdAt).format('YYYY-MM-DD')}</Title>
               <Divider />
-              客戶資訊
+              <Title level={4}>客戶資訊</Title>
               {
                 user?.customer ? <>
-                <p>客戶名稱: {user?.customer?.customerName}</p>
-                <p>客戶等級: {user?.customer?.customerGradeNo}</p>
-                <p>Email: {user?.customer?.email}</p>
-                <p>電話: {user?.customer?.phone}</p>
-                <p>統一編號: {user?.customer?.vatNumber}</p>
-                <p>啟用狀態: {user?.customer?.enable ? '啟用' : '未啟用'}</p>
+                  <Title level={5}>客戶名稱: {user?.customer?.customerName}</Title>
+                  <Title level={5}>客戶等級: {user?.customer?.customerGradeNo}</Title>
+                  <Title level={5}>Email: {user?.customer?.email}</Title>
+                  <Title level={5}>電話: {user?.customer?.phone}</Title>
+                  <Title level={5}>統一編號: {user?.customer?.vatNumber}</Title>
+                  <Title level={5}>啟用狀態: {user?.customer?.enable ? '啟用' : '未啟用'}</Title>
                 </> : <></>
               }
             </Card>
