@@ -1,5 +1,6 @@
 import { useMemo, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import _ from 'lodash';
 import { Button, Divider, Form, Breadcrumb, Card, Row, Col, Typography, Carousel, Image, notification } from 'antd';
 import color from 'shared/style/color';
 import i18n from 'i18next';
@@ -46,7 +47,10 @@ export default function ProductPage({ preview = false }) {
 
 
   // console.log('is preivew', preview);
-  const { fetchCart } = useCart();
+  const { fetchCart, cart } = useCart();
+
+  console.log(`cart`);
+  console.log(cart);
 
   const navigate = useNavigate();
   // console.log(cart)
@@ -74,6 +78,10 @@ export default function ProductPage({ preview = false }) {
   console.log(`inventoryData`)
   console.log(inventoryData)
   const productOrderable = useMemo(() => !!inventoryData.inventoryQty, [inventoryData]);
+
+  const inCartProduct = useMemo(() => _.find(cart, { productId: id }) || { qty: 0 }, [cart, id]);
+  console.log(`inCartProduct`)
+  console.log(inCartProduct)
   // const productOrderable = true
   // storing spec data
   const [specDict, setSpecDict] = useState({});
@@ -117,6 +125,14 @@ export default function ProductPage({ preview = false }) {
   const { loading: loadingProductDetailData } = useRequest(() => productApi.get({ id }), {
     onSuccess: (data) => {
       // console.log(data)
+
+      if (data.status === 'INACTIVE') {
+        notification.warning({
+          message: '商品已下架'
+        })
+        return navigate('/category')
+      }
+
       setProductData(data);
       if (data?.modelNo) {
         setModelNo(data.modelNo)
@@ -237,6 +253,17 @@ export default function ProductPage({ preview = false }) {
       }
       // console.log(`payload`);
       // console.log(payload);
+      // checking quantity
+
+
+      if (inCartProduct) {
+        const { qty: cartQty } = inCartProduct;
+        if (cartQty + qty > inventoryData.inventoryQty) {
+          return notification.warning({
+            message: '已達庫存上限'
+          })
+        }
+      }
 
       if (isDirectBuy) {
         runDirectBuy({ payload });
@@ -311,10 +338,10 @@ export default function ProductPage({ preview = false }) {
               {
                 productData?.customerPrice ? (
                   <Row gutter={50} align='middle'>
-                    <Col>
+                    <Col span={8}>
                       <Title style={{ margin: 0 }} level={4}>會員價格</Title>
                     </Col>
-                    <Col style={{ textAlign: 'center', display: 'flex', flexDirection: 'column' }}>
+                    <Col span={16} style={{ justifyContent: 'flex-start', display: 'flex', flexDirection: 'column' }}>
                       <CurrencyFormat
                         value={productData.defaultPrice}
                         thousandSeparator={true}
@@ -424,7 +451,7 @@ export default function ProductPage({ preview = false }) {
                 <Col span={16} style={{ alignSelf: 'center' }}>
                   <Form form={form} initialValues={{ qty: 1 }}>
                     <Form.Item name='qty' style={{ margin: 0 }}>
-                      <CartCountOperator />
+                      <CartCountOperator maximum={inventoryData?.inventoryQty - inCartProduct.qty} />
                     </Form.Item>
                   </Form>
                 </Col>

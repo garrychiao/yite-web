@@ -13,7 +13,7 @@ import CurrencyFormat from 'react-currency-format';
 import getSysFileUrl from 'utils/apiSysFiles';
 import { SpecChooser } from './fields'
 import CartCountOperator from 'shared/cartCountOperator';
-import { cartApi } from 'page/api';
+import { cartApi, productApi } from 'page/api';
 import { useRequest } from 'ahooks';
 
 const { Title } = Typography;
@@ -23,9 +23,26 @@ export default function CartPage() {
   const navigate = useNavigate();
   const { cart, fetchCart, hasProduct, selectedItems, setSelectedItems, onSelectAll, addSelectedToLocal } = useCart();
 
-  console.log(`selectedItems`)
-  console.log(selectedItems)
+  console.log(`cart`)
+  console.log(cart)
+
+  // console.log(`selectedItems`)
+  // console.log(selectedItems)
   const [initState, setInitState] = useState(true);
+
+  // const { data: cartInventory, loading: loadingCartInventory } = useRequest(() => Promise.all(cart.map(({productId, modelNo}) => productApi.getInventory({productId, modelNo}))), {
+  //   refreshDeps: [cart],
+  //   onSuccess: (data) => {
+  //     console.log(data)
+  //     fetchCart();
+  //   }, 
+  //   onError: (err) => {
+  //     console.error(err);
+  //     notification.error({
+  //       message: '發生錯誤'
+  //     })
+  //   }
+  // });
 
   const { run: updateToCart, loading: loadingUpdateToCart } = useRequest(({ payload }) => cartApi.update({ payload }), {
     manual: true,
@@ -263,7 +280,7 @@ export default function CartPage() {
                 addSelectedToLocal();
                 navigate('/order/confirm')
               }}>
-              前往結賬
+              前往結賬 <ArrowRightOutlined />
             </Button>
           </Col>
         </Row>

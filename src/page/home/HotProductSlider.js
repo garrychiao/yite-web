@@ -6,10 +6,34 @@ import ProductSliderCard from "./ProductSliderCard";
 import getSysFileUrl from "utils/apiSysFiles";
 import { Typography, Row, Col } from "antd";
 import { styled } from "styled-components";
+import { RightCircleOutlined, LeftCircleOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 
+function SampleNextArrow(props) {
+    const { className, style, onClick } = props;
+    return (
+        <div
+            className={className}
+            style={{ ...style, display: "block" }}
+            onClick={onClick}
+        />
+    );
+}
+
+function SamplePrevArrow(props) {
+    const { className, style, onClick } = props;
+    return (
+        <div
+            className={className}
+            style={{ ...style, display: "block" }}
+            onClick={onClick}
+        />
+    );
+}
+
 export default function HotProductSlider() {
+
 
     const settings = {
         dots: true,
@@ -20,6 +44,8 @@ export default function HotProductSlider() {
         slidesToShow: 4,
         slidesToScroll: 1,
         initialSlide: 0,
+        nextArrow: <SampleNextArrow />,
+        prevArrow: <SamplePrevArrow />,
         responsive: [
             {
                 breakpoint: 1024,
@@ -48,12 +74,12 @@ export default function HotProductSlider() {
         ]
     };
 
-    const { data: hotProductData, loading: loadingNew } = useRequest(() => productApi.list({
+    const { data: newProductData, loading: loadingNew } = useRequest(() => productApi.list({
         isHot: true
     }));
 
-    const hotProductList = useMemo(() => hotProductData?.rows || [], [hotProductData]);
-    // console.log(hotProductList);
+    const newProductList = useMemo(() => newProductData?.rows || [], [newProductData]);
+    console.log(newProductList);
 
     return (
         <Container>
@@ -64,10 +90,10 @@ export default function HotProductSlider() {
                     </Title>
                 </Col>
             </Row>
-            <Row style={{width: '100%'}}>
+            <Row style={{ width: '100%' }}>
                 <Col span={24}>
                     <Slider {...settings}>
-                        {hotProductList.map((item, index) => {
+                        {newProductList.map((item, index) => {
                             item.image = getSysFileUrl(item.mainImages[0].imageSysFileId)
                             return <ProductSliderCard key={index} productData={item} />
                         })}
@@ -80,4 +106,7 @@ export default function HotProductSlider() {
 
 const Container = styled.div`
     width: 100%;
+    .slick-prev:before, .slick-next:before {
+        color: #000;
+    }
 `

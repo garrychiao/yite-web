@@ -18,6 +18,7 @@ const { Title } = Typography;
 export default function CategoryPage() {
 
   const { id } = useParams();
+  console.log(id)
   const { data:categoryListData, loading:loadingCategoryList } = useRequest(() => categoryApi.list({
     params: id ? {
       parentCategoryId: id
@@ -35,8 +36,8 @@ export default function CategoryPage() {
 
   const [search, onSearch] = useState('');
 
-  // console.log(`categoryListData`)
-  // console.log(categoryListData)
+  console.log(`categoryDetailData`)
+  console.log(categoryDetailData)
 
   const categoryItems = useMemo(() => {
     const list = categoryListData?.rows || [];
@@ -60,15 +61,15 @@ export default function CategoryPage() {
       },
     ]
     const list = categoryDetailData?.categoryPath || [];
-    return initPath.concat(list.map(item => ({
+    return id ? initPath.concat(list.map(item => ({
       title: <Link to={`/category/${item.id}`}>{item.categoryName}</Link>,
       name: item.categoryName
-    })))
+    }))) : initPath
 
-  }, [categoryDetailData])
+  }, [categoryDetailData, id])
 
-  // console.log(`breadcrumbList`)
-  // console.log(breadcrumbList)
+  console.log(`breadcrumbList`)
+  console.log(breadcrumbList)
 
   const loading = loadingCategoryDetailData || loadingCategoryList
 

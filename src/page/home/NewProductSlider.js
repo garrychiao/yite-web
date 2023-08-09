@@ -6,10 +6,34 @@ import ProductSliderCard from "./ProductSliderCard";
 import getSysFileUrl from "utils/apiSysFiles";
 import { Typography, Row, Col } from "antd";
 import { styled } from "styled-components";
+import { RightCircleOutlined, LeftCircleOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 
+function SampleNextArrow(props) {
+    const { className, style, onClick } = props;
+    return (
+        <div
+            className={className}
+            style={{ ...style, display: "block" }}
+            onClick={onClick}
+        />
+    );
+}
+
+function SamplePrevArrow(props) {
+    const { className, style, onClick } = props;
+    return (
+        <div
+            className={className}
+            style={{ ...style, display: "block" }}
+            onClick={onClick}
+        />
+    );
+}
+
 export default function NewProductSlider() {
+
 
     const settings = {
         dots: true,
@@ -20,6 +44,8 @@ export default function NewProductSlider() {
         slidesToShow: 4,
         slidesToScroll: 1,
         initialSlide: 0,
+        nextArrow: <SampleNextArrow />,
+        prevArrow: <SamplePrevArrow />,
         responsive: [
             {
                 breakpoint: 1024,
@@ -80,4 +106,7 @@ export default function NewProductSlider() {
 
 const Container = styled.div`
     width: 100%;
+    .slick-prev:before, .slick-next:before {
+        color: #000;
+    }
 `

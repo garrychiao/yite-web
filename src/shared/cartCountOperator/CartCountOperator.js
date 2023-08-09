@@ -6,7 +6,7 @@ import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { useDebounceFn } from 'ahooks';
 
 
-export default function CartCountOperator ({initvalue = 1, onChange = () => {}}) {
+export default function CartCountOperator ({initvalue = 1, onChange = () => {}, maximum = 99999}) {
 
   const [count, setCount] = useState(initvalue);
   const { run: runDebounce } = useDebounceFn(
@@ -19,8 +19,10 @@ export default function CartCountOperator ({initvalue = 1, onChange = () => {}})
   );
   
   const onValueChange = (value) => {
-    runDebounce(value);
-    setCount(value);
+    if (value <= maximum) {
+      runDebounce(value);
+      setCount(value);
+    }
   }
 
   useEffect(()=> {

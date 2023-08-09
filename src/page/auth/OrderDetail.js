@@ -58,7 +58,7 @@ export default function OrderDetail() {
   const { data: orderData, loading: loadingList } = useRequest(() => orderApi.get(id));
   // console.log(orderData)
   const order = useMemo(() => orderData || {}, [orderData]);
-  const orderItems = useMemo(() => orderData?.orderItems || [], [order]);
+  const orderItems = useMemo(() => order?.orderItems || [], [order]);
 
 
   return (
@@ -76,8 +76,8 @@ export default function OrderDetail() {
           <Divider />
           <Row gutter={[20, 20]}>
             <Col xs={24} sm={18}>
-              <Card hoverable>
-                <Title level={5}>訂單明細</Title>
+              <Card hoverable style={{backgroundColor: 'white'}}>
+                <Title level={4}>訂單明細</Title>
                 <Divider />
                 <List
                   dataSource={orderItems}
@@ -129,7 +129,7 @@ export default function OrderDetail() {
               </Card>
             </Col>
             <Col xs={24} sm={6} md={6}>
-              <Card hoverable>
+              <Card hoverable style={{backgroundColor: 'white'}}>
                 <Row>
                   <Col>
                     <Title level={4}>狀態：{getStatusName(order?.status)}</Title>
@@ -155,28 +155,28 @@ export default function OrderDetail() {
           </Row>
           <Row gutter={[20, 20]} style={{ paddingTop: 20 }}>
             <Col sm={12} xs={24}>
-              <Card hoverable>
-                <Title level={5}>訂購人</Title>
+              <Card hoverable style={{backgroundColor: 'white'}}>
+                <Title level={4}>訂購人</Title>
                 <Divider />
                 <Space direction='vertical'>
-                  <Text>姓名：{order.orderName}</Text>
-                  <Text>Email：{order.orderEmail}</Text>
-                  <Text>聯絡電話：{order.orderPhone}</Text>
-                  <Text>地址：{order.orderAddress}</Text>
-                  <Text>郵遞區號：{order.orderZipcode}</Text>
+                  <Text style={{fontSize: 'large'}}>姓名：{order.orderName}</Text>
+                  <Text style={{fontSize: 'large'}}>Email：{order.orderEmail}</Text>
+                  <Text style={{fontSize: 'large'}}>聯絡電話：{order.orderPhone}</Text>
+                  <Text style={{fontSize: 'large'}}>地址：{order.orderAddress}</Text>
+                  <Text style={{fontSize: 'large'}}>郵遞區號：{order.orderZipcode}</Text>
                 </Space>
               </Card>
             </Col>
             <Col sm={12} xs={24}>
-              <Card hoverable>
-                <Title level={5}>收件人</Title>
+              <Card hoverable style={{backgroundColor: 'white'}}>
+                <Title level={4}>收件人</Title>
                 <Divider />
                 <Space direction='vertical'>
-                  <Text>姓名：{order.receiverName}</Text>
-                  <Text>Email：{order.receiverEmail}</Text>
-                  <Text>聯絡電話：{order.receiverPhone}</Text>
-                  <Text>地址：{order.receiverAddress}</Text>
-                  <Text>郵遞區號：{order.receiverZipcode}</Text>
+                  <Text style={{fontSize: 'large'}}>姓名：{order.receiverName}</Text>
+                  <Text style={{fontSize: 'large'}}>Email：{order.receiverEmail}</Text>
+                  <Text style={{fontSize: 'large'}}>聯絡電話：{order.receiverPhone}</Text>
+                  <Text style={{fontSize: 'large'}}>地址：{order.receiverAddress}</Text>
+                  <Text style={{fontSize: 'large'}}>郵遞區號：{order.receiverZipcode}</Text>
                 </Space>
               </Card>
             </Col>

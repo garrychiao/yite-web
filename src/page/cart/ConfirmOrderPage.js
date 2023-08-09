@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect, useMemo, useState, useRef } from 'react';
+import { useEffect, useMemo, useState, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 import _ from 'lodash';
 import { Input, Checkbox, Divider, Row, Col, Typography, Button, Image, Table, notification, Form, Radio, Space } from 'antd';
@@ -25,7 +25,6 @@ export default function ConfirmOrderPage() {
 
   const ORDERER = 'orderer';
   const RECEIVER = 'receiver'
-  const [formOrderer] = Form.useForm();
   const [form] = Form.useForm();
   const formRef = useRef();
   const [sameAsOrderer, setSameAsOrderer] = useState(false);
@@ -154,12 +153,26 @@ export default function ConfirmOrderPage() {
     },
   ];
 
+
+  const updateReceiver = useCallback((receiverData = {}) => {
+    localStorage.setItem('__receiver', JSON.stringify(receiverData));
+  }, [])
+
+  const fetchReceiver = useCallback(() => {
+    const receiverData = JSON.parse(localStorage.getItem('__receiver'));
+    console.log(`receiverData`)
+    console.log(receiverData)
+    return receiverData
+  }, [])
+
+
   const onConfirmOrder = async () => {
 
     try {
       await form.validateFields();
       const { orderer, receiver } = form.getFieldsValue();
 
+      updateReceiver(receiver);
       const payload = {
         userId: auth().id,
         totalPrice,
@@ -217,11 +230,21 @@ export default function ConfirmOrderPage() {
       form.setFieldsValue({
         [ORDERER]: {
           name: auth().displayName,
-          ...auth()
+          phone: auth().customer?.phone,
+          address: auth().customer?.address,
+          email: auth().email,
         }
       })
+      const receiverData = fetchReceiver();
+      if (receiverData) {
+        form.setFieldsValue({
+          [RECEIVER]: {
+            ...receiverData
+          }
+        })
+      }
     }
-  }, [])
+  }, [auth, fetchReceiver, form])
 
   return (
     <>
@@ -280,7 +303,7 @@ export default function ConfirmOrderPage() {
                         { required: true, message: '姓名為必填' },
                       ]}
                     >
-                      <Input placeholder='姓名為必填' autoComplete='name' />
+                      <Input disabled placeholder='姓名為必填' autoComplete='name' />
                     </Form.Item>
                   </FormCol>
                   <FormCol>
@@ -291,7 +314,7 @@ export default function ConfirmOrderPage() {
                         { required: true, message: '聯絡電話為必填' },
                       ]}
                     >
-                      <Input placeholder='聯絡電話為必填' autoComplete='phone' />
+                      <Input disabled placeholder='聯絡電話為必填' autoComplete='phone' />
                     </Form.Item>
                   </FormCol>
                 </FormRow>
@@ -304,7 +327,7 @@ export default function ConfirmOrderPage() {
                         { required: true, message: 'Email為必填' },
                       ]}
                     >
-                      <Input placeholder='Email為必填' autoComplete='email' />
+                      <Input disabled placeholder='Email為必填' autoComplete='email' />
                     </Form.Item>
                   </FormCol>
                   <FormCol>
@@ -312,7 +335,7 @@ export default function ConfirmOrderPage() {
                       name={[ORDERER, 'zipcode']}
                       label='郵遞區號'
                     >
-                      <Input autoComplete='postal-code' />
+                      <Input disabled autoComplete='postal-code' />
                     </Form.Item>
                   </FormCol>
                 </FormRow>
@@ -325,7 +348,7 @@ export default function ConfirmOrderPage() {
                         { required: true, message: '地址為必填' },
                       ]}
                     >
-                      <Input placeholder='地址為必填' autoComplete='address' />
+                      <Input disabled placeholder='地址為必填' autoComplete='address' />
                     </Form.Item>
                   </FormCol>
                 </FormRow>
