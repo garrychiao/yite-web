@@ -144,7 +144,10 @@ export default function ProductPage({ preview = false }) {
           if (index === 0) {
             setModelNo(spec.items[0].modelNo)
           }
-          dict[spec.id] = spec.items[0].itemName
+          dict[spec.id] = {
+            name: spec.items[0].itemName,
+            modelNo: spec.items[0].modelNo,
+          }
         })
       }
       setSpecDict(dict);
@@ -248,11 +251,12 @@ export default function ProductPage({ preview = false }) {
         qty,
         selectedProductSpecs: Object.keys(specDict).map(key => ({
           productSpecId: key,
-          itemName: specDict[key],
+          itemName: specDict[key].name,
+          modelNo: specDict[key].modelNo,
         }))
       }
-      // console.log(`payload`);
-      // console.log(payload);
+      console.log(`payload`);
+      console.log(payload);
       // checking quantity
 
 
@@ -427,11 +431,14 @@ export default function ProductPage({ preview = false }) {
                                 value: item.itemName,
                                 modelNo: item.modelNo,
                               }))}
-                              onChange={(value, modelNo) => {
+                              onChange={(name, modelNo) => {
                                 setModelNo(modelNo)
                                 setSpecDict({
                                   ...specDict,
-                                  [spec.id]: value,
+                                  [spec.id]: {
+                                    name, 
+                                    modelNo
+                                  },
                                 })
                               }}
                             />

@@ -21,7 +21,7 @@ const { Title } = Typography;
 export default function CartPage() {
 
   const navigate = useNavigate();
-  const { cart, fetchCart, hasProduct, selectedItems, setSelectedItems, onSelectAll, addSelectedToLocal } = useCart();
+  const { cart, fetchCart, hasProduct, selectedItems, setSelectedItems, addSelectedToLocal } = useCart();
 
   console.log(`cart`)
   console.log(cart)
@@ -30,19 +30,9 @@ export default function CartPage() {
   // console.log(selectedItems)
   const [initState, setInitState] = useState(true);
 
-  // const { data: cartInventory, loading: loadingCartInventory } = useRequest(() => Promise.all(cart.map(({productId, modelNo}) => productApi.getInventory({productId, modelNo}))), {
-  //   refreshDeps: [cart],
-  //   onSuccess: (data) => {
-  //     console.log(data)
-  //     fetchCart();
-  //   }, 
-  //   onError: (err) => {
-  //     console.error(err);
-  //     notification.error({
-  //       message: '發生錯誤'
-  //     })
-  //   }
-  // });
+  const { data: cartInventory, loading: loadingCartInventory, run: fetchCartInventory } = useRequest(() => Promise.all(cart.map(({ productId, currentModelNo }) => productApi.getInventory({ productId, modelNo: currentModelNo }))), {
+    // refreshDeps: [cart],
+  });
 
   const { run: updateToCart, loading: loadingUpdateToCart } = useRequest(({ payload }) => cartApi.update({ payload }), {
     manual: true,
@@ -74,27 +64,45 @@ export default function CartPage() {
     }
   });
 
-  const cartData = useMemo(() => cart.map(item => ({
-    ...item,
-    productName: item.product.productName,
-    productId: item.product.id,
-    image: getSysFileUrl(item?.product?.mainImages[0].imageSysFileId),
-    total: item.qty * item.unitPrice
-  })), [cart])
+  const cartData = useMemo(() => {
+
+    if ( cartInventory && cartInventory.length !== cart.length) {
+      return []
+    }
+    return cart.map((item, index) => ({
+      ...item,
+      productName: item.product.productName,
+      productId: item.product.id,
+      image: getSysFileUrl(item?.product?.mainImages[0].imageSysFileId),
+      total: item.qty * item.unitPrice,
+      inventory: cartInventory ? cartInventory[index]?.inventoryQty : 0,
+      inventoryExceed: cartInventory ? item.qty > cartInventory[index]?.inventoryQty : false,
+    }))
+  }, [cart, cartInventory])
+
+  // console.log(`cartData`)
+  // console.log(cartData)
 
   useEffect(() => {
     if (cart.length > 0 && initState) {
-      onSelectAll()
+      fetchCartInventory();
+      setSelectedItems(_.filter(cartData, {inventoryExceed: false}).map(i => i.id))
       setInitState(false);
     }
-  }, [cart, initState, onSelectAll])
+  }, [cart, initState])
 
+  useEffect(() => {
+    setSelectedItems(_.filter(cartData, {inventoryExceed: false}).map(i => i.id))
+  }, [cartData])
+  
   const rowSelection = {
     selectedRowKeys: selectedItems,
     onChange: (selectedRowKeys) => {
-      console.log(selectedRowKeys);
       setSelectedItems(selectedRowKeys)
     },
+    getCheckboxProps: (record) => ({
+      disabled: record.qty > record.inventory,
+    }),
   };
 
   const columns = [
@@ -159,7 +167,11 @@ export default function CartPage() {
       title: '數量',
       dataIndex: 'qty',
       key: 'qty',
-      render: (value, product) => <CartCountOperator initvalue={value} onChange={(value) => updateQty(product.id, value, product.selectedProductSpecs)} />,
+      render: (value, product) => <CartCountOperator
+        initvalue={value}
+        maximum={product?.inventory || 99999}
+        onChange={(value) => updateQty(product.id, value, product.selectedProductSpecs)}
+      />,
     },
     {
       title: '總計',
@@ -206,20 +218,22 @@ export default function CartPage() {
 
   const updateSpecs = (id, qty, specs) => {
 
+    // console.log(id, qty, specs)
     const payload = {
       id: id,
       qty,
       selectedProductSpecs: Object.keys(specs).map(key => ({
         productSpecId: key,
-        itemName: specs[key],
+        itemName: specs[key].name,
+        modelNo: specs[key].modelNo,
       }))
     }
-    // console.log(`payload`);
-    // console.log(payload);
+    console.log(`payload`);
+    console.log(payload);
     updateToCart({ payload });
   }
 
-  const loading = loadingUpdateToCart || loadingDeleteToCart;
+  const loading = loadingUpdateToCart || loadingDeleteToCart || loadingCartInventory;
 
   return (
     <Section.Container>
@@ -261,7 +275,7 @@ export default function CartPage() {
               <Col>
                 <Title level={5}>總計：
                   <CurrencyFormat
-                    value={_.sum(cart.map(item => item.unitPrice * item.qty))}
+                    value={_.sum(cart.filter(i => selectedItems.indexOf(i.id) > -1).map(item => item.unitPrice * item.qty))}
                     thousandSeparator={true}
                     prefix={'$'}
                     displayType='text'

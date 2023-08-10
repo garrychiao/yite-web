@@ -26,7 +26,10 @@ export default function SpecChooser({ product = {}, onSpecConfirmed }) {
     if (product.selectedProductSpecs) {
       let tmp = {}
       product.selectedProductSpecs.forEach((item) => {
-        tmp[item.productSpecId] = item.itemName
+        console.log(item.productSpecId)
+        tmp[item.productSpecId] = {};
+        tmp[item.productSpecId].name = item.itemName;
+        tmp[item.productSpecId].modelNo = item.modelNo;
       })
       setSpecs(tmp)
     }
@@ -62,14 +65,16 @@ export default function SpecChooser({ product = {}, onSpecConfirmed }) {
                   <ButtonGroup
                     size='middle'
                     selectedIndex={() => {
-                      return specs[spec.id]
+                      return specs[spec.id].name
                     }}
                     items={spec.items.map(item => ({
                       name: item.itemName,
-                      value: item.itemName
+                      value: item.itemName,
+                      modelNo: item.modelNo,
                     }))}
-                    onChange={(value) => {
-                      tmp[spec.id] = value;
+                    onChange={(name, modelNo) => {
+                      tmp[spec.id].name = name;
+                      tmp[spec.id].modelNo = modelNo;
                     }}
                   />
                 </Col>
@@ -104,7 +109,7 @@ export default function SpecChooser({ product = {}, onSpecConfirmed }) {
     <RenderSpecField>
       <Button
         onClick={() => setSpecOpen(true)} >
-        {Object.keys(specs).map(key => specs[key]).join('、')}
+        {Object.keys(specs).map(key => specs[key].name).join('、')}
       </Button>
     </RenderSpecField>
   );

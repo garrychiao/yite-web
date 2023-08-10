@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { createContext, useMemo, useState, useEffect, useCallback } from 'react';
 import { useRequest } from 'ahooks';
 import PropTypes from 'prop-types';
-import { cartApi } from 'page/api';
+import { cartApi, productApi } from 'page/api';
 import { useAuthUser } from 'react-auth-kit';
 
 export const CartContext = createContext({
@@ -13,7 +13,7 @@ export const CartContext = createContext({
   selectedItems: [],
   setSelectedItems: () => { },
   hasProduct: false,
-  onSelectAll: () => { },
+  // onSelectAll: () => { },
   // addSelectedItem: () => { },
   // removeSelectedItem: () => { },
   addSelectedToLocal: () => { },
@@ -29,17 +29,20 @@ export default function CartProvider({ children }) {
   const [selectedItems, setSelectedItems] = useState([]);
   const hasProduct = useMemo(() => (cart.length > 0), [cart]);
 
+  
   const { run: fetchCart } = useRequest(() => cartApi.list(), {
     ready: !!user,
     onSuccess: (res) => {
       const data = res?.rows || [];
-      console.log(data)
+      // console.log(data)
       const resCart = data.map(item => ({
         ...item,
         unitPrice: item?.product?.customerPrice?.price || item?.product?.defaultPrice,
         defaultPrice: item?.product?.defaultPrice,
+        currentModelNo: item?.selectedProductSpecs.length ? item?.selectedProductSpecs[0]?.modelNo : item?.product?.modelNo,
       }))
-      setCart(resCart);
+      console.log(resCart)
+      setCart([...resCart]);
 
       if (selectedItems.length > res.count) {
         setSelectedItems(resCart)
@@ -47,10 +50,9 @@ export default function CartProvider({ children }) {
     },
   })
 
-
-  const onSelectAll = useCallback(() => {
-    setSelectedItems(cart.map(item => item.id));
-  }, [cart])
+  // const onSelectAll = useCallback(() => {
+  //   setSelectedItems(cart.map(item => item.id));
+  // }, [cart])
 
   // const addSelectedItem = useCallback((id) => {
   //   const target = _.find(cart, { id });
@@ -81,7 +83,7 @@ export default function CartProvider({ children }) {
       setSelectedItems,
       fetchCart,
       hasProduct,
-      onSelectAll,
+      // onSelectAll,
       // addSelectedItem,
       // removeSelectedItem,
       addSelectedToLocal,
@@ -94,7 +96,7 @@ export default function CartProvider({ children }) {
       setSelectedItems,
       fetchCart,
       hasProduct,
-      onSelectAll,
+      // onSelectAll,
       // addSelectedItem,
       // removeSelectedItem,
       addSelectedToLocal,

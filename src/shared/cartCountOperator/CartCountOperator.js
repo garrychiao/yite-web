@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Card, Button, InputNumber } from 'antd';
+import { Card, Button, InputNumber, Typography } from 'antd';
 import color from 'shared/style/color';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { useDebounceFn } from 'ahooks';
 
+const { Text } = Typography;
 
-export default function CartCountOperator ({initvalue = 1, onChange = () => {}, maximum = 99999}) {
+
+export default function CartCountOperator({ initvalue = 1, onChange = () => { }, maximum = 99999 }) {
 
   const [count, setCount] = useState(initvalue);
   const { run: runDebounce } = useDebounceFn(
@@ -17,33 +19,44 @@ export default function CartCountOperator ({initvalue = 1, onChange = () => {}, 
       wait: 500,
     },
   );
-  
+
   const onValueChange = (value) => {
     if (value <= maximum) {
       runDebounce(value);
       setCount(value);
+    } else {
+      setCount(maximum);
+      runDebounce(maximum);
     }
   }
 
-  useEffect(()=> {
+  useEffect(() => {
     setCount(initvalue);
   }, [initvalue])
 
-  return (<Container>
-    <OperationContainer onClick={() => {
-      if (count > 1) onValueChange(count - 1)
-    }}>
-      <MinusOutlined />
-    </OperationContainer>
-    <InputContainer>
-      <InputNumber controls={false} value={count} min={1} step={1} onChange={onValueChange} />
-    </InputContainer>
-    <OperationContainer onClick={() => {
-      onValueChange(count + 1);
-    }}>
-      <PlusOutlined />
-    </OperationContainer>
-  </Container>)
+  return (
+    <>
+      <Container>
+        <OperationContainer onClick={() => {
+          if (count > 1) onValueChange(count - 1)
+        }}>
+          <MinusOutlined />
+        </OperationContainer>
+        <InputContainer>
+          <InputNumber controls={false} value={count} min={1} step={1} onChange={onValueChange} />
+        </InputContainer>
+        <OperationContainer onClick={() => {
+          onValueChange(count + 1);
+        }}>
+          <PlusOutlined />
+        </OperationContainer>
+      </Container>
+      {
+        count > maximum && <Text style={{ textAlign: 'center', color: 'red' }}>超出庫存上限</Text>
+      }
+      
+    </>
+  )
 
 }
 
