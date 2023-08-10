@@ -19,8 +19,9 @@ const { Title } = Typography;
 export default function UserInfo() {
 
   const auth = useAuthUser();
-  const user = useMemo(() => auth() || {}, [auth]);
-  console.log(user)
+  const user = auth();
+  // const user = useMemo(() => auth() || {}, [auth]);
+  // console.log(user)
 
   return (
     <Section.Container>

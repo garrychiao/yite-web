@@ -21,8 +21,8 @@ export default function LoginResultPage() {
   const navigate = useNavigate();
   const { hash } = useLocation();
   const formattedToken = hash.substring(1);
-  
-  const {run, loading} = useRequest(() => authApi.getMe({token: formattedToken}), {
+  console.log(formattedToken)
+  const {run, loading} = useRequest(() => authApi.getMe({token: `Bearer ${formattedToken}`}), {
     manual: true,
     onSuccess: (res) => {
       
@@ -31,6 +31,7 @@ export default function LoginResultPage() {
         request.headers.Authorization = `Bearer ${formattedToken}`;
         return request;
       });
+      localStorage.setItem('token', formattedToken);
 
       signIn(
         {

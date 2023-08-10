@@ -189,6 +189,7 @@ export default function ConfirmOrderPage() {
         receiverEmail: receiver.email,
         receiverAddress: receiver.address,
         receiverZipcode: receiver.zipcode,
+        sameAsOrderer,
       }
 
       console.log(payload);
