@@ -195,7 +195,7 @@ export default function ConfirmOrderPage() {
       console.log(payload);
       createOrder({ payload });
     } catch (err) {
-
+      console.error(err);
     }
   }
 
@@ -441,10 +441,10 @@ export default function ConfirmOrderPage() {
                 </Col> */}
                 <Col span={24}>
                   <Title level={4} style={{ marginBottom: 20 }}>選擇付款方式</Title>
-                  <Radio.Group value={1} onChange={() => { }}>
+                  <Radio.Group  onChange={() => { }}>
                     <Space direction="vertical" size={'large'}>
                       <Radio value={1}>信用卡一次付清</Radio>
-                      {/* <Radio value={2}>超商門市貨到付款</Radio> */}
+                      <Radio value={2}>月結用戶</Radio>
                     </Space>
                   </Radio.Group>
                 </Col>

@@ -76,7 +76,7 @@ export default function OrderDetail() {
           <Divider />
           <Row gutter={[20, 20]}>
             <Col xs={24} sm={18}>
-              <Card hoverable style={{backgroundColor: 'white'}}>
+              <Card hoverable style={{ backgroundColor: 'white' }}>
                 <Title level={4}>訂單明細</Title>
                 <Divider />
                 <List
@@ -129,7 +129,7 @@ export default function OrderDetail() {
               </Card>
             </Col>
             <Col xs={24} sm={6} md={6}>
-              <Card hoverable style={{backgroundColor: 'white'}}>
+              <Card hoverable style={{ backgroundColor: 'white' }}>
                 <Row>
                   <Col>
                     <Title level={4}>狀態：{getStatusName(order?.status)}</Title>
@@ -155,28 +155,35 @@ export default function OrderDetail() {
           </Row>
           <Row gutter={[20, 20]} style={{ paddingTop: 20 }}>
             <Col sm={12} xs={24}>
-              <Card hoverable style={{backgroundColor: 'white'}}>
-                <Title level={4}>訂購人</Title>
+              <Card hoverable style={{ backgroundColor: 'white' }}>
+                <Title style={{margin: 0}} level={4}>訂購人</Title>
                 <Divider />
                 <Space direction='vertical'>
-                  <Text style={{fontSize: 'large'}}>姓名：{order.orderName}</Text>
-                  <Text style={{fontSize: 'large'}}>Email：{order.orderEmail}</Text>
-                  <Text style={{fontSize: 'large'}}>聯絡電話：{order.orderPhone}</Text>
-                  <Text style={{fontSize: 'large'}}>地址：{order.orderAddress}</Text>
-                  <Text style={{fontSize: 'large'}}>郵遞區號：{order.orderZipcode}</Text>
+                  <Text style={{ fontSize: 'large' }}>姓名：{order.orderName}</Text>
+                  <Text style={{ fontSize: 'large' }}>Email：{order.orderEmail}</Text>
+                  <Text style={{ fontSize: 'large' }}>聯絡電話：{order.orderPhone}</Text>
+                  <Text style={{ fontSize: 'large' }}>地址：{order.orderAddress}</Text>
+                  <Text style={{ fontSize: 'large' }}>郵遞區號：{order.orderZipcode}</Text>
                 </Space>
               </Card>
             </Col>
             <Col sm={12} xs={24}>
-              <Card hoverable style={{backgroundColor: 'white'}}>
-                <Title level={4}>收件人</Title>
+              <Card hoverable style={{ backgroundColor: 'white' }}>
+                <Row align='middle' gutter={20}>
+                  <Col>
+                    <Title style={{margin: 0}} level={4}>收件人</Title>
+                  </Col>
+                  <Col>
+                    {order.sameAsOrderer && <Text style={{margin: 0}} type='success'>同訂購人</Text>}
+                  </Col>
+                </Row>
                 <Divider />
                 <Space direction='vertical'>
-                  <Text style={{fontSize: 'large'}}>姓名：{order.receiverName}</Text>
-                  <Text style={{fontSize: 'large'}}>Email：{order.receiverEmail}</Text>
-                  <Text style={{fontSize: 'large'}}>聯絡電話：{order.receiverPhone}</Text>
-                  <Text style={{fontSize: 'large'}}>地址：{order.receiverAddress}</Text>
-                  <Text style={{fontSize: 'large'}}>郵遞區號：{order.receiverZipcode}</Text>
+                  <Text style={{ fontSize: 'large' }}>姓名：{order.receiverName}</Text>
+                  <Text style={{ fontSize: 'large' }}>Email：{order.receiverEmail}</Text>
+                  <Text style={{ fontSize: 'large' }}>聯絡電話：{order.receiverPhone}</Text>
+                  <Text style={{ fontSize: 'large' }}>地址：{order.receiverAddress}</Text>
+                  <Text style={{ fontSize: 'large' }}>郵遞區號：{order.receiverZipcode}</Text>
                 </Space>
               </Card>
             </Col>
