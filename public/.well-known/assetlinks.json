@@ -5,11 +5,12 @@
         ],
         "target": {
             "namespace": "android_app",
-            "package_name": "com.yiteapp",
+            "package_name": "com.yiteApp",
             "sha256_cert_fingerprints": [
                 "2A:D5:C1:78:B1:5E:93:67:26:D3:BB:4C:EF:84:9E:10:94:D9:D0:62:9B:8F:D4:B1:FD:56:E5:7E:B1:60:DC:2B",
                 "5A:88:9E:1E:19:87:F1:5D:A4:45:69:2F:91:F9:68:E9:0C:F7:F6:32:01:45:9D:25:C2:ED:61:AE:AA:A9:3E:D1",
-                "FA:C6:17:45:DC:09:03:78:6F:B9:ED:E6:2A:96:2B:39:9F:73:48:F0:BB:6F:89:9B:83:32:66:75:91:03:3B:9C"
+                "FA:C6:17:45:DC:09:03:78:6F:B9:ED:E6:2A:96:2B:39:9F:73:48:F0:BB:6F:89:9B:83:32:66:75:91:03:3B:9C",
+                "FD:C5:2A:37:EA:E7:BB:0B:37:47:CC:45:CF:40:24:F7:8B:8D:AB:48:B9:14:65:70:7F:50:B2:4F:08:19:A3:85"
             ]
         }
     }

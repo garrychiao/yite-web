@@ -14,6 +14,16 @@ const productApi = {
       modelNo,
     }
   }),
+  getHotCategory: () => axios.get(`/product/hot/category`, {
+    params: {
+      enable: true,
+    }
+  }),
+  getHotProducts: ({categoryId}) => axios.get(`/product/hot/product`, {
+    params: {
+      hotCategoryId: categoryId,
+    }
+  }),
 };
 
 export default productApi;

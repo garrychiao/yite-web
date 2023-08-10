@@ -1,6 +1,6 @@
-// import { Suspense } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
-import { Row, Col, Typography, Carousel, Image, Divider } from 'antd';
+import { Row, Col, Typography, Carousel, Image, Divider, Spin } from 'antd';
 import color from 'shared/style/color';
 import i18n from 'i18next';
 import { ArrowRightOutlined } from '@ant-design/icons';
@@ -20,16 +20,47 @@ import { useRequest } from 'ahooks';
 import { productApi } from 'page/api';
 import NewProductSlider from './NewProductSlider';
 import HotProductSlider from './HotProductSlider';
+import FullSpin from 'shared/FullSpin';
 
 const { Title } = Typography;
 
 export default function HomePage() {
 
-  const { data: hotProductData, loading: loadingHot } = useRequest(() => productApi.list({
-    isHot: true
-  }));
-  console.log(hotProductData);
+  const [lists, setLists] = useState([]);
+  const [loadingProducts, setLoadingProducts] = useState(false);
 
+
+  const { loading: loadingHot } = useRequest(() => productApi.getHotCategory(), {
+    onSuccess: async (res) => {
+      setLoadingProducts(true)
+      try {
+        console.log(`res`)
+        console.log(res)
+
+        const list = await Promise.all(res.map(async (i) => {
+
+          const products = await productApi.getHotProducts({ categoryId: i.id })
+          return {
+            name: i.hotCategoryName,
+            id: i.id,
+            products,
+            productsLength: products.length
+          }
+        }))
+
+        // console.log(`list`)
+        // console.log(list)
+        setLists(list.filter(i => i.productsLength >= 2))
+
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoadingProducts(false);
+      }
+    }
+  });
+  // console.log(hotProductCats);
+  const loading = loadingProducts || loadingHot;
 
   return (
     <>
@@ -64,17 +95,21 @@ export default function HomePage() {
       </Carousel>
       <Section.Container>
         <Section>
-          <Row>
-            <Col span={24}>
-              <NewProductSlider />
-            </Col>
-          </Row>
-          <Divider />
-          <Row>
-            <Col span={24}>
-              <HotProductSlider />
-            </Col>
-          </Row>
+          <FullSpin spinning={loading}>
+
+            {
+              lists.map((item, index) => (
+                <Row key={index}>
+                  <Col span={24}>
+                    <NewProductSlider listItems={item} />
+                    <Divider />
+                  </Col>
+                </Row>
+              ))
+            }
+
+          </FullSpin>
+
         </Section>
       </Section.Container>
     </>

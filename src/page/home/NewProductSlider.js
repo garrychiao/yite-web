@@ -32,8 +32,14 @@ function SamplePrevArrow(props) {
     );
 }
 
-export default function NewProductSlider() {
+export default function NewProductSlider({listItems = {}}) {
 
+    console.log(`listItems`)
+    
+    if (listItems.products.length <= 2) {
+        listItems.products = listItems.products.concat(listItems.products)
+    }
+    console.log(listItems.products)
 
     const settings = {
         dots: true,
@@ -74,28 +80,30 @@ export default function NewProductSlider() {
         ]
     };
 
-    const { data: newProductData, loading: loadingNew } = useRequest(() => productApi.list({
-        isNew: true
-    }));
+    // const { data: newProductData, loading: loadingNew } = useRequest(() => productApi.list({
+    //     isNew: true
+    // }));
 
-    const newProductList = useMemo(() => newProductData?.rows || [], [newProductData]);
-    console.log(newProductList);
+    // const newProductList = useMemo(() => newProductData?.rows || [], [newProductData]);
+    // console.log(newProductList);
 
     return (
         <Container>
             <Row justify={'center'}>
                 <Col>
                     <Title level={2}>
-                        新品上架
+                        {listItems.name}
                     </Title>
                 </Col>
             </Row>
             <Row style={{ width: '100%' }}>
                 <Col span={24}>
                     <Slider {...settings}>
-                        {newProductList.map((item, index) => {
-                            item.image = getSysFileUrl(item.mainImages[0].imageSysFileId)
-                            return <ProductSliderCard key={index} productData={item} />
+                        {listItems?.products && listItems.products.map((item, index) => {
+                            const pData = item.product
+                            pData.image = getSysFileUrl(item.product.mainImages[0].imageSysFileId)
+                            // console.log(getSysFileUrl(item.product.mainImages[0].imageSysFileId))
+                            return <ProductSliderCard key={index} productData={item.product} />
                         })}
                     </Slider>
                 </Col>
