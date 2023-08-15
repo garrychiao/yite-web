@@ -103,6 +103,8 @@ export default function InitECPayPage() {
         <input name="EncryptType" value={paymentData.EncryptType} autoComplete="off" />
         <input name="ClientBackURL" value={paymentData.ClientBackURL} autoComplete="off" />
         <input name="CustomField1" value={paymentData.CustomField1} autoComplete="off" />
+        <input name="CustomField2" value={paymentData.CustomField2} autoComplete="off" />
+        <input name="NeedExtraPaidInfo" value={paymentData.NeedExtraPaidInfo} autoComplete="off" />
 
         <button type="submit">
           確認訂單
