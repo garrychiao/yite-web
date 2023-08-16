@@ -21,7 +21,7 @@ import FullSpin from 'shared/FullSpin';
 const { Title } = Typography;
 
 export default function ConfirmOrderPage() {
-  
+
   const [initState, setInitState] = useState(true);
 
 
@@ -36,9 +36,10 @@ export default function ConfirmOrderPage() {
 
   const { cart, fetchCart, selectedItems, setSelectedItems, getSelectedFromLocal } = useCart();
   const auth = useAuthUser()
-  console.log(auth())
+  // console.log(auth())
   const ordererLockState = useMemo(() => !!auth()?.customer, [auth]);
-
+  // console.log(`ordererLockState`)
+  // console.log(ordererLockState)
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -219,24 +220,27 @@ export default function ConfirmOrderPage() {
 
   useEffect(() => {
     if (formRef?.current && initState) {
-      if (ordererLockState) {
-        form.setFieldsValue({
-          [ORDERER]: {
-            name: auth().displayName,
-            phone: auth().customer?.phone,
-            address: auth().customer?.address,
-            email: auth().email,
-          }
-        })
-      } else {
-        form.setFieldsValue({
-          [ORDERER]: {
-            name: auth().displayName,
-            email: auth().email,
-          }
-        })
-      }
-      
+      // if (ordererLockState) {
+
+      // } else {
+      //   form.setFieldsValue({
+      //     [ORDERER]: {
+      //       name: auth().displayName,
+      //       email: auth().email,
+      //     }
+      //   })
+      // }
+      // console.log(`use effect auth()`)
+      // console.log(auth())
+      // form.setFieldsValue({
+      //   [ORDERER]: {
+      //     name: auth().displayName,
+      //     phone: auth().customer?.phone,
+      //     address: auth().customer?.address,
+      //     email: auth().email,
+      //   }
+      // })
+
       const receiverData = fetchReceiver();
       if (receiverData) {
         form.setFieldsValue({
@@ -248,6 +252,19 @@ export default function ConfirmOrderPage() {
       setInitState(false);
     }
   }, [auth, fetchReceiver, form])
+
+  useEffect(() => {
+    if (formRef?.current) {
+      form.setFieldsValue({
+        [ORDERER]: {
+          name: auth().displayName,
+          phone: auth().customer?.phone,
+          address: auth().customer?.address,
+          email: auth().email,
+        }
+      })
+    }
+  }, [auth, form])
 
   return (
     <FullSpin spinning={loading}>
@@ -443,7 +460,7 @@ export default function ConfirmOrderPage() {
                 </Col> */}
                 <Col span={24}>
                   <Title level={4} style={{ marginBottom: 20 }}>選擇付款方式</Title>
-                  <Radio.Group  onChange={() => { }}>
+                  <Radio.Group onChange={() => { }}>
                     <Space direction="vertical" size={'large'}>
                       <Radio value={1}>信用卡一次付清</Radio>
                       <Radio value={2}>月結用戶</Radio>
