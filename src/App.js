@@ -10,6 +10,7 @@ import useAppRoutes from './useAppRoutes';
 import { useRequest } from 'ahooks';
 import { authApi } from 'page/api';
 import { useSignIn, useAuthUser, useAuthHeader, useIsAuthenticated } from 'react-auth-kit'
+import { useLocation } from 'react-router-dom';
 // ConfigProvider.config({
 //   theme: {
 //     primaryColor: color.primary,
@@ -21,6 +22,7 @@ import { useSignIn, useAuthUser, useAuthHeader, useIsAuthenticated } from 'react
 export default function App() {
   const routes = useAppRoutes();
   const signIn = useSignIn();
+  const location = useLocation();
 
   const userHeader = useAuthHeader();
   const isAuthenticated = useIsAuthenticated()
@@ -46,10 +48,12 @@ export default function App() {
 
 
   useEffect(() => {
+    console.log(`location`)
+    console.log(location)
     if (isAuthenticated()) {
       run();
     }
-  }, [])
+  }, [location])
 
   return (
     <ConfigProvider renderEmpty={() => <Empty description={false} />}>

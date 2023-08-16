@@ -45,7 +45,7 @@ export default function ProductListPage() {
   }, [productListData, search]);
 
   // console.log(`data`)
-  console.log(productListData)
+  // console.log(productListData)
 
   const breadcrumbList = useMemo(() => {
     const initPath = [

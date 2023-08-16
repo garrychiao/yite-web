@@ -49,8 +49,8 @@ export default function ProductPage({ preview = false }) {
   // console.log('is preivew', preview);
   const { fetchCart, cart } = useCart();
 
-  console.log(`cart`);
-  console.log(cart);
+  // console.log(`cart`);
+  // console.log(cart);
 
   const navigate = useNavigate();
   // console.log(cart)
@@ -75,13 +75,13 @@ export default function ProductPage({ preview = false }) {
   const [modelNo, setModelNo] = useState(false);
   // const [inventoryColor, setInventoryColor] = useState('gray');
   const [inventoryData, setInventoryData] = useState({});
-  console.log(`inventoryData`)
-  console.log(inventoryData)
+  // console.log(`inventoryData`)
+  // console.log(inventoryData)
   const productOrderable = useMemo(() => !!inventoryData.inventoryQty, [inventoryData]);
 
   const inCartProduct = useMemo(() => _.find(cart, { productId: id, currentModelNo: modelNo }) || { qty: 0 }, [cart, id, modelNo]);
-  console.log(`inCartProduct`)
-  console.log(inCartProduct)
+  // console.log(`inCartProduct`)
+  // console.log(inCartProduct)
   // const productOrderable = true
   // storing spec data
   const [specDict, setSpecDict] = useState({});
@@ -255,8 +255,8 @@ export default function ProductPage({ preview = false }) {
           modelNo: specDict[key].modelNo,
         }))
       }
-      console.log(`payload`);
-      console.log(payload);
+      // console.log(`payload`);
+      // console.log(payload);
       // checking quantity
 
 

@@ -11,40 +11,41 @@ import getSysFileUrl from 'utils/apiSysFiles';
 import CurrencyFormat from 'react-currency-format';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from 'shared/cart';
+import { getOrderStatus } from 'utils/OrderStatus';
 
 const { Title, Text, Paragraph } = Typography;
 
-const getStatusName = (status) => {
-  switch (status) {
-    case 'DRAFT': {
-      return '草稿'
-    }
-    case 'INIT': {
-      return '訂單建立，待付款'
-    }
-    case 'WAITING': {
-      return '付款完成，等待確認'
-    }
-    case 'CONFIRM': {
-      return '訂單已確認，出貨中'
-    }
-    case 'SHIP': {
-      return ' 已出貨'
-    }
-    case 'FINISH': {
-      return '訂單已完成'
-    }
-    case 'CANCEL': {
-      return '訂單取消'
-    }
-    case 'OVERDUE': {
-      return '訂單過期'
-    }
-    default: {
-      return '不明'
-    }
-  }
-}
+// const getStatusName = (status) => {
+//   switch (status) {
+//     case 'DRAFT': {
+//       return '草稿'
+//     }
+//     case 'INIT': {
+//       return '訂單建立，待付款'
+//     }
+//     case 'WAITING': {
+//       return '付款完成，等待確認'
+//     }
+//     case 'CONFIRM': {
+//       return '訂單已確認，出貨中'
+//     }
+//     case 'SHIP': {
+//       return ' 已出貨'
+//     }
+//     case 'FINISH': {
+//       return '訂單已完成'
+//     }
+//     case 'CANCEL': {
+//       return '訂單取消'
+//     }
+//     case 'OVERDUE': {
+//       return '訂單過期'
+//     }
+//     default: {
+//       return '不明'
+//     }
+//   }
+// }
 
 export default function OrderHistory() {
 
@@ -82,7 +83,10 @@ export default function OrderHistory() {
       key: 'status',
       width: 150,
       // render: (value) => value === 'WAITING' ? '訂單處理中' : '訂單完成'
-      render: (value) => getStatusName(value)
+      render: (value) => {
+        const orderStatus = getOrderStatus(value);
+        return <Text style={{ fontSize: 'large', color: orderStatus?.color }}>{orderStatus?.value}</Text>
+      }
     },
     {
       title: '品項',

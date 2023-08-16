@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import _ from 'lodash';
 // import styled from 'styled-components';
-import { Card, Button, Space, Table, List, Image, Row, Col, Divider, Typography, notification, Spin } from 'antd';
+import { Card, Button, Space, Popconfirm, List, Image, Row, Col, Divider, Typography, notification, Spin } from 'antd';
 import dayjs from 'dayjs';
 import { useAuthUser } from 'react-auth-kit';
 import { Section } from 'shared/layout';
@@ -12,40 +12,9 @@ import CurrencyFormat from 'react-currency-format';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useCart } from 'shared/cart';
 import { ArrowLeftOutlined } from '@ant-design/icons';
+import { getOrderStatus } from 'utils/OrderStatus';
 
 const { Title, Text, Paragraph } = Typography;
-
-const getStatusName = (status) => {
-  switch (status) {
-    case 'DRAFT': {
-      return '草稿'
-    }
-    case 'INIT': {
-      return '訂單建立，待付款'
-    }
-    case 'WAITING': {
-      return '付款完成，等待確認'
-    }
-    case 'CONFIRM': {
-      return '訂單已確認，出貨中'
-    }
-    case 'SHIP': {
-      return '已出貨'
-    }
-    case 'FINISH': {
-      return '訂單已完成'
-    }
-    case 'CANCEL': {
-      return '訂單取消'
-    }
-    case 'OVERDUE': {
-      return '訂單過期'
-    }
-    default: {
-      return '不明'
-    }
-  }
-}
 
 export default function OrderDetail() {
 
@@ -55,15 +24,32 @@ export default function OrderDetail() {
   const { id } = useParams();
   // console.log(id)
 
-  const { data: orderData, loading: loadingList } = useRequest(() => orderApi.get(id));
+  const { data: orderData, loading: loadingList, run: runGetOrder } = useRequest(() => orderApi.get(id));
   // console.log(orderData)
   const order = useMemo(() => orderData || {}, [orderData]);
   const orderItems = useMemo(() => order?.orderItems || [], [order]);
+  const orderStatus = useMemo(() => {
+    return getOrderStatus(order?.status);
+  }, [order])
+
+  const { run: runCancelOrder, loading: loadingCancel } = useRequest(() => orderApi.cancel(id), {
+    manual: true,
+    onSuccess: (res) => {
+      console.log(res)
+      notification.success({
+        message: '成功取消訂單'
+      })
+      runGetOrder();
+    },
+    onError: (error) => {
+      console.error(error)
+    },
+  });
 
   return (
     <Section.Container>
       <Section>
-        <Spin spinning={loadingList}>
+        <Spin spinning={loadingList || loadingCancel}>
           <Row>
             <Col>
               <Link to='/order/history'>
@@ -76,7 +62,7 @@ export default function OrderDetail() {
               <Card hoverable style={{ backgroundColor: 'white' }}>
                 <Row>
                   <Col>
-                    <Title level={4}>狀態：{getStatusName(order?.status)}</Title>
+                    <Title level={4} style={{color: orderStatus?.color}}>狀態：{orderStatus.value}</Title>
                   </Col>
                 </Row>
                 <Row>
@@ -94,6 +80,23 @@ export default function OrderDetail() {
                     /></Title>
                   </Col>
                 </Row>
+                {
+                  orderStatus?.cancelable && <Row>
+                    <Col style={{ marginTop: 20 }}>
+                      <Popconfirm
+                        title="取消訂單"
+                        description="確定要取消訂單嗎？"
+                        onConfirm={() => {
+                          runCancelOrder();
+                        }}
+                        okText="確認取消"
+                        cancelText="返回"
+                      >
+                        <Button danger>取消訂單</Button>
+                      </Popconfirm>
+                    </Col>
+                  </Row>
+                }
               </Card>
             </Col>
             <Col sm={8} xs={24}>
@@ -134,8 +137,8 @@ export default function OrderDetail() {
           <Divider />
           <Row gutter={[20, 20]}>
             <Col xs={24} sm={24}>
-              <Card hoverable style={{ backgroundColor: 'white' }} bodyStyle={{padding: '20px 0'}}>
-                <Title style={{paddingLeft: 20}} level={4}>訂單明細</Title>
+              <Card hoverable style={{ backgroundColor: 'white' }} bodyStyle={{ padding: '20px 0' }}>
+                <Title style={{ paddingLeft: 20 }} level={4}>訂單明細</Title>
                 <Divider />
                 <Row>
                   <Col span={24}>
@@ -149,7 +152,7 @@ export default function OrderDetail() {
                       dataSource={orderItems}
                       renderItem={(item, index) => (
                         <List.Item key={index}>
-                          <Card bodyStyle={{padding: 10}}>
+                          <Card bodyStyle={{ padding: 10 }}>
                             <Card.Meta
                               avatar={
                                 <Image width={100} preview={false} src={getSysFileUrl(item.images[0].imageSysFileId)} />

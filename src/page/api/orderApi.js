@@ -9,6 +9,7 @@ const orderApi = {
     }
   }),
   create: ({payload}) => axios.post(`/order`, payload),
+  cancel: (id) => axios.post(`/order/cancel`, {orderId: id}),
   get: (id = '', token) => axios.get(`/order/${id}`, token ? {
     baseURL: `${process.env.REACT_APP_API_BASE_URL}/api`,
     headers: {
