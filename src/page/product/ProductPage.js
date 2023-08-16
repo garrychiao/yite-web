@@ -79,7 +79,7 @@ export default function ProductPage({ preview = false }) {
   console.log(inventoryData)
   const productOrderable = useMemo(() => !!inventoryData.inventoryQty, [inventoryData]);
 
-  const inCartProduct = useMemo(() => _.find(cart, { productId: id }) || { qty: 0 }, [cart, id]);
+  const inCartProduct = useMemo(() => _.find(cart, { productId: id, currentModelNo: modelNo }) || { qty: 0 }, [cart, id, modelNo]);
   console.log(`inCartProduct`)
   console.log(inCartProduct)
   // const productOrderable = true

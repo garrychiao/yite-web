@@ -58,16 +58,15 @@ export default function OrderHistory() {
   const tableData = useMemo(() => {
     const list = data?.rows || [];
     return _.chain(list).orderBy('createdAt', 'asc')
-      .map((i, index) => ({ ...i, id_index: index + 1 }))
       .orderBy('createdAt', 'desc')
       .value()
   }, [data])
-  // console.log(tableData);
+  console.log(tableData);
   const columns = [
     {
       title: '訂單編號',
-      dataIndex: 'id_index',
-      key: 'id_index',
+      dataIndex: 'orderNo',
+      key: 'orderNo',
       width: 100,
     },
     {
@@ -81,7 +80,7 @@ export default function OrderHistory() {
       title: '訂單狀態',
       dataIndex: 'status',
       key: 'status',
-      width: 100,
+      width: 150,
       // render: (value) => value === 'WAITING' ? '訂單處理中' : '訂單完成'
       render: (value) => getStatusName(value)
     },
@@ -98,33 +97,49 @@ export default function OrderHistory() {
               avatar={
                 <Image width={100} preview={false} src={getSysFileUrl(item.images[0].imageSysFileId)} />
               }
-              title={item.product.productName}
-              description={<Space direction='vertical'>
-                <Text>規格：{item.selectedProductSpecs.length ? item.selectedProductSpecs.map(item => item.itemName).join('、') : <>無</>}</Text>
-                <Text>單價：
-                  <CurrencyFormat
-                    value={item.price}
-                    thousandSeparator={true}
-                    prefix={'$'}
-                    displayType='text'
-                  />
-                </Text>
-                <Text>數量：
-                  <CurrencyFormat
-                    value={item.qty}
-                    thousandSeparator={true}
-                    displayType='text'
-                  />
-                </Text>
-                <Text>合計：
-                  <CurrencyFormat
-                    value={item.price * item.qty}
-                    thousandSeparator={true}
-                    prefix={'$'}
-                    displayType='text'
-                  />
-                </Text>
+              title={<Space direction='vertical' size={'small'}>
+                <Text style={{ fontSize: 'larger' }}>{item.product.productName}</Text>
+                <Text style={{ fontSize: 'larger' }}>{item.product.productNo}</Text>
               </Space>}
+              description={
+                <>
+                  <Row>
+                    <Col span={12}>
+                      <Text style={{ fontSize: 'larger' }}>規格：{item.selectedProductSpecs.length ? item.selectedProductSpecs.map(item => item.itemName).join('、') : <>無</>}</Text>
+                    </Col>
+                    <Col span={12}>
+                      <Text style={{ fontSize: 'larger' }}>單價：
+                        <CurrencyFormat
+                          value={item.price}
+                          thousandSeparator={true}
+                          prefix={'$'}
+                          displayType='text'
+                        />
+                      </Text>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={12}>
+                      <Text style={{ fontSize: 'larger' }}>數量：
+                        <CurrencyFormat
+                          value={item.qty}
+                          thousandSeparator={true}
+                          displayType='text'
+                        />
+                      </Text>
+                    </Col>
+                    <Col span={12}>
+                      <Text style={{ fontSize: 'larger' }}>合計：
+                        <CurrencyFormat
+                          value={item.price * item.qty}
+                          thousandSeparator={true}
+                          prefix={'$'}
+                          displayType='text'
+                        />
+                      </Text>
+                    </Col>
+                  </Row>
+                </>}
             />
           </List.Item>
         )}
@@ -134,6 +149,7 @@ export default function OrderHistory() {
       title: '金額',
       dataIndex: 'totalPrice',
       key: 'totalPrice',
+      width: 100,
       render: (value) => (<CurrencyFormat
         value={value}
         thousandSeparator={true}
@@ -145,12 +161,13 @@ export default function OrderHistory() {
       title: '操作',
       dataIndex: 'actions',
       key: 'actions',
+      width: 150,
       render: (_, order) => (
         <Row gutter={[20, 20]}>
           <Col>
-            <Button onClick={() => { 
+            <Button onClick={() => {
               navigate(`./${order.id}`)
-             }}>
+            }}>
               查看明細
             </Button>
           </Col>
@@ -177,6 +194,7 @@ export default function OrderHistory() {
           selectedProductSpecs: item.selectedProductSpecs.map(item => ({
             itemName: item.itemName,
             productSpecId: item.productSpecId,
+            modelNo: item.modelNo,
           }))
         }
         return cartApi.add({ payload })

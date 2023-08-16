@@ -16,23 +16,25 @@ import CartCountOperator from 'shared/cartCountOperator';
 import { cartApi, productApi } from 'page/api';
 import { useRequest } from 'ahooks';
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 export default function CartPage() {
 
   const navigate = useNavigate();
   const { cart, fetchCart, hasProduct, selectedItems, setSelectedItems, addSelectedToLocal } = useCart();
 
-  console.log(`cart`)
-  console.log(cart)
+  // console.log(`cart`)
+  // console.log(cart)
 
   // console.log(`selectedItems`)
   // console.log(selectedItems)
   const [initState, setInitState] = useState(true);
+  const [cartData, setCartData] = useState([]);
+  const [loadingCartInventory, setLoadingCartInventory] = useState(false);
 
-  const { data: cartInventory, loading: loadingCartInventory, run: fetchCartInventory } = useRequest(() => Promise.all(cart.map(({ productId, currentModelNo }) => productApi.getInventory({ productId, modelNo: currentModelNo }))), {
-    // refreshDeps: [cart],
-  });
+  // const { data: cartInventory, loading: loadingCartInventory, run: fetchCartInventory } = useRequest(() => , {
+  // refreshDeps: [cart],
+  // });
 
   const { run: updateToCart, loading: loadingUpdateToCart } = useRequest(({ payload }) => cartApi.update({ payload }), {
     manual: true,
@@ -64,37 +66,71 @@ export default function CartPage() {
     }
   });
 
-  const cartData = useMemo(() => {
+  // const cartDatar = useMemo(() => {
 
-    if ( cartInventory && cartInventory.length !== cart.length) {
-      return []
-    }
-    return cart.map((item, index) => ({
-      ...item,
-      productName: item.product.productName,
-      productId: item.product.id,
-      image: getSysFileUrl(item?.product?.mainImages[0].imageSysFileId),
-      total: item.qty * item.unitPrice,
-      inventory: cartInventory ? cartInventory[index]?.inventoryQty : 0,
-      inventoryExceed: cartInventory ? item.qty > cartInventory[index]?.inventoryQty : false,
-    }))
-  }, [cart, cartInventory])
+  //   console.log('rendering cart data...')
+  //   // if ( cartInventory && cartInventory.length !== cart.length) {
+  //   //   return []
+  //   // }
+
+
+  //   return cart.map((item, index) => ({
+  //     ...item,
+  //     productName: item.product.productName,
+  //     productId: item.product.id,
+  //     image: getSysFileUrl(item?.product?.mainImages[0].imageSysFileId),
+  //     total: item.qty * item.unitPrice,
+  //     inventory: cartInventory ? cartInventory[index]?.inventoryQty : 0,
+  //     inventoryExceed: cartInventory ? item.qty > cartInventory[index]?.inventoryQty : false,
+  //   }))
+  // }, [cart, cartInventory])
 
   // console.log(`cartData`)
   // console.log(cartData)
 
   useEffect(() => {
     if (cart.length > 0 && initState) {
-      fetchCartInventory();
-      setSelectedItems(_.filter(cartData, {inventoryExceed: false}).map(i => i.id))
+      // fetchCartInventory();
+      setSelectedItems(_.filter(cartData, { inventoryExceed: false }).map(i => i.id))
       setInitState(false);
     }
   }, [cart, initState])
 
+
   useEffect(() => {
-    setSelectedItems(_.filter(cartData, {inventoryExceed: false}).map(i => i.id))
+
+    const init = async () => {
+      setLoadingCartInventory(true);
+      try {
+        const cartInventory = await Promise.all(cart.map(({ productId, currentModelNo }) => productApi.getInventory({ productId, modelNo: currentModelNo })));
+        console.log(`cartInventory`)
+        console.log(cartInventory)
+        setCartData(cart.map((item, index) => ({
+          ...item,
+          productName: item.product.productName,
+          productId: item.product.id,
+          image: getSysFileUrl(item?.product?.mainImages[0].imageSysFileId),
+          total: item.qty * item.unitPrice,
+          inventory: cartInventory ? cartInventory[index]?.inventoryQty : 0,
+          inventoryExceed: cartInventory ? item.qty > cartInventory[index]?.inventoryQty : false,
+        })))
+
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoadingCartInventory(false)
+      }
+    }
+
+    init()
+
+  }, [cart])
+
+
+  useEffect(() => {
+    setSelectedItems(_.filter(cartData, { inventoryExceed: false }).map(i => i.id))
   }, [cartData])
-  
+
   const rowSelection = {
     selectedRowKeys: selectedItems,
     onChange: (selectedRowKeys) => {
@@ -167,11 +203,14 @@ export default function CartPage() {
       title: '數量',
       dataIndex: 'qty',
       key: 'qty',
-      render: (value, product) => <CartCountOperator
-        initvalue={value}
-        maximum={product?.inventory || 99999}
-        onChange={(value) => updateQty(product.id, value, product.selectedProductSpecs)}
-      />,
+      render: (value, product) => (<div style={{display: 'flex', flexDirection: 'column', alignItems: 'baseline'}}>
+        <CartCountOperator
+          initvalue={value}
+          maximum={product?.inventory}
+          onChange={(value) => updateQty(product.id, value, product.selectedProductSpecs)}
+        />
+        {product.inventoryExceed && <Text style={{ textAlign: 'center', color: 'red' }}>超出庫存上限</Text>}
+      </div>),
     },
     {
       title: '總計',
@@ -189,11 +228,11 @@ export default function CartPage() {
       title: '操作',
       dataIndex: 'actions',
       key: 'actions',
-      render: (_, product) => <Popconfirm
-        title={`刪除 ${product.productName} ?`}
-        description={`確定從購物車移除 ${product.productName} 嗎？`}
+      render: (_, cart) => <Popconfirm
+        title={`刪除 ${cart.productName} ?`}
+        description={`確定從購物車移除 ${cart.productName} 嗎？`}
         onConfirm={() => {
-          deleteToCart({ id: product.id });
+          deleteToCart({ id: cart.id });
         }}
         // onCancel={() => {}}
         okText="確認"

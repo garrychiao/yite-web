@@ -16,10 +16,15 @@ import { useAuthUser } from 'react-auth-kit';
 import { orderApi } from 'page/api';
 import { useRequest } from 'ahooks';
 import { basicFormProps, FormRow, FormCol } from 'shared/form';
+import FullSpin from 'shared/FullSpin';
 
 const { Title } = Typography;
 
 export default function ConfirmOrderPage() {
+  
+  const [initState, setInitState] = useState(true);
+
+
   const [paymentData, setPaymentData] = useState({})
   const [paymentUrl, setPaymentUrl] = useState('')
 
@@ -32,6 +37,7 @@ export default function ConfirmOrderPage() {
   const { cart, fetchCart, selectedItems, setSelectedItems, getSelectedFromLocal } = useCart();
   const auth = useAuthUser()
   console.log(auth())
+  const ordererLockState = useMemo(() => !!auth()?.customer, [auth]);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -52,27 +58,12 @@ export default function ConfirmOrderPage() {
     onSuccess: async (data) => {
       console.log('order.create.data:', data)
       console.log(`${window.location.origin}/order/payment/confirm/${data.id}`)
-      // const paymentResp = await orderApi.initPayment({
-      //   userId: auth().id,
-      //   orderId: data.id,
-      //   showResultUrl: `${window.location.origin}/order/payment/confirm/${data.id}`
-      // })
-
-      // setPaymentData({ ...paymentResp.payload });
-      // setPaymentUrl(paymentResp.redirectUrl)
-      // document.querySelector('#payForm').submit();
-
-
-      // fetchCart();
-      // notification.success({
-      //   message: '訂單已送出'
-      // })
       navigate(`/order/initECPay/${data.id}`);
 
     }, onError: (err) => {
       console.error(err);
       notification.error({
-        message: '發生錯誤'
+        message: err?.message
       })
     }
   });
@@ -227,15 +218,25 @@ export default function ConfirmOrderPage() {
   }
 
   useEffect(() => {
-    if (formRef?.current) {
-      form.setFieldsValue({
-        [ORDERER]: {
-          name: auth().displayName,
-          phone: auth().customer?.phone,
-          address: auth().customer?.address,
-          email: auth().email,
-        }
-      })
+    if (formRef?.current && initState) {
+      if (ordererLockState) {
+        form.setFieldsValue({
+          [ORDERER]: {
+            name: auth().displayName,
+            phone: auth().customer?.phone,
+            address: auth().customer?.address,
+            email: auth().email,
+          }
+        })
+      } else {
+        form.setFieldsValue({
+          [ORDERER]: {
+            name: auth().displayName,
+            email: auth().email,
+          }
+        })
+      }
+      
       const receiverData = fetchReceiver();
       if (receiverData) {
         form.setFieldsValue({
@@ -244,11 +245,12 @@ export default function ConfirmOrderPage() {
           }
         })
       }
+      setInitState(false);
     }
   }, [auth, fetchReceiver, form])
 
   return (
-    <>
+    <FullSpin spinning={loading}>
       <Section.Container>
         <Section>
           <Title level={4}>確認訂單 | 結帳</Title>
@@ -304,7 +306,7 @@ export default function ConfirmOrderPage() {
                         { required: true, message: '姓名為必填' },
                       ]}
                     >
-                      <Input disabled placeholder='姓名為必填' autoComplete='name' />
+                      <Input disabled={ordererLockState} placeholder='姓名為必填' autoComplete='name' />
                     </Form.Item>
                   </FormCol>
                   <FormCol>
@@ -315,7 +317,7 @@ export default function ConfirmOrderPage() {
                         { required: true, message: '聯絡電話為必填' },
                       ]}
                     >
-                      <Input disabled placeholder='聯絡電話為必填' autoComplete='phone' />
+                      <Input disabled={ordererLockState} placeholder='聯絡電話為必填' autoComplete='phone' />
                     </Form.Item>
                   </FormCol>
                 </FormRow>
@@ -328,7 +330,7 @@ export default function ConfirmOrderPage() {
                         { required: true, message: 'Email為必填' },
                       ]}
                     >
-                      <Input disabled placeholder='Email為必填' autoComplete='email' />
+                      <Input disabled={ordererLockState} placeholder='Email為必填' autoComplete='email' />
                     </Form.Item>
                   </FormCol>
                   <FormCol>
@@ -336,7 +338,7 @@ export default function ConfirmOrderPage() {
                       name={[ORDERER, 'zipcode']}
                       label='郵遞區號'
                     >
-                      <Input disabled autoComplete='postal-code' />
+                      <Input disabled={ordererLockState} autoComplete='postal-code' />
                     </Form.Item>
                   </FormCol>
                 </FormRow>
@@ -349,7 +351,7 @@ export default function ConfirmOrderPage() {
                         { required: true, message: '地址為必填' },
                       ]}
                     >
-                      <Input disabled placeholder='地址為必填' autoComplete='address' />
+                      <Input disabled={ordererLockState} placeholder='地址為必填' autoComplete='address' />
                     </Form.Item>
                   </FormCol>
                 </FormRow>
@@ -490,7 +492,7 @@ export default function ConfirmOrderPage() {
           確認訂單
         </button>
       </form>
-    </>
+    </FullSpin>
   );
 }
 

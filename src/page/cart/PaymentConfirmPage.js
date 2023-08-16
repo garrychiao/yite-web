@@ -63,6 +63,7 @@ export default function PaymentConfirmPage() {
   }
 
   useEffect(() => {
+    window.location.href = `yiteapp://order/payment/confirm/${id}`
     if (!!id) {
       getOrderData(id)
     }
@@ -73,10 +74,10 @@ export default function PaymentConfirmPage() {
       <Section>
         <Row gutter={20}>
           <Col>
-            <Card title='訂單付款成功' bordered={false} style={{ width: 300 }}>
+            <Card title='訂單資訊' bordered={false} style={{ width: 300 }}>
               <p>訂單編號: {orderData?.orderNo}</p>
               <p>訂單狀態: {getStatusName(orderData?.status)}</p>
-              <p>付款完成時間: {dayjs(orderData?.paidAt).format('YYYY-MM-DD HH:mm:ss')}</p>
+              <p>付款完成時間: { orderData?.paidAt ? dayjs(orderData?.paidAt).format('YYYY-MM-DD HH:mm:ss') : '無'}</p>
               <Divider />
               <p>付款編號: {paymentData?.paymentNo}</p>
               <p>付款訊息: {paymentData?.paymentLog?.returnMessage}</p>

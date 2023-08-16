@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import _ from 'lodash';
 // import styled from 'styled-components';
 import { Card, Button, Space, Table, List, Image, Row, Col, Divider, Typography, notification, Spin } from 'antd';
@@ -60,7 +60,6 @@ export default function OrderDetail() {
   const order = useMemo(() => orderData || {}, [orderData]);
   const orderItems = useMemo(() => order?.orderItems || [], [order]);
 
-
   return (
     <Section.Container>
       <Section>
@@ -72,63 +71,8 @@ export default function OrderDetail() {
               </Link>
             </Col>
           </Row>
-          {/* <Title level={4}>訂單明細</Title> */}
-          <Divider />
-          <Row gutter={[20, 20]}>
-            <Col xs={24} sm={18}>
-              <Card hoverable style={{ backgroundColor: 'white' }}>
-                <Title level={4}>訂單明細</Title>
-                <Divider />
-                <List
-                  dataSource={orderItems}
-                  renderItem={(item, index) => (
-                    <List.Item>
-                      <List.Item.Meta
-                        avatar={
-                          <Image width={100} preview={false} src={getSysFileUrl(item.images[0].imageSysFileId)} />
-                        }
-                        title={
-                          <div
-                            style={{ cursor: 'pointer' }}
-                            level={5}
-                            onClick={() => {
-                              navigate(`/category/productDetail/${item.product.id}`)
-                            }}>
-                            {item.product.productName}
-                          </div>}
-                        description={<Space direction='vertical'>
-                          <Text>規格：{item.selectedProductSpecs.length ? item.selectedProductSpecs.map(item => item.itemName).join('、') : <>無</>}</Text>
-                          <Text>單價：
-                            <CurrencyFormat
-                              value={item.price}
-                              thousandSeparator={true}
-                              prefix={'$'}
-                              displayType='text'
-                            />
-                          </Text>
-                          <Text>數量：
-                            <CurrencyFormat
-                              value={item.qty}
-                              thousandSeparator={true}
-                              displayType='text'
-                            />
-                          </Text>
-                          <Text>合計：
-                            <CurrencyFormat
-                              value={item.price * item.qty}
-                              thousandSeparator={true}
-                              prefix={'$'}
-                              displayType='text'
-                            />
-                          </Text>
-                        </Space>}
-                      />
-                    </List.Item>
-                  )}
-                />
-              </Card>
-            </Col>
-            <Col xs={24} sm={6} md={6}>
+          <Row gutter={[20, 20]} style={{ paddingTop: 20 }}>
+            <Col xs={24} sm={8} md={8}>
               <Card hoverable style={{ backgroundColor: 'white' }}>
                 <Row>
                   <Col>
@@ -152,11 +96,9 @@ export default function OrderDetail() {
                 </Row>
               </Card>
             </Col>
-          </Row>
-          <Row gutter={[20, 20]} style={{ paddingTop: 20 }}>
-            <Col sm={12} xs={24}>
+            <Col sm={8} xs={24}>
               <Card hoverable style={{ backgroundColor: 'white' }}>
-                <Title style={{margin: 0}} level={4}>訂購人</Title>
+                <Title style={{ margin: 0 }} level={4}>訂購人</Title>
                 <Divider />
                 <Space direction='vertical'>
                   <Text style={{ fontSize: 'large' }}>姓名：{order.orderName}</Text>
@@ -167,14 +109,14 @@ export default function OrderDetail() {
                 </Space>
               </Card>
             </Col>
-            <Col sm={12} xs={24}>
+            <Col sm={8} xs={24}>
               <Card hoverable style={{ backgroundColor: 'white' }}>
                 <Row align='middle' gutter={20}>
                   <Col>
-                    <Title style={{margin: 0}} level={4}>收件人</Title>
+                    <Title style={{ margin: 0 }} level={4}>收件人</Title>
                   </Col>
                   <Col>
-                    {order.sameAsOrderer && <Text style={{margin: 0}} type='success'>同訂購人</Text>}
+                    {order.sameAsOrderer && <Text style={{ margin: 0 }} type='success'>同訂購人</Text>}
                   </Col>
                 </Row>
                 <Divider />
@@ -188,6 +130,82 @@ export default function OrderDetail() {
               </Card>
             </Col>
           </Row>
+          {/* <Title level={4}>訂單明細</Title> */}
+          <Divider />
+          <Row gutter={[20, 20]}>
+            <Col xs={24} sm={24}>
+              <Card hoverable style={{ backgroundColor: 'white' }} bodyStyle={{padding: '20px 0'}}>
+                <Title style={{paddingLeft: 20}} level={4}>訂單明細</Title>
+                <Divider />
+                <Row>
+                  <Col span={24}>
+                    <List
+                      grid={{
+                        gutter: 16,
+                        xs: 1,
+                        sm: 2,
+                        md: 3,
+                      }}
+                      dataSource={orderItems}
+                      renderItem={(item, index) => (
+                        <List.Item key={index}>
+                          <Card bodyStyle={{padding: 10}}>
+                            <Card.Meta
+                              avatar={
+                                <Image width={100} preview={false} src={getSysFileUrl(item.images[0].imageSysFileId)} />
+                              }
+                              title={
+                                <Row style={{ cursor: 'pointer' }}
+                                  onClick={() => {
+                                    navigate(`/category/productDetail/${item.product.id}`)
+                                  }}>
+                                  <Col span={24}>
+                                    <Text style={{ fontSize: 'larger', whiteSpace: 'break-spaces' }}>{item.product.productName}</Text>
+                                  </Col>
+                                  <Col span={24}>
+                                    <Text style={{ fontSize: 'larger', whiteSpace: 'break-spaces' }}>{item.product.productNo}</Text>
+                                  </Col>
+                                </Row>
+                              }
+                              description={<Space direction='vertical'>
+                                <Text style={{ fontSize: 'larger' }}>規格：{item.selectedProductSpecs.length ? item.selectedProductSpecs.map(item => item.itemName).join('、') : <>無</>}</Text>
+                                <Text style={{ fontSize: 'larger' }}>單價：
+                                  <CurrencyFormat
+                                    value={item.price}
+                                    thousandSeparator={true}
+                                    prefix={'$'}
+                                    displayType='text'
+                                  />
+                                </Text>
+                                <Text style={{ fontSize: 'larger' }}>數量：
+                                  <CurrencyFormat
+                                    value={item.qty}
+                                    thousandSeparator={true}
+                                    displayType='text'
+                                  />
+                                </Text>
+                                <Text style={{ fontSize: 'larger' }}>合計：
+                                  <CurrencyFormat
+                                    value={item.price * item.qty}
+                                    thousandSeparator={true}
+                                    prefix={'$'}
+                                    displayType='text'
+                                  />
+                                </Text>
+                              </Space>}
+                            />
+                          </Card>
+                        </List.Item>
+                      )}
+                    />
+                  </Col>
+                </Row>
+
+              </Card>
+            </Col>
+
+          </Row>
+
         </Spin>
       </Section>
     </Section.Container>

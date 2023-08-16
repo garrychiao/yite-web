@@ -5,7 +5,7 @@ import MenuStyles from './MenuStyles';
 // import RadioStyles from './RadioStyles';
 // import ScrollbarStyles from './ScrollbarStyles';
 // import SelectStyles from './SelectStyles';
-// import TableStyles from './TableStyles';
+import TableStyles from './TableStyles';
 // import TabsStyles from './TabsStyles';
 
 export default function GlobalStyles() {
@@ -15,13 +15,15 @@ export default function GlobalStyles() {
       {/* others */}
       {/* antd styles */}
       <MenuStyles />
+      <TableStyles /> 
       {/* <ModalStyles />
       <InputStyles />
       <SelectStyles />
       <RadioStyles />
       <ButtonStyles />
       <TabsStyles />
-      <TableStyles /> */}
+      
+      */}
     </>
   );
 }

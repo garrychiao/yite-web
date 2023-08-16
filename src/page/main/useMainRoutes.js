@@ -89,7 +89,7 @@ export default function useMainRoutes() {
         },
         {
           path: 'payment/confirm/:id',
-          element: (<RequireAuth required>
+          element: (<RequireAuth required={false}>
             <PaymentConfirmPage />
           </RequireAuth>)
         },

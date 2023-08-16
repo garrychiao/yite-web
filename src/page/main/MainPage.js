@@ -21,9 +21,7 @@ export default function MainPage() {
       <MainHeader onToggleClick={toggle} />
       <StyledContent>
         <Suspense fallback={null}>{routes}</Suspense>
-        {/* <Footer>
-          Copyright © 2020-2022 Teleworker Inc. All rights reserved.
-        </Footer> */}
+        {/* <a href='yiteapp://order/payment/confirm/test-order-id'>test app link</a> */}
       </StyledContent>
     </Layout>
   );

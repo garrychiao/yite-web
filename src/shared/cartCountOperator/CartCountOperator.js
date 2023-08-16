@@ -38,7 +38,9 @@ export default function CartCountOperator({ initvalue = 1, onChange = () => { },
     <>
       <Container>
         <OperationContainer onClick={() => {
-          if (count > 1) onValueChange(count - 1)
+          if (maximum > 0) {
+            if (count > 1) onValueChange(count - 1)
+          }
         }}>
           <MinusOutlined />
         </OperationContainer>
@@ -46,14 +48,17 @@ export default function CartCountOperator({ initvalue = 1, onChange = () => { },
           <InputNumber controls={false} value={count} min={1} step={1} onChange={onValueChange} />
         </InputContainer>
         <OperationContainer onClick={() => {
-          onValueChange(count + 1);
+          if (maximum > 0) {
+            onValueChange(count + 1);
+          }
         }}>
           <PlusOutlined />
         </OperationContainer>
       </Container>
-      {
-        count > maximum && <Text style={{ textAlign: 'center', color: 'red' }}>超出庫存上限</Text>
-      }
+      {maximum}
+      {/* {
+        (count > maximum && maximum !== 0) && <Text style={{ textAlign: 'center', color: 'red' }}>超出庫存上限</Text>
+      } */}
       
     </>
   )
