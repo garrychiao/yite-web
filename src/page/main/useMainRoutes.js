@@ -62,7 +62,7 @@ export default function useMainRoutes() {
     },
     {
       path: '/cart',
-      element: (<RequireAuth required>
+      element: (<RequireAuth required requiredEnable>
         <CartPage />
       </RequireAuth>)
     },
@@ -83,7 +83,7 @@ export default function useMainRoutes() {
         },
         {
           path: 'confirm',
-          element: (<RequireAuth required>
+          element: (<RequireAuth required requiredEnable>
             <ConfirmOrderPage />
           </RequireAuth>)
         },
@@ -95,7 +95,7 @@ export default function useMainRoutes() {
         },
         {
           path: 'confirm/:id',
-          element: (<RequireAuth required>
+          element: (<RequireAuth required requiredEnable>
             <ConfirmOrderPage />
           </RequireAuth>)
         },

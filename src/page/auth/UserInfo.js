@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 // import styled from 'styled-components';
-import { Typography, Card, Row, Col, Divider } from 'antd';
+import { Typography, Card, Row, Col, Divider, Tag } from 'antd';
 import dayjs from 'dayjs';
 // import color from 'shared/style/color';
 // import i18n from 'i18next';
@@ -28,7 +28,12 @@ export default function UserInfo() {
       <Section>
         <Row gutter={20}>
           <Col xs={24} sm={24} md={8}>
-            <Card title={<Title level={3}>{user?.displayName}</Title>} hoverable style={{ width: '100%', backgroundColor: '#fff' }}>
+            <Card title={<Row align='middle' justify={'space-between'}>
+              <Title style={{margin: 0}} level={3}>{user?.displayName}</Title>
+              {
+                user?.enable ? <Tag color="green" style={{fontSize: 'larger'}}>啟用</Tag> : <Tag color="red" style={{fontSize: 'larger'}}>停權</Tag>
+              }
+            </Row>} hoverable style={{ width: '100%', backgroundColor: '#fff' }}>
               <Title level={5}>Email: {user?.email}</Title>
               <Title level={5}>建立時間: {dayjs(user?.createdAt).format('YYYY-MM-DD')}</Title>
               <Divider />
@@ -40,7 +45,7 @@ export default function UserInfo() {
                   <Title level={5}>Email: {user?.customer?.email}</Title>
                   <Title level={5}>電話: {user?.customer?.phone}</Title>
                   <Title level={5}>統一編號: {user?.customer?.vatNumber}</Title>
-                  <Title level={5}>啟用狀態: {user?.customer?.enable ? '啟用' : '未啟用'}</Title>
+                  <Title level={5}>啟用狀態: {user?.enable ? '啟用' : '未啟用'}</Title>
                 </> : <></>
               }
             </Card>

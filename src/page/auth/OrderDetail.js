@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import _ from 'lodash';
 // import styled from 'styled-components';
-import { Card, Button, Space, Popconfirm, List, Image, Row, Col, Divider, Typography, notification, Spin } from 'antd';
+import { Card, Button, Space, Popconfirm, List, Image, Row, Col, Divider, Typography, notification, Spin, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { useAuthUser } from 'react-auth-kit';
 import { Section } from 'shared/layout';
@@ -25,7 +25,7 @@ export default function OrderDetail() {
   // console.log(id)
 
   const { data: orderData, loading: loadingList, run: runGetOrder } = useRequest(() => orderApi.get(id));
-  // console.log(orderData)
+  console.log(orderData)
   const order = useMemo(() => orderData || {}, [orderData]);
   const orderItems = useMemo(() => order?.orderItems || [], [order]);
   const orderStatus = useMemo(() => {
@@ -60,10 +60,13 @@ export default function OrderDetail() {
           <Row gutter={[20, 20]} style={{ paddingTop: 20 }}>
             <Col xs={24} sm={8} md={8}>
               <Card hoverable style={{ backgroundColor: 'white' }}>
-                <Row>
+                <Row justify={'space-between'} align={'middle'}>
                   <Col>
-                    <Title level={4} style={{color: orderStatus?.color}}>狀態：{orderStatus.value}</Title>
+                    <Title level={4} style={{ color: orderStatus?.color, margin: 0 }}>狀態：{orderStatus.value}</Title>
                   </Col>
+                  {order.isMonthClose && <Col>
+                    <Tag color='blue'>月結訂單</Tag>
+                  </Col>}
                 </Row>
                 <Row>
                   <Col>
@@ -78,6 +81,16 @@ export default function OrderDetail() {
                       prefix={'$'}
                       displayType='text'
                     /></Title>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Title level={5}>訂單編號：{order.orderNo}</Title>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Title level={5}>付款編號：{order.payment?.paymentNo}</Title>
                   </Col>
                 </Row>
                 {
@@ -119,7 +132,7 @@ export default function OrderDetail() {
                     <Title style={{ margin: 0 }} level={4}>收件人</Title>
                   </Col>
                   <Col>
-                    {order.sameAsOrderer && <Text style={{ margin: 0 }} type='success'>同訂購人</Text>}
+                    {order.sameAsOrderer && <Tag style={{ margin: 0 }} color='green'>同訂購人</Tag>}
                   </Col>
                 </Row>
                 <Divider />

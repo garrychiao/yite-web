@@ -50,7 +50,7 @@ const { Title, Text, Paragraph } = Typography;
 export default function OrderHistory() {
 
   const auth = useAuthUser();
-  // const user = useMemo(() => auth() || {}, [auth]);
+  const user = auth();
   const navigate = useNavigate();
   const { fetchCart } = useCart();
   const [loadingBuyAgain, setLoadingBuyAgain] = useState(false);
@@ -101,7 +101,7 @@ export default function OrderHistory() {
               avatar={
                 <Image width={100} preview={false} src={getSysFileUrl(item.images[0].imageSysFileId)} />
               }
-              title={<Space direction='vertical' size={'small'}>
+              title={<Space direction='vertical' size={'small'} style={{cursor: 'pointer'}} onClick={() => navigate(`/category/productDetail/${item.product.id}`)} >
                 <Text style={{ fontSize: 'larger' }}>{item.product.productName}</Text>
                 <Text style={{ fontSize: 'larger' }}>{item.product.productNo}</Text>
               </Space>}
@@ -186,13 +186,20 @@ export default function OrderHistory() {
   ];
 
   const onBuyAgain = async (order) => {
+
+    if (!user?.enable) {
+      return notification.error({
+        message: '您的用戶已被停權'
+      })
+    }
+
     const { orderItems } = order;
     console.log(orderItems);
     setLoadingBuyAgain(true);
     try {
       await Promise.all(orderItems.map(item => {
         const payload = {
-          userId: auth().id,
+          userId: user?.id,
           productId: item.productId,
           qty: item.qty,
           selectedProductSpecs: item.selectedProductSpecs.map(item => ({

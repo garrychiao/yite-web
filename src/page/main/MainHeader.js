@@ -112,7 +112,9 @@ export default function MainHeader() {
               >
                 <a onClick={(e) => e.preventDefault()}>
                   <Space>
-                    {user?.displayName}
+                    <span style={{ color: user?.enable ? 'inherit' : 'red' }}>
+                      {user?.displayName}
+                    </span>
                     <DownOutlined />
                   </Space>
                 </a>
@@ -121,7 +123,7 @@ export default function MainHeader() {
           </Row> : <SignInButton />}
         </RightNavContainer>
       </Row> : <>
-        <Row style={{width: '100%'}} align='middle' justify='space-between'>
+        <Row style={{ width: '100%' }} align='middle' justify='space-between'>
           <Col>
             <Image src={LOGO_IMAGE} width={120} preview={false} onClick={() => {
               navigate('/')

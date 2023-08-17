@@ -9,13 +9,13 @@ const ORDER_STATUS = [
     },
     {
         key: 'INIT',
-        value: '訂單建立，待付款',
+        value: '待付款',
         cancelable: true,
         color: '#FFbb00'
     },
     {
         key: 'WAITING',
-        value: '付款完成，等待確認',
+        value: '訂單建立，等待確認',
         cancelable: true,
         color: '#FFbb00'
     },

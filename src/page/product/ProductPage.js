@@ -60,7 +60,7 @@ export default function ProductPage({ preview = false }) {
   // tmp section
   // const inventoryCountList = [1000, 500, 199, 95, 5, 0];
   // const [inventoryCount, setInventoryCount] = useState(0);
-  const permissionValid = useMemo(() => (isAuthenticated() && !preview), [preview, isAuthenticated]);
+  const permissionValid = useMemo(() => (!preview), [preview]);
   const { id } = useParams();
   const [productData, setProductData] = useState({});
   // console.log(`productData`)
@@ -238,6 +238,11 @@ export default function ProductPage({ preview = false }) {
         message: '請先登入'
       })
       return navigate('/login')
+    }
+    if (!user.enable) {
+      return notification.error({
+        message: '您的用戶已被停權'
+      })
     }
 
     try {

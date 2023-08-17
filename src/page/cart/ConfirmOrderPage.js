@@ -17,6 +17,7 @@ import { orderApi } from 'page/api';
 import { useRequest } from 'ahooks';
 import { basicFormProps, FormRow, FormCol } from 'shared/form';
 import FullSpin from 'shared/FullSpin';
+import { getUserAuthority } from 'utils/UserAuthority';
 
 const { Title } = Typography;
 
@@ -36,10 +37,12 @@ export default function ConfirmOrderPage() {
 
   const { cart, fetchCart, selectedItems, setSelectedItems, getSelectedFromLocal } = useCart();
   const auth = useAuthUser()
+  const user = auth();
   // console.log(auth())
-  const ordererLockState = useMemo(() => !!auth()?.customer, [auth]);
-  // console.log(`ordererLockState`)
-  // console.log(ordererLockState)
+  const ordererLockState = useMemo(() => !!user?.customer, [user]);
+  const userAuthority = useMemo(() => getUserAuthority(user.role), [user]);
+  console.log(`userAuthority`)
+  console.log(userAuthority)
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -58,8 +61,7 @@ export default function ConfirmOrderPage() {
     manual: true,
     onSuccess: async (data) => {
       console.log('order.create.data:', data)
-      console.log(`${window.location.origin}/order/payment/confirm/${data.id}`)
-      navigate(`/order/initECPay/${data.id}`);
+      checkDirectToECPay(data.id);
 
     }, onError: (err) => {
       console.error(err);
@@ -68,6 +70,17 @@ export default function ConfirmOrderPage() {
       })
     }
   });
+
+  const checkDirectToECPay = useCallback((id) => {
+    const { isMonthClose } = form.getFieldsValue();
+
+    if (!isMonthClose) {
+      console.log(`${window.location.origin}/order/payment/confirm/${id}`)
+      navigate(`/order/initECPay/${id}`);
+    } else {
+      navigate(`/order/history/${id}`);
+    }
+  }, [form])
 
   useEffect(() => {
     if (id && cart.length > 0 && selectedItems.length !== 1) {
@@ -162,11 +175,11 @@ export default function ConfirmOrderPage() {
 
     try {
       await form.validateFields();
-      const { orderer, receiver } = form.getFieldsValue();
+      const { orderer, receiver, isMonthClose } = form.getFieldsValue();
 
       updateReceiver(receiver);
       const payload = {
-        userId: auth().id,
+        userId: user?.id,
         totalPrice,
         cartProducts: cartData.map(item => ({
           cartId: item.id
@@ -182,8 +195,10 @@ export default function ConfirmOrderPage() {
         receiverAddress: receiver.address,
         receiverZipcode: receiver.zipcode,
         sameAsOrderer,
+        isMonthClose
       }
 
+      console.log(`payload`);
       console.log(payload);
       createOrder({ payload });
     } catch (err) {
@@ -257,14 +272,14 @@ export default function ConfirmOrderPage() {
     if (formRef?.current) {
       form.setFieldsValue({
         [ORDERER]: {
-          name: auth().displayName,
-          phone: auth().customer?.phone,
-          address: auth().customer?.address,
-          email: auth().email,
+          name: user?.displayName,
+          phone: user?.customer?.phone,
+          address: user?.customer?.address,
+          email: user?.email,
         }
       })
     }
-  }, [auth, form])
+  }, [user, form])
 
   return (
     <FullSpin spinning={loading}>
@@ -309,7 +324,7 @@ export default function ConfirmOrderPage() {
           <Form
             ref={formRef}
             form={form}
-            initialValues={{ ...auth() }}
+            initialValues={{ ...user }}
             {...basicFormProps}>
             <Row gutter={40}>
               <StyledFormContainer lg={12}>
@@ -442,34 +457,32 @@ export default function ConfirmOrderPage() {
                 </FormRow>
               </Col>
             </Row>
-          </Form>
-          <Divider />
+            <Divider />
 
-          <Row>
-            <Col lg={12}>
-              <Row>
-                {/* <Col span={24}>
-                  <Title level={4} style={{ marginBottom: 20 }}>選擇配送方式</Title>
-                  <Radio.Group onChange={() => { }}>
-                    <Space direction="vertical" size={'large'}>
-                      <Radio value={1}>宅配</Radio>
-                      <Radio value={2}>超商門市自取</Radio>
-                    </Space>
-                  </Radio.Group>
-                  <Divider />
-                </Col> */}
-                <Col span={24}>
-                  <Title level={4} style={{ marginBottom: 20 }}>選擇付款方式</Title>
-                  <Radio.Group onChange={() => { }}>
-                    <Space direction="vertical" size={'large'}>
-                      <Radio value={1}>信用卡一次付清</Radio>
-                      <Radio value={2}>月結用戶</Radio>
-                    </Space>
-                  </Radio.Group>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
+            <Row>
+              <Col lg={12}>
+                <Row>
+                  <Col span={24}>
+                    <Form.Item
+                      name={'isMonthClose'}
+                      label={<Title level={4} style={{ marginBottom: 20 }}>選擇付款方式</Title>}
+                      rules={[
+                        { required: true, message: '付款方式為必填' },
+                      ]}
+                    >
+                      <Radio.Group onChange={() => { }} required>
+                        <Space direction="vertical" size={'large'}>
+                          <Radio value={false}>信用卡一次付清</Radio>
+                          <Radio disabled={!userAuthority?.bill_monthly} value={true}>月結用戶</Radio>
+                        </Space>
+                      </Radio.Group>
+                    </Form.Item>
+
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          </Form>
           <Row justify={'space-around'} style={{ paddingTop: 50 }}>
             <Col>
               <Link to='/cart'>
@@ -504,7 +517,6 @@ export default function ConfirmOrderPage() {
         <input name="CustomField1" value={paymentData.CustomField1} autoComplete="off" />
         <input name="CustomField2" value={paymentData.CustomField2} autoComplete="off" />
         <input name="NeedExtraPaidInfo" value={paymentData.NeedExtraPaidInfo} autoComplete="off" />
-
         <button type="submit">
           確認訂單
         </button>
