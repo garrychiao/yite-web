@@ -38,11 +38,11 @@ export default function ConfirmOrderPage() {
   const { cart, fetchCart, selectedItems, setSelectedItems, getSelectedFromLocal } = useCart();
   const auth = useAuthUser()
   const user = auth();
-  // console.log(auth())
+  console.log(user)
   const ordererLockState = useMemo(() => !!user?.customer, [user]);
   const userAuthority = useMemo(() => getUserAuthority(user.role), [user]);
-  console.log(`userAuthority`)
-  console.log(userAuthority)
+  // console.log(`userAuthority`)
+  // console.log(userAuthority)
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -272,10 +272,10 @@ export default function ConfirmOrderPage() {
     if (formRef?.current) {
       form.setFieldsValue({
         [ORDERER]: {
-          name: user?.displayName,
+          name: user?.customer?.contactPerson ? user?.customer?.contactPerson : user?.displayName,
           phone: user?.customer?.phone,
           address: user?.customer?.address,
-          email: user?.email,
+          email: user?.customer?.email ? user?.customer?.email : user?.email,
         }
       })
     }

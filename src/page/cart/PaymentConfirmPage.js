@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Card, Row, Col, Divider } from 'antd';
+import { Card, Row, Col, Divider, notification } from 'antd';
 import { Section } from 'shared/layout';
 import dayjs from 'dayjs';
 import { orderApi } from 'page/api';
@@ -7,7 +7,8 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import * as R from 'ramda'
 import { Button } from 'antd';
 import { getOrderStatus } from 'utils/OrderStatus';
-
+import axios from 'axios';
+import { useAuthUser } from 'react-auth-kit';
 // const getStatusName = (status) => {
 //   switch (status) {
 //     case 'DRAFT': {
@@ -44,6 +45,8 @@ export default function PaymentConfirmPage() {
   const [orderData, setOrderData] = useState({})
   const [paymentData, setPaymentData] = useState({})
   const { id } = useParams();
+  const auth = useAuthUser();
+  const user = auth();
   const navigate = useNavigate();
   const orderStatus = useMemo(() => {
     return getOrderStatus(orderData.status);
@@ -52,7 +55,9 @@ export default function PaymentConfirmPage() {
   // call api
   const getOrderData = async (orderId) => {
     try {
-      const response = await orderApi.get(orderId)
+      const response = await axios.get(`/order/${orderId}`, {
+        baseURL: `${process.env.REACT_APP_API_BASE_URL}/public`
+      })
       console.log(`response`);
       console.log(response);
       setOrderData(response)
@@ -63,7 +68,20 @@ export default function PaymentConfirmPage() {
       }), response?.payments || []))
     } catch (err) {
       console.error(err)
+      if (err.statusCode === 404) {
+        notification.error({
+          message: '查無此訂單'
+        })
+        handleGoBack();
+      }
     }
+  }
+
+  const handleGoBack = () => {
+    if (!user) {
+      return navigate('/login')
+    }
+    return navigate('/order/history')
   }
 
   useEffect(() => {
@@ -80,8 +98,8 @@ export default function PaymentConfirmPage() {
           <Col>
             <Card title='訂單資訊' bordered={false} style={{ width: 300 }}>
               <p>訂單編號: {orderData?.orderNo}</p>
-              <p style={{color: orderStatus?.color}}>訂單狀態: {orderStatus?.value}</p>
-              <p>付款完成時間: { orderData?.paidAt ? dayjs(orderData?.paidAt).format('YYYY-MM-DD HH:mm:ss') : '無'}</p>
+              <p style={{ color: orderStatus?.color }}>訂單狀態: {orderStatus?.value}</p>
+              <p>付款完成時間: {orderData?.paidAt ? dayjs(orderData?.paidAt).format('YYYY-MM-DD HH:mm:ss') : '無'}</p>
               <Divider />
               <p>付款編號: {paymentData?.paymentNo}</p>
               <p>付款訊息: {paymentData?.paymentLog?.returnMessage}</p>
@@ -90,7 +108,7 @@ export default function PaymentConfirmPage() {
               <Button
                 size='large'
                 onClick={() => {
-                  navigate('/order/history')
+                  handleGoBack();
                 }}>
                 確認ok，回到訂單記錄
               </Button>

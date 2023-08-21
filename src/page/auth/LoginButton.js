@@ -12,6 +12,6 @@ export default function LoginButton() {
       onClick={() => {
         // console.log(`https://yite-api.meproz.com/auth/line?frontend_url=${window.location.origin}/login/result`)
         window.open(`https://yite-api.meproz.com/auth/line?frontend_url=${window.location.origin}/login/result`, '_blank');
-      }}>Login with Line</Button>
+      }}>Line 登入</Button>
   );
 }

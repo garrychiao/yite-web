@@ -36,8 +36,10 @@ export default function NewProductSlider({listItems = {}}) {
 
     console.log(`listItems`)
     
-    if (listItems.products.length <= 2) {
-        listItems.products = listItems.products.concat(listItems.products)
+    if (listItems.products.length <= 4) {
+        while(listItems.products.length < 4) {
+            listItems.products = listItems.products.concat(listItems.products)
+        }
     }
     console.log(listItems.products)
 
@@ -86,6 +88,7 @@ export default function NewProductSlider({listItems = {}}) {
 
     // const newProductList = useMemo(() => newProductData?.rows || [], [newProductData]);
     // console.log(newProductList);
+    // const showSlider = useMemo(() => listItems.products.length >=, [])
 
     return (
         <Container>
@@ -98,7 +101,7 @@ export default function NewProductSlider({listItems = {}}) {
             </Row>
             <Row style={{ width: '100%' }}>
                 <Col span={24}>
-                    <Slider {...settings}>
+                   <Slider {...settings}>
                         {listItems?.products && listItems.products.map((item, index) => {
                             const pData = item.product
                             pData.image = getSysFileUrl(item.product.mainImages[0].imageSysFileId)

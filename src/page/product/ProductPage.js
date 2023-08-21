@@ -99,7 +99,7 @@ export default function ProductPage({ preview = false }) {
     }, onError: (err) => {
       console.error(err);
       notification.error({
-        message: '發生錯誤'
+        message: err?.message
       })
     }
   });
@@ -115,7 +115,7 @@ export default function ProductPage({ preview = false }) {
     }, onError: (err) => {
       console.error(err);
       notification.error({
-        message: '發生錯誤'
+        message: err?.message
       })
     }
   });
@@ -260,10 +260,6 @@ export default function ProductPage({ preview = false }) {
           modelNo: specDict[key].modelNo,
         }))
       }
-      // console.log(`payload`);
-      // console.log(payload);
-      // checking quantity
-
 
       if (inCartProduct) {
         const { qty: cartQty } = inCartProduct;
